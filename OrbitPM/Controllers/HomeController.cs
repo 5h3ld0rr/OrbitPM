@@ -52,9 +52,9 @@ namespace OrbitPM.Controllers
 
                 viewModel.TableTitle = "My Project Submissions";
                 viewModel.ProposalsList = await _context.ProposalOwnerships
-                    .Include(o => o.ProjectProposal).ThenInclude(p => p.ResearchArea)
-                    .Where(o => o.StudentId == userId)
-                    .Select(o => o.ProjectProposal)
+                    .Include(o => o.ProjectProposal)!.ThenInclude(p => p!.ResearchArea)
+                    .Where(o => o.StudentId == userId && o.ProjectProposal != null)
+                    .Select(o => o.ProjectProposal!)
                     .OrderByDescending(p => p.CreatedAt)
                     .Take(5)
                     .ToListAsync();

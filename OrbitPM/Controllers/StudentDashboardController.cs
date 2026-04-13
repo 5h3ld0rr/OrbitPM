@@ -46,6 +46,7 @@ namespace OrbitPM.Controllers
         public async Task<IActionResult> CreateProposal([Bind("Title,Abstract,TechnicalStack,ResearchAreaId")] ProjectProposal proposal)
         {
             var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (studentId == null) return Unauthorized();
 
             if (ModelState.IsValid)
             {
@@ -73,12 +74,13 @@ namespace OrbitPM.Controllers
         public async Task<IActionResult> EditProposal(int id)
         {
             var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (studentId == null) return Unauthorized();
             var ownership = await _context.ProposalOwnerships
                 .Include(o => o.ProjectProposal)
                 .FirstOrDefaultAsync(o => o.ProjectProposalId == id && o.StudentId == studentId);
 
             // Constraint: Cannot edit if already matched or doesn't belong to them
-            if (ownership == null || ownership.ProjectProposal?.Status == ProjectStatus.Matched)
+            if (ownership == null || ownership.ProjectProposal == null || ownership.ProjectProposal.Status == ProjectStatus.Matched)
             {
                 return NotFound();
             }
@@ -92,6 +94,7 @@ namespace OrbitPM.Controllers
         public async Task<IActionResult> EditProposal(int id, [Bind("Id,Title,Abstract,TechnicalStack,ResearchAreaId")] ProjectProposal proposal)
         {
             var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (studentId == null) return Unauthorized();
             var ownership = await _context.ProposalOwnerships
                 .Include(o => o.ProjectProposal)
                 .FirstOrDefaultAsync(o => o.ProjectProposalId == id && o.StudentId == studentId);
@@ -121,6 +124,7 @@ namespace OrbitPM.Controllers
         public async Task<IActionResult> WithdrawProposal(int proposalId)
         {
             var studentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (studentId == null) return Unauthorized();
 
             var ownership = await _context.ProposalOwnerships
                 .Include(o => o.ProjectProposal)
