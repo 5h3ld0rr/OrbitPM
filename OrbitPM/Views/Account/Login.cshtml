@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Authenticate";
+}
+
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-5">
+        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
+            <div class="text-center mb-5">
+                <div class="feature-icon-wrapper mb-3 mx-auto pulse-glow" style="width: 70px; height: 70px;">
+                    <i class="bi bi-person-bounding-box"></i>
+                </div>
+                <h2 class="fw-bolder text-white">System Access</h2>
+                <p class="text-secondary">Enter credentials to proceed securely</p>
+            </div>
+            
+            <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="form-floating mb-4">
+                    <input name="email" class="form-control bg-transparent text-white border-secondary" autocomplete="username" aria-required="true" placeholder="name@example.com" required/>
+                    <label class="text-secondary">Email address</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <input name="password" type="password" class="form-control bg-transparent text-white border-secondary" autocomplete="current-password" aria-required="true" placeholder="password" required/>
+                    <label class="text-secondary">Password</label>
+                </div>
+                <div class="mt-5">
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill fw-bold">Authenticate <i class="bi bi-unlock-fill ms-2"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

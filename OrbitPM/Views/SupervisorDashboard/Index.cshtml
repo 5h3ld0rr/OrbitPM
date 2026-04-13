@@ -1,0 +1,161 @@
+@model IEnumerable<OrbitPM.Models.ProjectProposal>
+@{
+    ViewData["Title"] = "Supervisor Dashboard - Blind Match";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+    /* Premium Glassmorphism Aesthetics for Supervisor Dashboard */
+    body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        color: #f8fafc;
+        font-family: 'Inter', system-ui, sans-serif;
+    }
+    
+    .dashboard-header {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .proposal-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.8rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .proposal-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.2) inset;
+        border: 1px solid rgba(99, 102, 241, 0.5);
+    }
+    
+    .badge-research {
+        background: rgba(99, 102, 241, 0.2);
+        color: #818cf8;
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+    
+    .tag-stack {
+        background: rgba(30, 41, 59, 0.8);
+        color: #94a3b8;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.05);
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+
+    .btn-match {
+        background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    
+    .btn-match:hover {
+        opacity: 0.95;
+        transform: scale(1.02);
+        color: white;
+        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.5);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        background: rgba(255,255,255,0.02);
+        border-radius: 16px;
+        border: 1px dashed rgba(255,255,255,0.15);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="dashboard-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="fw-bold mb-2 text-white"><i class="bi bi-shield-lock-fill text-primary me-3"></i>Blind Review Dashboard</h1>
+            <p class="text-slate-300 mb-0" style="color: #cbd5e1; font-size: 1.1rem;">Browse anonymous student proposals securely and select your matches.</p>
+        </div>
+        <div>
+            <a asp-action="ManageExpertise" class="btn btn-outline-light rounded-pill px-4 shadow-sm" style="border-color: rgba(255,255,255,0.2);">
+                <i class="bi bi-sliders me-2"></i> Manage Mentorship Domains
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; backdrop-filter: blur(8px);">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+            <h3 class="fw-light text-white mt-3">No pending proposals available</h3>
+            <p class="text-muted">Wait for students to submit new final-year project ideas.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var proposal in Model)
+            {
+                <div class="col-lg-6">
+                    <div class="proposal-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge badge-research rounded-pill px-3 py-2">
+                                @(proposal.ResearchArea?.Name ?? "Uncategorized")
+                            </span>
+                            <span class="text-muted small fw-bold" style="letter-spacing: 1px;">#@proposal.Id.ToString("D4")</span>
+                        </div>
+                        
+                        <h4 class="fw-bold text-white mb-3" style="line-height: 1.4;">@proposal.Title</h4>
+                        <p class="text-slate-300 flex-grow-1" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                            @proposal.Abstract
+                        </p>
+                        
+                        <div class="mb-4">
+                            @foreach(var tech in proposal.TechnicalStack.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <span class="tag-stack">@tech.Trim()</span>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-4" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                            <div class="small" style="color: #cbd5e1;">
+                                <i class="bi bi-incognito text-primary me-2"></i> <span class="opacity-75">Anonymous Submission</span>
+                            </div>
+                            <form asp-action="ExpressInterest" method="post" class="m-0">
+                                <input type="hidden" name="proposalId" value="@proposal.Id" />
+                                <button type="submit" class="btn btn-match">
+                                    <i class="bi bi-hand-index-thumb me-1"></i> Confirm Match
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

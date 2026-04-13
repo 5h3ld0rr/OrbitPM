@@ -1,0 +1,94 @@
+@model IEnumerable<OrbitPM.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Configure Users";
+}
+
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-10">
+        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="feature-icon-wrapper me-3 pulse-glow" style="width: 50px; height: 50px;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div>
+                        <h2 class="fw-bolder text-white mb-0">System Users</h2>
+                        <p class="text-secondary mb-0">Manage access control and provisions</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="collapse" data-bs-target="#createUserForm">
+                        <i class="bi bi-person-plus me-1"></i> Provision User
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-light rounded-pill px-3 fw-bold text-secondary border-secondary ms-2 btn-sm">Back</a>
+                </div>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success border-0 bg-success bg-opacity-10 text-success rounded-4 p-3 mb-4">
+                    <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <div class="collapse mb-4" id="createUserForm">
+                <div class="card bg-dark bg-opacity-50 border border-primary border-opacity-25 rounded-4 p-4">
+                    <form asp-action="CreateUser" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="text-secondary small mb-1">Full Name</label>
+                                <input type="text" name="fullName" class="form-control bg-transparent text-white border-secondary" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-secondary small mb-1">Email</label>
+                                <input type="email" name="email" class="form-control bg-transparent text-white border-secondary" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-secondary small mb-1">Access Role</label>
+                                <select name="role" class="form-select bg-dark text-white border-secondary" required>
+                                    <option value="Student">Student</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="ModuleLeader">Module Leader</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-secondary small mb-1">Initial Password</label>
+                                <input type="password" name="rawPassword" class="form-control bg-transparent text-white border-secondary" required />
+                            </div>
+                            <div class="col-12 mt-4 text-end">
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold">Provision Account</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive rounded-4 border border-secondary border-opacity-25" style="background: rgba(255,255,255,0.02)">
+                <table class="table table-borderless table-hover text-white align-middle mb-0">
+                    <thead class="border-bottom border-secondary border-opacity-25 text-secondary">
+                        <tr>
+                            <th class="ps-4 py-3">User</th>
+                            <th class="py-3">Role</th>
+                            <th class="py-3">System ID / Auth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var user in Model)
+                        {
+                            <tr class="border-bottom border-secondary border-opacity-10">
+                                <td class="ps-4 py-3">
+                                    <div class="fw-bold">@user.FullName</div>
+                                    <div class="small text-muted">@user.Email</div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="badge @(user.Role == "Student" ? "bg-primary" : user.Role == "Supervisor" ? "bg-success" : "bg-danger") bg-opacity-25 border border-secondary border-opacity-25 rounded-pill px-3">@user.Role</span>
+                                </td>
+                                <td class="py-3 text-muted small user-select-all font-monospace">@user.Id.Substring(0,8)...</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

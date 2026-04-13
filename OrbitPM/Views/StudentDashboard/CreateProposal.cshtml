@@ -1,0 +1,65 @@
+@model OrbitPM.Models.ProjectProposal
+@{
+    ViewData["Title"] = "Create Proposal - Student Dashboard";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-white border-bottom p-4">
+                    <div class="d-flex align-items-center mb-1">
+                        <a asp-action="Index" class="btn btn-sm btn-light border me-3"><i class="bi bi-arrow-left"></i> Back</a>
+                        <h2 class="fw-bold mb-0 text-dark">Submit New Idea</h2>
+                    </div>
+                    <p class="text-muted ms-5 ps-2 mb-0">Your identity will remain completely anonymous until a supervisor connects.</p>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="CreateProposal" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Title" class="form-label fw-bold text-secondary">Project Title <span class="text-danger">*</span></label>
+                            <input asp-for="Title" class="form-control form-control-lg bg-light" placeholder="e.g., AI-Driven Analytics Platform" required />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-4 mb-md-0">
+                                <label asp-for="ResearchAreaId" class="form-label fw-bold text-secondary">Primary Research Area <span class="text-danger">*</span></label>
+                                <select asp-for="ResearchAreaId" class="form-select border-secondary-subtle" asp-items="ViewBag.ResearchAreas" required>
+                                    <option value="">-- Select specific category --</option>
+                                </select>
+                                <span asp-validation-for="ResearchAreaId" class="text-danger small"></span>
+                                <div class="form-text mt-2"><i class="bi bi-info-circle"></i> Supervisors filter strongly by Area.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="TechnicalStack" class="form-label fw-bold text-secondary">Technical Stack</label>
+                                <input asp-for="TechnicalStack" class="form-control border-secondary-subtle" placeholder="e.g., React, Node.js, Python" />
+                                <span asp-validation-for="TechnicalStack" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label asp-for="Abstract" class="form-label fw-bold text-secondary">Project Abstract <span class="text-danger">*</span></label>
+                            <textarea asp-for="Abstract" class="form-control bg-light" rows="6" placeholder="Describe the core problem, methodology, and expected outcomes..." required></textarea>
+                            <span asp-validation-for="Abstract" class="text-danger small"></span>
+                            <div class="form-text mt-2"><i class="bi bi-shield-check text-success"></i> Reminder: Do not include your real name or ID in the abstract to protect Blind Review integrity.</div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold shadow">
+                                <i class="bi bi-send-fill me-2"></i> Submit Proposal for Blind Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

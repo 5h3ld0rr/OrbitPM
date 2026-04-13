@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Expertise Management";
+    var allAreas = ViewBag.AllAreas as List<OrbitPM.Models.ResearchArea> ?? new List<OrbitPM.Models.ResearchArea>();
+    var myAreas = ViewBag.MyAreas as List<int> ?? new List<int>();
+}
+
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-8">
+        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
+            <div class="d-flex align-items-center mb-4">
+                <div class="feature-icon-wrapper me-3 pulse-glow" style="width: 50px; height: 50px;">
+                    <i class="bi bi-sliders"></i>
+                </div>
+                <div>
+                    <h2 class="fw-bolder text-white mb-0">Configure Mentorship Domains</h2>
+                    <p class="text-secondary mb-0">Select the research tags you wish to filter incoming blind-match proposals by.</p>
+                </div>
+            </div>
+            
+            <form asp-action="ManageExpertise" method="post">
+                <div class="row g-3 mt-3 mb-5">
+                    @foreach (var area in allAreas)
+                    {
+                        var isChecked = myAreas.Contains(area.Id);
+                        <div class="col-md-6">
+                            <div class="form-check p-3 rounded-4 border @(isChecked ? "border-primary bg-primary bg-opacity-10" : "border-secondary border-opacity-25")" style="transition: all 0.2s;">
+                                <input class="form-check-input ms-1 shadow-none" type="checkbox" name="selectedAreas" value="@area.Id" id="area_@area.Id" @(isChecked ? "checked" : "") style="border-color: var(--primary);">
+                                <label class="form-check-label fw-bold ms-2 text-white w-100" for="area_@area.Id" style="cursor: pointer;">
+                                    @area.Name
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <div class="d-flex justify-content-end gap-3 border-top border-secondary border-opacity-25 pt-4">
+                    <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4 fw-bold text-secondary border-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold">Save Preferences <i class="bi bi-save ms-2"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+</style>
