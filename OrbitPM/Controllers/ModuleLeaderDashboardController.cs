@@ -84,6 +84,12 @@ namespace OrbitPM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUser(string fullName, string email, string role, string rawPassword)
         {
+            if (role == "ModuleLeader")
+            {
+                TempData["ErrorMessage"] = "You do not have permission to provision additional administrative accounts.";
+                return RedirectToAction(nameof(Users));
+            }
+
             if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(rawPassword))
             {
                 var user = new ApplicationUser 
