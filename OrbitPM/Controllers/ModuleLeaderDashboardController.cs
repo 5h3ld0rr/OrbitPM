@@ -104,5 +104,26 @@ namespace OrbitPM.Controllers
             }
             return RedirectToAction(nameof(Users));
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (user != null)
+            {
+                if (user.Id == currentUserId)
+                {
+                    TempData["ErrorMessage"] = "You cannot delete your own administrative account.";
+                    return RedirectToAction(nameof(Users));
+                }
+
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = $"User {user.FullName} has been permanently removed from the system.";
+            }
+            return RedirectToAction(nameof(Users));
+        }
     }
 }
