@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrbitPM.Data;
 using OrbitPM.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace OrbitPM.Controllers
 {
@@ -85,18 +86,19 @@ namespace OrbitPM.Controllers
         {
             if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(rawPassword))
             {
-                using var sha256 = System.Security.Cryptography.SHA256.Create();
-                var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(rawPassword));
-                var passwordHash = Convert.ToBase64String(hashedBytes);
-
-                _context.Users.Add(new ApplicationUser 
+                var user = new ApplicationUser 
                 { 
                     Id = Guid.NewGuid().ToString(),
                     FullName = fullName,
                     Email = email,
                     Role = role,
-                    PasswordHash = passwordHash
-                });
+                    PasswordHash = string.Empty
+                };
+
+                var hasher = new PasswordHasher<ApplicationUser>();
+                user.PasswordHash = hasher.HashPassword(user, rawPassword);
+
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = $"User {fullName} ({role}) created successfully.";
             }

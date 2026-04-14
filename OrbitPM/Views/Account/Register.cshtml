@@ -1,0 +1,63 @@
+@model OrbitPM.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-6">
+        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
+            <div class="text-center mb-5">
+                <div class="feature-icon-wrapper mb-3 mx-auto pulse-glow" style="width: 70px; height: 70px;">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+                <h2 class="fw-bolder text-white">Join OrbitPM</h2>
+                <p class="text-secondary">Create your professional profile to get started</p>
+            </div>
+
+            <form asp-controller="Account" asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                
+                <div class="form-floating mb-4">
+                    <input asp-for="FullName" class="form-control bg-transparent text-white border-secondary" placeholder="John Doe" required />
+                    <label asp-for="FullName" class="text-secondary"></label>
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <div class="form-floating mb-4">
+                    <input asp-for="Email" class="form-control bg-transparent text-white border-secondary" placeholder="name@example.com" required />
+                    <label asp-for="Email" class="text-secondary"></label>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-4">
+                            <input asp-for="Password" type="password" class="form-control bg-transparent text-white border-secondary" placeholder="Password" required />
+                            <label asp-for="Password" class="text-secondary"></label>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-4">
+                            <input asp-for="ConfirmPassword" type="password" class="form-control bg-transparent text-white border-secondary" placeholder="Confirm Password" required />
+                            <label asp-for="ConfirmPassword" class="text-secondary"></label>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary rounded-pill fw-bold">Sign Up <i class="bi bi-chevron-right ms-2"></i></button>
+                </div>
+
+                <div class="text-center mt-4">
+                    <p class="text-secondary">Already have an account? <a asp-action="Login" class="text-primary text-decoration-none fw-bold">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
