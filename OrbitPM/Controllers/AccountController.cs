@@ -64,5 +64,57 @@ namespace OrbitPM.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Use LINQ to check if email already exists
+                var existingUser = await _context.Users.AnyAsync(u => u.Email == model.Email);
+                if (existingUser)
+                {
+                    ModelState.AddModelError("Email", "Email already in use.");
+                    return View(model);
+                }
+
+                var hasher = new PasswordHasher<ApplicationUser>();
+                var user = new ApplicationUser
+                {
+                    Email = model.Email,
+                    FullName = model.FullName,
+                    Role = "Student", // Force Student role for self-registration
+                    PasswordHash = string.Empty
+                };
+
+                user.PasswordHash = hasher.HashPassword(user, model.Password);
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
+                // Auto-login after registration
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.FullName ?? user.Email),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role)
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
     }
 }
