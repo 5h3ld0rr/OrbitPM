@@ -3,55 +3,61 @@
     ViewData["Title"] = "Create Account";
 }
 
-<div class="row justify-content-center mt-5 fade-in-up">
+<div class="row justify-content-center mt-5">
     <div class="col-md-6">
-        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
+        <div class="card p-4 p-md-5">
             <div class="text-center mb-5">
-                <div class="feature-icon-wrapper mb-3 mx-auto pulse-glow" style="width: 70px; height: 70px;">
-                    <i class="bi bi-person-plus-fill"></i>
+                <div class="p-3 bg-primary bg-opacity-10 rounded-4 d-inline-block mb-4">
+                    <i class="bi bi-person-plus-fill text-primary fs-2"></i>
                 </div>
-                <h2 class="fw-bolder text-white">Join OrbitPM</h2>
-                <p class="text-secondary">Create your professional profile to get started</p>
+                <h2 class="fw-bold text-white mb-2">Request Access</h2>
+                <p class="text-dim">Create your OrbitPM identity to start collaborating</p>
             </div>
 
             <form asp-controller="Account" asp-action="Register" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 font-monospace small"></div>
                 
-                <div class="form-floating mb-4">
-                    <input asp-for="FullName" class="form-control bg-transparent text-white border-secondary" placeholder="John Doe" required />
-                    <label asp-for="FullName" class="text-secondary"></label>
-                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                <div class="mb-4">
+                    <label class="form-label small text-uppercase ls-wide">Full Legal Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
+                            <i class="bi bi-person"></i>
+                        </span>
+                        <input asp-for="FullName" class="form-control border-start-0" placeholder="e.g. Admiral Grace Hopper" required />
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger small mt-1 d-block font-monospace"></span>
                 </div>
 
-                <div class="form-floating mb-4">
-                    <input asp-for="Email" class="form-control bg-transparent text-white border-secondary" placeholder="name@example.com" required />
-                    <label asp-for="Email" class="text-secondary"></label>
-                    <span asp-validation-for="Email" class="text-danger small"></span>
+                <div class="mb-4">
+                    <label class="form-label small text-uppercase ls-wide">Academic Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
+                            <i class="bi bi-envelope-at"></i>
+                        </span>
+                        <input asp-for="Email" class="form-control border-start-0" placeholder="id@orbitpm.edu" required />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger small mt-1 d-block font-monospace"></span>
                 </div>
 
-                <div class="row">
+                <div class="row g-4 mb-5">
                     <div class="col-md-6">
-                        <div class="form-floating mb-4">
-                            <input asp-for="Password" type="password" class="form-control bg-transparent text-white border-secondary" placeholder="Password" required />
-                            <label asp-for="Password" class="text-secondary"></label>
-                            <span asp-validation-for="Password" class="text-danger small"></span>
-                        </div>
+                        <label class="form-label small text-uppercase ls-wide">Security Phrase</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" required />
+                        <span asp-validation-for="Password" class="text-danger small mt-1 d-block font-monospace"></span>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-floating mb-4">
-                            <input asp-for="ConfirmPassword" type="password" class="form-control bg-transparent text-white border-secondary" placeholder="Confirm Password" required />
-                            <label asp-for="ConfirmPassword" class="text-secondary"></label>
-                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
-                        </div>
+                        <label class="form-label small text-uppercase ls-wide">Confirm Phrase</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="••••••••" required />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small mt-1 d-block font-monospace"></span>
                     </div>
                 </div>
 
-                <div class="mt-5">
-                    <button type="submit" class="w-100 btn btn-lg btn-primary rounded-pill fw-bold">Sign Up <i class="bi bi-chevron-right ms-2"></i></button>
-                </div>
+                <button type="submit" class="w-100 btn btn-primary mb-4 py-3">
+                    Submit Registration Request <i class="bi bi-check2-circle ms-2"></i>
+                </button>
 
-                <div class="text-center mt-4">
-                    <p class="text-secondary">Already have an account? <a asp-action="Login" class="text-primary text-decoration-none fw-bold">Login here</a></p>
+                <div class="text-center">
+                    <p class="text-dim small mb-0">Already an Operator? <a asp-action="Login" class="text-primary text-decoration-none fw-bold">Login here</a></p>
                 </div>
             </form>
         </div>

@@ -2,32 +2,49 @@
     ViewData["Title"] = "Authenticate";
 }
 
-<div class="row justify-content-center mt-5 fade-in-up">
+<div class="row justify-content-center mt-5">
     <div class="col-md-5">
-        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
+        <div class="card p-4 p-md-5">
             <div class="text-center mb-5">
-                <div class="feature-icon-wrapper mb-3 mx-auto pulse-glow" style="width: 70px; height: 70px;">
-                    <i class="bi bi-person-bounding-box"></i>
+                <div class="p-3 bg-primary bg-opacity-10 rounded-4 d-inline-block mb-4">
+                    <i class="bi bi-shield-lock-fill text-primary fs-2"></i>
                 </div>
-                <h2 class="fw-bolder text-white">System Access</h2>
-                <p class="text-secondary">Enter credentials to proceed securely</p>
+                <h2 class="fw-bold text-white mb-2">Access Portal</h2>
+                <p class="text-dim">Connect to the OrbitPM secure network</p>
             </div>
             
             <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                <div class="form-floating mb-4">
-                    <input name="email" class="form-control bg-transparent text-white border-secondary" autocomplete="username" aria-required="true" placeholder="name@example.com" required/>
-                    <label class="text-secondary">Email address</label>
+                
+                <div class="mb-4">
+                    <label class="form-label small text-uppercase ls-wide">Network ID (Email)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+                        <input name="email" class="form-control border-start-0" autocomplete="username" aria-required="true" placeholder="id@orbitpm.edu" required/>
+                    </div>
                 </div>
-                <div class="form-floating mb-4">
-                    <input name="password" type="password" class="form-control bg-transparent text-white border-secondary" autocomplete="current-password" aria-required="true" placeholder="password" required/>
-                    <label class="text-secondary">Password</label>
+
+                <div class="mb-5">
+                    <div class="d-flex justify-content-between">
+                        <label class="form-label small text-uppercase ls-wide">Security Key</label>
+                        <a href="#" class="small text-primary text-decoration-none">Lost Key?</a>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
+                            <i class="bi bi-key"></i>
+                        </span>
+                        <input name="password" type="password" class="form-control border-start-0" autocomplete="current-password" aria-required="true" placeholder="••••••••" required/>
+                    </div>
                 </div>
-                <div class="mt-5">
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill fw-bold">Authenticate <i class="bi bi-unlock-fill ms-2"></i></button>
-                </div>
-                <div class="text-center mt-4">
-                    <p class="text-secondary small">New to the system? <a asp-action="Register" class="text-primary text-decoration-none fw-bold">Create Account</a></p>
+
+                <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-4 py-3">
+                    Initiate Connection <i class="bi bi-arrow-right-short ms-2"></i>
+                </button>
+
+                <div class="text-center">
+                    <p class="text-dim small mb-0">New Operator? <a asp-action="Register" class="text-primary text-decoration-none fw-bold">Request Access</a></p>
                 </div>
             </form>
         </div>

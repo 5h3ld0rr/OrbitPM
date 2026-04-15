@@ -3,120 +3,144 @@
     ViewData["Title"] = Model.DashboardTitle;
 }
 
-<div class="container-fluid py-4 fade-in-up">
+<div class="py-4">
     <!-- Dashboard Header -->
-    <div class="d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25 pb-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
         <div>
-            <h2 class="fw-bolder mb-0"><i class="bi bi-activity text-primary me-2 pulse-glow rounded-circle shadow-sm"></i>@Model.DashboardTitle</h2>
-            <p class="text-secondary mb-0">@Model.DashboardSubtitle</p>
+            <h1 class="display-5 fw-bold mb-1">
+                @Model.DashboardTitle
+            </h1>
+            <p class="text-dim fs-5 mb-0">@Model.DashboardSubtitle</p>
         </div>
         
-        @if (!User.Identity?.IsAuthenticated ?? true)
-        {
-            <a asp-controller="Account" asp-action="Login" class="btn btn-primary fw-bold shadow-sm rounded-pill px-4">
-                <i class="bi bi-shield-lock-fill me-2"></i> Access Terminal
-            </a>
-        }
-        else
-        {
-            <a asp-controller="@(User.IsInRole("ModuleLeader") ? "ModuleLeaderDashboard" : User.IsInRole("Supervisor") ? "SupervisorDashboard" : "StudentDashboard")" asp-action="Index" class="btn btn-outline-light fw-bold shadow-sm rounded-pill px-4 text-secondary border-secondary">
-                <i class="bi bi-box-arrow-up-right me-2"></i> Legacy Workspace
-            </a>
-        }
+        <div>
+            @if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                <a asp-controller="Account" asp-action="Login" class="btn btn-primary px-4">
+                    <i class="bi bi-shield-lock-fill me-2"></i> Access Terminal
+                </a>
+            }
+            else
+            {
+                <a asp-controller="@(User.IsInRole("ModuleLeader") ? "ModuleLeaderDashboard" : User.IsInRole("Supervisor") ? "SupervisorDashboard" : "StudentDashboard")" asp-action="Index" class="btn btn-outline-light px-4 border-2">
+                    <i class="bi bi-box-arrow-up-right me-2"></i> Enter Workspace
+                </a>
+            }
+        </div>
     </div>
 
     <!-- Metrics Cards -->
     <div class="row g-4 mb-5">
         <div class="col-md-3">
-            <div class="card stat-card border-0 h-100 p-4 rounded-4" style="background: linear-gradient(145deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%);">
+            <div class="card stat-card p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">@Model.Stat1Label</span>
-                    <i class="bi @Model.Stat1Icon fs-4 @Model.Stat1Color opacity-75"></i>
+                    <span class="text-dim small fw-bold text-uppercase ls-wide">@Model.Stat1Label</span>
+                    <div class="p-2 rounded-3 bg-primary bg-opacity-10 text-primary">
+                        <i class="bi @Model.Stat1Icon fs-5"></i>
+                    </div>
                 </div>
-                <h2 class="display-5 fw-bolder mb-0 text-white">@Model.Stat1Value</h2>
+                <h2 class="stat-value display-6 mb-0">@Model.Stat1Value</h2>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card stat-card border-0 h-100 p-4 rounded-4" style="background: linear-gradient(145deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%);">
+            <div class="card stat-card p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">@Model.Stat2Label</span>
-                    <i class="bi @Model.Stat2Icon fs-4 @Model.Stat2Color opacity-75"></i>
+                    <span class="text-dim small fw-bold text-uppercase ls-wide">@Model.Stat2Label</span>
+                    <div class="p-2 rounded-3 bg-info bg-opacity-10 text-info">
+                        <i class="bi @Model.Stat2Icon fs-5"></i>
+                    </div>
                 </div>
-                <h2 class="display-5 fw-bolder mb-0 text-white">@Model.Stat2Value</h2>
+                <h2 class="stat-value display-6 mb-0">@Model.Stat2Value</h2>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card stat-card border-0 h-100 p-4 rounded-4" style="background: linear-gradient(145deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); border-left: 3px solid var(--primary) !important;">
+            <div class="card stat-card p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">@Model.Stat3Label</span>
-                    <i class="bi @Model.Stat3Icon fs-4 @Model.Stat3Color opacity-75"></i>
+                    <span class="text-dim small fw-bold text-uppercase ls-wide">@Model.Stat3Label</span>
+                    <div class="p-2 rounded-3 bg-success bg-opacity-10 text-success">
+                        <i class="bi @Model.Stat3Icon fs-5"></i>
+                    </div>
                 </div>
-                <h2 class="display-5 fw-bolder mb-0 text-white">@Model.Stat3Value</h2>
+                <h2 class="stat-value display-6 mb-0">@Model.Stat3Value</h2>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card stat-card border-0 h-100 p-4 rounded-4" style="background: linear-gradient(145deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); border-left: 3px solid var(--accent) !important;">
+            <div class="card stat-card p-4 h-100 border-start-primary">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">@Model.Stat4Label</span>
-                    <i class="bi @Model.Stat4Icon fs-4 @Model.Stat4Color opacity-75"></i>
+                    <span class="text-dim small fw-bold text-uppercase ls-wide">@Model.Stat4Label</span>
+                    <div class="p-2 rounded-3 bg-warning bg-opacity-10 text-warning">
+                        <i class="bi @Model.Stat4Icon fs-5"></i>
+                    </div>
                 </div>
-                <h2 class="display-5 fw-bolder mb-0 text-white">@Model.Stat4Value</h2>
+                <h2 class="stat-value display-6 mb-0">@Model.Stat4Value</h2>
             </div>
         </div>
     </div>
 
-    <!-- Recent Activity Table -->
-    <div class="card border-0 p-4 rounded-5" style="background: rgba(13,20,36,0.4); backdrop-filter: blur(20px);">
-        <h4 class="fw-bold mb-4"><i class="bi bi-list-columns-reverse me-2 text-primary"></i> @Model.TableTitle</h4>
+    <!-- Recent Activity Section -->
+    <div class="card border-0 p-0 overflow-hidden">
+        <div class="p-4 border-bottom border-white border-opacity-5 d-flex justify-content-between align-items-center bg-white bg-opacity-5">
+            <h4 class="fw-bold mb-0"><i class="bi bi-intersect me-2 text-primary"></i> @Model.TableTitle</h4>
+            <span class="badge bg-primary bg-opacity-10 text-primary fw-normal">Live Signal Feed</span>
+        </div>
         
         <div class="table-responsive">
-            <table class="table custom-table table-hover align-middle mb-0">
-                <thead class="bg-transparent text-secondary">
+            <table class="table align-middle">
+                <thead>
                     <tr>
-                        <th class="border-0">Title</th>
-                        <th class="border-0">Domain</th>
-                        <th class="border-0 text-center">Status</th>
-                        <th class="border-0 text-end">Time</th>
+                        <th class="ps-4">Project Title</th>
+                        <th>Research Domain</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-end pe-4">Timestamp</th>
                     </tr>
                 </thead>
-                <tbody class="border-top border-secondary border-opacity-25">
+                <tbody>
                     @if (Model.ProposalsList.Any())
                     {
                         foreach (var p in Model.ProposalsList)
                         {
-                            <tr>
-                                <td class="fw-bold text-white py-3">
-                                    <i class="bi bi-file-earmark-code text-primary me-2"></i> @p.Title
+                            <tr class="hover-row">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="p-2 bg-white bg-opacity-5 rounded-3 me-3">
+                                            <i class="bi bi-file-earmark-text text-dim"></i>
+                                        </div>
+                                        <span class="fw-semibold text-white">@p.Title</span>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span class="badge rounded-pill bg-transparent border border-secondary text-secondary">
-                                        @p.ResearchArea?.Name
+                                    <span class="text-dim">
+                                        <i class="bi bi-hash small me-1"></i>@p.ResearchArea?.Name
                                     </span>
                                 </td>
                                 <td class="text-center">
                                     @if(p.Status == OrbitPM.Models.ProjectStatus.Pending)
                                     {
-                                        <span class="badge rounded-pill bg-warning text-dark px-3"><i class="bi bi-hourglass-split me-1"></i> Pending</span>
+                                        <span class="badge bg-warning bg-opacity-10 text-warning px-3"><i class="bi bi-dot me-1"></i>Waiting</span>
                                     }
                                     else if (p.Status == OrbitPM.Models.ProjectStatus.Matched)
                                     {
-                                        <span class="badge rounded-pill bg-success text-dark px-3"><i class="bi bi-check-circle-fill me-1"></i> Matched</span>
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3"><i class="bi bi-check-all me-1"></i>Secure Match</span>
                                     }
                                     else
                                     {
-                                        <span class="badge rounded-pill bg-secondary text-dark px-3">@p.Status</span>
+                                        <span class="badge bg-secondary bg-opacity-10 text-dim px-3">@p.Status</span>
                                     }
                                 </td>
-                                <td class="text-end text-muted small font-monospace">@p.CreatedAt.ToString("MMM dd HH:mm")</td>
+                                <td class="text-end pe-4">
+                                    <span class="text-dim font-monospace small">@p.CreatedAt.ToString("MMM dd, HH:mm")</span>
+                                </td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-5">
-                                <i class="bi bi-hdd-network fs-1 d-block mb-3 opacity-50"></i>
-                                No signals detected waiting in queue
+                            <td colspan="4" class="text-center py-5">
+                                <div class="opacity-25 mb-3">
+                                    <i class="bi bi-broadcast fs-1"></i>
+                                </div>
+                                <p class="text-dim mb-0">No active signals found in the current orbit.</p>
                             </td>
                         </tr>
                     }
