@@ -7,11 +7,11 @@
 
 <div class="row justify-content-center mt-4">
     <div class="col-md-10">
-        <div class="card p-4 p-md-5">
+        <div class="card p-4 p-md-5 border-0 shadow-2xl" style="background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(20px);">
             <!-- Header Section -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
                 <div class="d-flex align-items-center">
-                    <div class="p-3 bg-primary bg-opacity-10 rounded-4 me-3">
+                    <div class="p-3 bg-primary bg-opacity-20 rounded-4 me-3">
                         <i class="bi bi-diagram-3 text-primary fs-3"></i>
                     </div>
                     <div>
@@ -22,8 +22,8 @@
                 <!-- Quick Add Form -->
                 <form action="/SupervisorDashboard/AddResearchArea" method="post" class="d-flex gap-2">
                     @Html.AntiForgeryToken()
-                    <input type="text" name="name" class="form-control form-control-sm" placeholder="New domain name..." required style="min-width: 200px;" />
-                    <button type="submit" class="btn btn-primary btn-sm px-3 shadow-sm"><i class="bi bi-plus-lg"></i></button>
+                    <input type="text" name="name" class="form-control form-control-sm bg-dark text-white border-white border-opacity-10" placeholder="New Research Area..." required style="min-width: 200px;" />
+                    <button type="submit" class="btn btn-primary btn-sm px-3"><i class="bi bi-plus-lg"></i></button>
                 </form>
             </div>
 
@@ -41,77 +41,58 @@
                 </div>
             }
 
-            <!-- Primary Selection Form -->
-            <form id="selectionForm" action="/SupervisorDashboard/ManageExpertise" method="post">
-                @Html.AntiForgeryToken()
-                <div class="row g-4 mb-5">
-                    @foreach (var area in allAreas)
-                    {
-                        var isChecked = myAreas.Contains(area.Id);
-                        <div class="col-lg-4 col-md-6">
-                            <div class="card bg-white bg-opacity-5 border-white border-opacity-10 p-3 h-100 group-hover transition-all">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div class="form-check p-0 m-0 d-flex align-items-center">
-                                        <input class="form-check-input mt-0 me-2 shadow-none" type="checkbox" name="selectedAreas" value="@area.Id" id="area_@area.Id" @(isChecked ? "checked" : "") style="width: 1.2rem; height: 1.2rem;">
-                                        <label class="form-check-label fw-bold text-white mb-0" for="area_@area.Id" style="cursor: pointer;">
-                                            @area.Name
-                                        </label>
-                                    </div>
-                                    <div class="d-flex gap-1" style="z-index: 10;">
-                                        <!-- Edit Modal Trigger -->
-                                        <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-primary" data-bs-toggle="modal" data-bs-target="#editModal_@area.Id">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <!-- Delete Trigger -->
-                                        <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-danger" onclick="confirmDelete(@area.Id, '@area.Name')">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </div>
+            <!-- Primary Selection Grid -->
+            <div class="row g-4 mb-5">
+                @foreach (var area in allAreas)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card bg-white bg-opacity-5 border-white border-opacity-10 p-3 h-100 group-hover transition-all">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h5 class="fw-bold text-white mb-0">@area.Name</h5>
+                                <div class="d-flex gap-1">
+                                    <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-primary" data-bs-toggle="modal" data-bs-target="#editModal_@area.Id">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-danger" onclick="confirmDelete(@area.Id, '@area.Name')">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
                                 </div>
-                                <span class="text-dim small opacity-50">#ID-@area.Id</span>
                             </div>
+                            <span class="text-dim small opacity-50">#ID-@area.Id</span>
                         </div>
-                    }
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center border-top border-white border-opacity-5 pt-4">
-                    <p class="text-dim small mb-0 opacity-75"><i class="bi bi-info-circle me-1"></i> Update your interests globally here.</p>
-                    <div class="d-flex gap-3">
-                        <a href="/SupervisorDashboard/Index" class="btn btn-outline-light px-4 border-white border-opacity-10">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-5 shadow-sm">Publish Interests <i class="bi bi-send ms-2"></i></button>
                     </div>
-                </div>
-            </form>
+                }
+            </div>
         </div>
     </div>
 </div>
 
-<!-- All Management Modals Hosted Separately to avoid DOM nesting issues -->
+<!-- Modals -->
 @foreach (var area in allAreas)
 {
-    <div class="modal fade" id="editModal_@area.Id" tabindex="-1" aria-labelledby="editLabel_@area.Id" aria-hidden="true" style="z-index: 1060;">
+    <div class="modal fade" id="editModal_@area.Id" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark border border-white border-opacity-20 rounded-4">
+            <div class="modal-content bg-slate-900 border border-white border-opacity-20 rounded-4" style="background-color: #0f172a;">
                 <div class="modal-header border-bottom border-white border-opacity-5 p-4">
-                    <h5 class="modal-title fw-bold text-white" id="editLabel_@area.Id">Modify Domain #@area.Id</h5>
+                    <h5 class="modal-title fw-bold text-white">Modify Domain #@area.Id</h5>
                     <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="/SupervisorDashboard/EditResearchArea" method="post">
                     @Html.AntiForgeryToken()
                     <div class="modal-body p-4">
                         <input type="hidden" name="id" value="@area.Id" />
-                        <div class="mb-3">
-                            <label class="form-label small text-uppercase text-dim ls-wide">Domain Designation</label>
-                            <input type="text" name="name" class="form-control" value="@area.Name" required />
+                        <div class="mb-4">
+                            <label class="form-label small text-uppercase text-dim ls-wide mb-2">Domain Designation</label>
+                            <input type="text" name="name" class="form-control bg-dark text-white border-white border-opacity-20 py-2 px-3 shadow-none focus-vibrant" value="@area.Name" required />
                         </div>
-                        <div class="d-flex align-items-start p-3 bg-warning bg-opacity-10 rounded-3">
+                        <div class="d-flex align-items-start p-3 bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-20">
                             <i class="bi bi-exclamation-triangle-fill text-warning me-2 mt-1"></i>
-                            <p class="text-warning small mb-0"><strong>Alert:</strong> Changing names affects all matching rules system-wide.</p>
+                            <p class="text-warning small mb-0">Changing names affects all matching rules system-wide.</p>
                         </div>
                     </div>
                     <div class="modal-footer border-top border-white border-opacity-5 p-3">
                         <button type="button" class="btn btn-link text-white text-decoration-none px-4" data-bs-dismiss="modal">Discard</button>
-                        <button type="submit" class="btn btn-primary px-4 shadow-sm" onclick="console.log('Post Submit Triggered for ID: @area.Id')">Apply Changes</button>
+                        <button type="submit" class="btn btn-primary px-4">Apply Changes</button>
                     </div>
                 </form>
             </div>
@@ -119,7 +100,6 @@
     </div>
 }
 
-<!-- Unified Delete Form -->
 <form id="deleteForm" action="/SupervisorDashboard/DeleteResearchArea" method="post" style="display:none;">
     @Html.AntiForgeryToken()
     <input type="hidden" name="id" id="deleteId" />
@@ -128,13 +108,11 @@
 @section Scripts {
     <script>
         function confirmDelete(id, name) {
-            if (confirm(`Permanent Action: Are you sure you want to remove '${name}'? This affects everything linked to this domain.`)) {
+            if (confirm(`Permanent Action: Are you sure you want to remove '${name}'?`)) {
                 document.getElementById('deleteId').value = id;
                 document.getElementById('deleteForm').submit();
             }
         }
-        // Diagnostic Log
-        console.log("Mentorship Management Scripts Primed.");
     </script>
     <style>
         .hover-primary:hover { color: var(--primary) !important; transform: scale(1.1); }
@@ -142,5 +120,7 @@
         .group-hover:hover { border-color: var(--primary) !important; background: rgba(255,255,255,0.08) !important; }
         .ls-wide { letter-spacing: 0.05em; }
         .transition-all { transition: all 0.2s ease-in-out; }
+        .focus-vibrant:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.25) !important; }
+        .bg-slate-900 { background-color: #0f172a; }
     </style>
 }
