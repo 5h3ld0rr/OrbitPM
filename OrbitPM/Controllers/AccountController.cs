@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrbitPM.Data;
 using OrbitPM.Models;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity; // Still valid for barebones PasswordHasher utility without full Identity setup
-
+using Microsoft.AspNetCore.Identity;
 namespace OrbitPM.Controllers
 {
     public class AccountController : Controller
@@ -62,7 +61,7 @@ namespace OrbitPM.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpGet]
@@ -111,7 +110,7 @@ namespace OrbitPM.Controllers
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "StudentDashboard");
             }
 
             return View(model);
