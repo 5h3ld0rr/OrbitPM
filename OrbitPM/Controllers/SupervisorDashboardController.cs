@@ -19,12 +19,35 @@ namespace OrbitPM.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Fetch pending proposals, inherently hiding student details since we never join the ownership table here!
+            var supervisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            // 1. Get areas this supervisor is interested in
+            var myAreaIds = await _context.SupervisorResearchAreas
+                .Where(s => s.SupervisorId == supervisorId)
+                .Select(s => s.ResearchAreaId)
+                .ToListAsync();
+
+            // 2. Fetch all pending proposals
             var availableProposals = await _context.ProjectProposals
                 .Include(p => p.ResearchArea)
                 .Where(p => p.Status == ProjectStatus.Pending)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
+
+            // 3. Count matches for the notification alert
+            ViewBag.MatchCount = availableProposals.Count(p => myAreaIds.Contains(p.ResearchAreaId));
+            ViewBag.MyAreaIds = myAreaIds;
+
+            // 4. Statistics Calculation for the logged-in supervisor
+            var myMatches = await _context.MatchRecords
+                .Include(m => m.ProjectProposal)
+                .Where(m => m.SupervisorId == supervisorId)
+                .ToListAsync();
+
+            ViewBag.Stats_Total = myMatches.Count;
+            ViewBag.Stats_Approved = myMatches.Count(m => m.ProjectProposal?.Status == ProjectStatus.Approved);
+            ViewBag.Stats_Pending = myMatches.Count(m => m.ProjectProposal?.Status == ProjectStatus.Matched); // Still in 'Matched' phase but not yet 'Approved'
+            ViewBag.Stats_Rejected = myMatches.Count(m => m.ProjectProposal?.Status == ProjectStatus.Rejected);
 
             return View(availableProposals);
         }

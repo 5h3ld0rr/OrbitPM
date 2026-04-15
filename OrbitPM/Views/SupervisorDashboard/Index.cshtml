@@ -85,10 +85,73 @@
         border-radius: 16px;
         border: 1px dashed rgba(255,255,255,0.15);
     }
+
+    /* Stats Panel Styles */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+    }
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 1.5rem;
+    }
+    .text-dim { color: #94a3b8; }
+    .ls-wide { letter-spacing: 0.05em; }
+
+    /* New Empty State Lux Styles */
+    .empty-state-lux {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+    .guide-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    .guide-card:hover {
+        transform: translateY(-10px);
+        background: rgba(30, 41, 59, 0.8);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+    .guide-num {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 32px;
+        height: 32px;
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.5);
+    }
+    .shadow-glow {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    .shadow-glow:hover {
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+    }
 </style>
 
 <div class="container py-5">
-    <div class="dashboard-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div class="dashboard-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
             <h1 class="fw-bold mb-2 text-white"><i class="bi bi-shield-lock-fill text-primary me-3"></i>Blind Review Dashboard</h1>
             <p class="text-slate-300 mb-0" style="color: #cbd5e1; font-size: 1.1rem;">Browse anonymous student proposals securely and select your matches.</p>
@@ -100,6 +163,70 @@
         </div>
     </div>
 
+    <!-- Statistics Panel -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-3 col-6">
+            <div class="glass-card p-3 d-flex align-items-center">
+                <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                    <i class="bi bi-clipboard-check-fill"></i>
+                </div>
+                <div>
+                    <div class="text-dim small fw-bold text-uppercase ls-wide">Total Matches</div>
+                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Total</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="glass-card p-3 d-flex align-items-center">
+                <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                    <i class="bi bi-check-all"></i>
+                </div>
+                <div>
+                    <div class="text-dim small fw-bold text-uppercase ls-wide">Approved</div>
+                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Approved</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="glass-card p-3 d-flex align-items-center">
+                <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+                <div>
+                    <div class="text-dim small fw-bold text-uppercase ls-wide">Pending</div>
+                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Pending</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="glass-card p-3 d-flex align-items-center">
+                <div class="stat-icon bg-danger bg-opacity-10 text-danger me-3">
+                    <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <div>
+                    <div class="text-dim small fw-bold text-uppercase ls-wide">Rejected</div>
+                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Rejected</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.MatchCount > 0)
+    {
+        <div class="notification-banner mb-5 p-4 rounded-4 d-flex align-items-center justify-content-between animate__animated animate__pulse animate__infinite">
+            <div class="d-flex align-items-center">
+                <div class="icon-box me-4">
+                    <i class="bi bi-lightning-charge-fill text-warning fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-white mb-1">New Priority Matches Detected!</h5>
+                    <p class="mb-0 text-white opacity-75">There are @ViewBag.MatchCount pending proposals matching your academic research areas.</p>
+                </div>
+            </div>
+            <button class="btn btn-light btn-sm rounded-pill px-4 fw-bold text-primary shadow-sm" onclick="scrollToFirstMatch()">View Now</button>
+        </div>
+    }
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; backdrop-filter: blur(8px);">
@@ -110,10 +237,50 @@
 
     @if (!Model.Any())
     {
-        <div class="empty-state">
-            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-            <h3 class="fw-light text-white mt-3">No pending proposals available</h3>
-            <p class="text-muted">Wait for students to submit new final-year project ideas.</p>
+        <div class="empty-state-lux p-5 rounded-4 text-center mt-4">
+            <div class="mb-4">
+                <div class="display-container position-relative d-inline-block">
+                    <i class="bi bi-rocket-takeoff-fill text-primary display-1 opacity-25"></i>
+                    <i class="bi bi-search position-absolute top-50 start-50 translate-middle text-white fs-1"></i>
+                </div>
+            </div>
+            
+            <h2 class="fw-bold text-white mb-3">Quiet before the innovation storm...</h2>
+            <p class="text-dim mb-5 mx-auto" style="max-width: 600px;">
+                There aren't any pending proposals right now. While you wait for student submissions, 
+                make sure your profile is optimized for the best matches.
+            </p>
+
+            <div class="row g-4 justify-content-center mb-5">
+                <div class="col-md-4">
+                    <div class="guide-card p-4 rounded-4 h-100">
+                        <div class="guide-num">1</div>
+                        <i class="bi bi-tags-fill text-primary fs-3 mb-3 d-block"></i>
+                        <h6 class="fw-bold text-white">Define Expertise</h6>
+                        <p class="small text-dim mb-0">Select your research areas to trigger Priority Match alerts.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="guide-card p-4 rounded-4 h-100">
+                        <div class="guide-num">2</div>
+                        <i class="bi bi-incognito text-warning fs-3 mb-3 d-block"></i>
+                        <h6 class="fw-bold text-white">Blind Review</h6>
+                        <p class="small text-dim mb-0">Evaluate project abstracts without student identity bias.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="guide-card p-4 rounded-4 h-100">
+                        <div class="guide-num">3</div>
+                        <i class="bi bi-handshake-fill text-success fs-3 mb-3 d-block"></i>
+                        <h6 class="fw-bold text-white">Mutual Match</h6>
+                        <p class="small text-dim mb-0">Confirm interests to unlock contact details and proceed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <a asp-action="ManageExpertise" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow-glow">
+                <i class="bi bi-gear-fill me-2"></i> Update Research Profile Now
+            </a>
         </div>
     }
     else
@@ -121,12 +288,21 @@
         <div class="row g-4">
             @foreach (var proposal in Model)
             {
-                <div class="col-lg-6">
-                    <div class="proposal-card">
+                var isMatch = (ViewBag.MyAreaIds as List<int>)?.Contains(proposal.ResearchAreaId) ?? false;
+                <div class="col-lg-6 @(isMatch ? "priority-match-item" : "")">
+                    <div class="proposal-card @(isMatch ? "matched-border" : "")">
                         <div class="d-flex justify-content-between align-items-start mb-3">
-                            <span class="badge badge-research rounded-pill px-3 py-2">
-                                @(proposal.ResearchArea?.Name ?? "Uncategorized")
-                            </span>
+                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                <span class="badge badge-research rounded-pill px-3 py-2 text-truncate" style="max-width: 180px;" title="@(proposal.ResearchArea?.Name ?? "Uncategorized")">
+                                    @(proposal.ResearchArea?.Name ?? "Uncategorized")
+                                </span>
+                                @if (isMatch)
+                                {
+                                    <span class="badge bg-warning text-dark border-0 rounded-pill px-3 py-2 small fw-bold">
+                                        <i class="bi bi-star-fill me-1"></i> PRIORITY MATCH
+                                    </span>
+                                }
+                            </div>
                             <span class="text-muted small fw-bold" style="letter-spacing: 1px;">#@proposal.Id.ToString("D4")</span>
                         </div>
                         
@@ -159,3 +335,43 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        function scrollToFirstMatch() {
+            const firstMatch = document.querySelector('.priority-match-item');
+            if (firstMatch) {
+                firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstMatch.classList.add('pulse-highlight');
+                setTimeout(() => firstMatch.classList.remove('pulse-highlight'), 2000);
+            }
+        }
+    </script>
+    <style>
+        .notification-banner {
+            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .icon-box {
+            background: rgba(255,255,255,0.15);
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .matched-border {
+            border: 2px solid rgba(255, 193, 7, 0.4) !important;
+            background: rgba(255, 193, 7, 0.03) !important;
+        }
+        .pulse-highlight {
+            animation: pulse-ring 1s cubic-bezier(0.25, 0, 0, 1) infinite;
+        }
+        @@keyframes pulse-ring {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(255, 193, 7, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+    </style>
+}

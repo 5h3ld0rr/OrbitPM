@@ -7,24 +7,35 @@
 
 <div class="row justify-content-center mt-4">
     <div class="col-md-10">
-        <div class="card p-4 p-md-5 border-0 shadow-2xl" style="background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(20px);">
-            <!-- Header Section -->
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
-                <div class="d-flex align-items-center">
-                    <div class="p-3 bg-primary bg-opacity-20 rounded-4 me-3">
-                        <i class="bi bi-diagram-3 text-primary fs-3"></i>
+            <!-- Header Section & Search -->
+            <div class="mb-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 bg-primary bg-opacity-20 rounded-4 me-3">
+                            <i class="bi bi-diagram-3 text-primary fs-3"></i>
+                        </div>
+                        <div>
+                            <h2 class="fw-bold text-white mb-0">Research Areas</h2>
+                            <p class="text-dim mb-0">Manage system-wide academic domains.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 class="fw-bold text-white mb-0">Research Areas</h2>
-                        <p class="text-dim mb-0">Manage and select your areas of academic expertise.</p>
+                    <!-- Quick Add Form -->
+                    <form action="/SupervisorDashboard/AddResearchArea" method="post" class="d-flex gap-2">
+                        @Html.AntiForgeryToken()
+                        <input type="text" name="name" class="form-control form-control-sm bg-dark text-white border-white border-opacity-10" placeholder="Create new..." required />
+                        <button type="submit" class="btn btn-primary btn-sm px-3 shadow-glow"><i class="bi bi-plus-lg"></i></button>
+                    </form>
+                </div>
+
+                <!-- Advanced Search Filter -->
+                <div class="position-relative search-container">
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-primary"></i>
+                    <input type="text" id="areaSearch" class="form-control bg-white bg-opacity-5 border-white border-opacity-10 py-3 ps-5 text-white rounded-4 shadow-none focus-glow" 
+                           placeholder="Filter domains by name or keyword..." onkeyup="filterAreas()">
+                    <div id="searchCounter" class="position-absolute top-50 end-0 translate-middle-y me-3 badge bg-primary bg-opacity-20 text-primary d-none">
+                        <span id="matchCount">0</span> matches
                     </div>
                 </div>
-                <!-- Quick Add Form -->
-                <form action="/SupervisorDashboard/AddResearchArea" method="post" class="d-flex gap-2">
-                    @Html.AntiForgeryToken()
-                    <input type="text" name="name" class="form-control form-control-sm bg-dark text-white border-white border-opacity-10" placeholder="New Research Area..." required style="min-width: 200px;" />
-                    <button type="submit" class="btn btn-primary btn-sm px-3"><i class="bi bi-plus-lg"></i></button>
-                </form>
             </div>
 
             @if (TempData["SuccessMessage"] != null)
@@ -33,22 +44,15 @@
                     <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
                 </div>
             }
-            
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger mb-4" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ErrorMessage"]
-                </div>
-            }
 
             <!-- Primary Selection Grid -->
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-3" id="areaGrid">
                 @foreach (var area in allAreas)
                 {
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card bg-white bg-opacity-5 border-white border-opacity-10 p-3 h-100 group-hover transition-all">
+                    <div class="col-lg-4 col-md-6 area-card-item" data-name="@area.Name.ToLower()">
+                        <div class="card bg-white bg-opacity-5 border-white border-opacity-10 p-3 h-100 group-hover transition-all border-1">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <h5 class="fw-bold text-white mb-0">@area.Name</h5>
+                                <h5 class="fw-bold text-white mb-0 area-title text-truncate-2" title="@area.Name">@area.Name</h5>
                                 <div class="d-flex gap-1">
                                     <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-primary" data-bs-toggle="modal" data-bs-target="#editModal_@area.Id">
                                         <i class="bi bi-pencil-square"></i>
@@ -62,6 +66,11 @@
                         </div>
                     </div>
                 }
+            </div>
+            <div id="noResults" class="text-center py-5 d-none">
+                <i class="bi bi-search text-dim display-1 mb-3 opacity-25"></i>
+                <h4 class="text-white fw-light">No matching domains found</h4>
+                <p class="text-dim">Try a different keyword or create a new area.</p>
             </div>
         </div>
     </div>
@@ -113,6 +122,42 @@
                 document.getElementById('deleteForm').submit();
             }
         }
+
+        function filterAreas() {
+            const query = document.getElementById('areaSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.area-card-item');
+            const counter = document.getElementById('searchCounter');
+            const matchCountSpan = document.getElementById('matchCount');
+            const noResults = document.getElementById('noResults');
+            let matchCount = 0;
+
+            items.forEach(item => {
+                const name = item.getAttribute('data-name');
+                if (name.includes(query)) {
+                    item.classList.remove('d-none');
+                    matchCount++;
+                } else {
+                    item.classList.add('d-none');
+                }
+            });
+
+            // Update UI feedback
+            if (query.length > 0) {
+                counter.classList.remove('d-none');
+                matchCountSpan.innerText = matchCount;
+            } else {
+                counter.classList.add('d-none');
+            }
+
+            // Toggle no results state
+            if (matchCount === 0 && query.length > 0) {
+                noResults.classList.remove('d-none');
+                document.getElementById('areaGrid').classList.add('d-none');
+            } else {
+                noResults.classList.add('d-none');
+                document.getElementById('areaGrid').classList.remove('d-none');
+            }
+        }
     </script>
     <style>
         .hover-primary:hover { color: var(--primary) !important; transform: scale(1.1); }
@@ -120,7 +165,23 @@
         .group-hover:hover { border-color: var(--primary) !important; background: rgba(255,255,255,0.08) !important; }
         .ls-wide { letter-spacing: 0.05em; }
         .transition-all { transition: all 0.2s ease-in-out; }
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 3rem;
+            line-height: 1.5rem;
+        }
         .focus-vibrant:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.25) !important; }
         .bg-slate-900 { background-color: #0f172a; }
+        .focus-glow:focus { 
+            background: rgba(255,255,255,0.1) !important; 
+            border-color: var(--primary) !important; 
+            box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.2) !important;
+        }
+        .search-container i { opacity: 0.5; transition: opacity 0.2s; }
+        .search-container:focus-within i { opacity: 1; color: var(--primary) !important; }
     </style>
 }

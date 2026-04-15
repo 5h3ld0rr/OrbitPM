@@ -4,6 +4,8 @@ namespace OrbitPM.Models
     {
         Pending,
         Matched,
+        Approved,
+        Rejected,
         Withdrawn
     }
 }
