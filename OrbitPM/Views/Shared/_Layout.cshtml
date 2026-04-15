@@ -10,59 +10,78 @@
     <link rel="stylesheet" href="~/OrbitPM.styles.css" asp-append-version="true" />
 </head>
 <body>
+    <div class="hero-glow"></div>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light glass-nav sticky-top mb-4">
-            <div class="container-fluid px-4">
+        <nav class="navbar navbar-expand-lg glass-nav sticky-top">
+            <div class="container px-4">
                 <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-rocket-takeoff-fill text-primary me-2 fs-3"></i> OrbitPM
+                    <i class="bi bi-rocket-takeoff-fill me-2 fs-3 text-primary"></i>
+                    Orbit<span>PM</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="bi bi-list fs-2 text-white"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3">
                         @if (User.IsInRole("Student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-success fw-bold" asp-area="" asp-controller="StudentDashboard" asp-action="Index" title="Student Area">
-                                    <i class="bi bi-mortarboard-fill"></i> My Projects
+                                <a class="nav-link" asp-controller="StudentDashboard" asp-action="Index">
+                                    <i class="bi bi-grid-1x2 me-1"></i> Dashboard
                                 </a>
                             </li>
                         }
                         @if (User.IsInRole("Supervisor"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-primary fw-bold" asp-area="" asp-controller="SupervisorDashboard" asp-action="Index" title="Supervisor Area">
-                                    <i class="bi bi-shield-lock-fill"></i> Blind Review
+                                <a class="nav-link" asp-controller="SupervisorDashboard" asp-action="Index">
+                                    <i class="bi bi-incognito me-1"></i> Blind Matching
                                 </a>
                             </li>
                         }
                         @if (User.IsInRole("ModuleLeader"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-area="" asp-controller="ModuleLeaderDashboard" asp-action="Index" title="Module Leader Area">
-                                    <i class="bi bi-gear-fill"></i> System Overview
+                                <a class="nav-link" asp-controller="ModuleLeaderDashboard" asp-action="Index">
+                                    <i class="bi bi-cpu me-1"></i> Terminal
                                 </a>
                             </li>
                         }
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <div class="d-flex align-items-center">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container pb-5">
+        <main role="main" class="fade-in-up">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - OrbitPM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-md-start mb-3 mb-md-0">
+                    <span class="fw-bold text-white">OrbitPM</span> <span class="small opacity-50">&copy; 2026 Virtual Academic Hub</span>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="#" class="text-dim text-decoration-none hover-white"><i class="bi bi-github"></i></a>
+                        <a href="#" class="text-dim text-decoration-none hover-white"><i class="bi bi-discord"></i></a>
+                        <a href="#" class="text-dim text-decoration-none hover-white"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-dim text-decoration-none small hover-white">Cloud Privacy Protocol</a>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
