@@ -3,15 +3,16 @@
     ViewData["Title"] = "Configure Users";
 }
 
-<div class="row justify-content-center mt-4 fade-in-up">
-    <div class="col-md-11 mb-3">
-        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-light transition-all">
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-10 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
             <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
         </a>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
         <!-- Main Registry Card -->
-        <div class="card bg-black bg-opacity-40 border border-info border-opacity-20 shadow-2xl rounded-4 overflow-hidden">
+        <div class="card border border-info border-opacity-25 shadow-2xl rounded-4 overflow-hidden" 
+             style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(2, 6, 23, 0.8) 100%); backdrop-filter: blur(10px);">
             
             <!-- Deep Midnight Header -->
             <div class="p-4 d-flex align-items-center border-bottom border-info border-opacity-30" style="background: #020617;">
@@ -98,7 +99,7 @@
                                                 <span class="fw-800 text-uppercase">@user.FullName?[0]</span>
                                             </div>
                                             <div>
-                                                <div class="text-white fw-bold" style="font-size: 0.95rem;">@user.FullName.ToLower()</div>
+                                                <div class="text-white fw-bold" style="font-size: 0.95rem;">@user.FullName?.ToLower()</div>
                                                 <div class="text-dim extra-small text-uppercase tracking-wider" style="font-size: 0.65rem;">@user.Email</div>
                                             </div>
                                         </div>

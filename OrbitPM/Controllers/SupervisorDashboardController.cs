@@ -157,7 +157,7 @@ namespace OrbitPM.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Error removing domain. It may be linked to existing data.";
+                TempData["ErrorMessage"] = "Error removing domain: " + ex.Message;
             }
             return RedirectToAction(nameof(ManageExpertise));
         }
