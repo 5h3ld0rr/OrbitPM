@@ -23,30 +23,8 @@
                 </button>
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3">
-                        @if (User.IsInRole("Student"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="StudentDashboard" asp-action="Index">
-                                    <i class="bi bi-grid-1x2 me-1"></i> Dashboard
-                                </a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Supervisor"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="SupervisorDashboard" asp-action="Index">
-                                    <i class="bi bi-incognito me-1"></i> Blind Matching
-                                </a>
-                            </li>
-                        }
-                        @if (User.IsInRole("ModuleLeader"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="ModuleLeaderDashboard" asp-action="Index">
-                                    <i class="bi bi-cpu me-1"></i> Terminal
-                                </a>
-                            </li>
-                        }
+
+
                     </ul>
                     <div class="d-flex align-items-center">
                         <partial name="_LoginPartial" />
@@ -65,23 +43,15 @@
     <footer class="footer">
         <div class="container text-center">
             <div class="row align-items-center">
-                <div class="col-md-4 text-md-start mb-3 mb-md-0">
-                    <span class="fw-bold text-white">OrbitPM</span> <span class="small opacity-50">&copy; 2026 Virtual Academic Hub</span>
+                <div class="col-md-6 text-md-start mb-3 mb-md-0">
+                    <span class="fw-bold text-white">OrbitPM</span> <span class="small opacity-50">&copy; 2026 All rights reserved.</span>
                 </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="text-dim text-decoration-none hover-white"><i class="bi bi-github"></i></a>
-                        <a href="#" class="text-dim text-decoration-none hover-white"><i class="bi bi-discord"></i></a>
-                        <a href="#" class="text-dim text-decoration-none hover-white"><i class="bi bi-twitter-x"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-4 text-md-end">
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-dim text-decoration-none small hover-white">Cloud Privacy Protocol</a>
+                <div class="col-md-6 text-md-end">
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-dim text-decoration-none small hover-white">Privacy Policy</a>
                 </div>
             </div>
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -10,44 +10,44 @@
                 <div class="p-3 bg-primary bg-opacity-10 rounded-4 d-inline-block mb-4">
                     <i class="bi bi-person-plus-fill text-primary fs-2"></i>
                 </div>
-                <h2 class="fw-bold text-white mb-2">Request Access</h2>
-                <p class="text-dim">Create your OrbitPM identity to start collaborating</p>
+                <h2 class="fw-bold text-white mb-2">Create Account</h2>
+                <p class="text-dim">Join OrbitPM to start managing your projects</p>
             </div>
 
             <form asp-controller="Account" asp-action="Register" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3 font-monospace small"></div>
                 
                 <div class="mb-4">
-                    <label class="form-label small text-uppercase ls-wide">Full Legal Name</label>
-                    <input asp-for="FullName" class="form-control" placeholder="e.g. Admiral Grace Hopper" required />
+                    <label class="form-label small text-uppercase ls-wide">Full Name</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Enter your full name" required />
                     <span asp-validation-for="FullName" class="text-danger small mt-1 d-block font-monospace"></span>
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label small text-uppercase ls-wide">Academic Email</label>
-                    <input asp-for="Email" class="form-control" placeholder="id@orbitpm.edu" required />
+                    <label class="form-label small text-uppercase ls-wide">Email Address</label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" required />
                     <span asp-validation-for="Email" class="text-danger small mt-1 d-block font-monospace"></span>
                 </div>
 
                 <div class="row g-4 mb-5">
                     <div class="col-md-6">
-                        <label class="form-label small text-uppercase ls-wide">Security Phrase</label>
+                        <label class="form-label small text-uppercase ls-wide">Password</label>
                         <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" required />
                         <span asp-validation-for="Password" class="text-danger small mt-1 d-block font-monospace"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small text-uppercase ls-wide">Confirm Phrase</label>
+                        <label class="form-label small text-uppercase ls-wide">Confirm Password</label>
                         <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="••••••••" required />
                         <span asp-validation-for="ConfirmPassword" class="text-danger small mt-1 d-block font-monospace"></span>
                     </div>
                 </div>
 
                 <button type="submit" class="w-100 btn btn-primary mb-4 py-3">
-                    Submit Registration Request <i class="bi bi-check2-circle ms-2"></i>
+                    Create Account <i class="bi bi-person-check-fill ms-2"></i>
                 </button>
 
                 <div class="text-center">
-                    <p class="text-dim small mb-0">Already an Operator? <a asp-action="Login" class="text-primary text-decoration-none fw-bold">Login here</a></p>
+                    <p class="text-dim small mb-0">Already have an account? <a asp-action="Login" class="text-primary text-decoration-none fw-bold">Login here</a></p>
                 </div>
             </form>
         </div>

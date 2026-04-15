@@ -66,6 +66,7 @@ body {
     font-size: 1.4rem;
     letter-spacing: -0.5px;
     background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -126,6 +127,12 @@ body {
     font-weight: 800;
     letter-spacing: -2px;
 }
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+.fw-800 { font-weight: 800; }
 
 /* Buttons */
 .btn {
@@ -210,13 +217,83 @@ body {
     border: 1px solid currentColor;
 }
 
+.glass-alert {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    color: var(--text-main);
+}
+
+/* Match Reveal Module */
+.match-reveal-module {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-left: 4px solid var(--primary);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.match-reveal-module::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-image: 
+        radial-gradient(circle at 100% 0%, rgba(0, 242, 254, 0.1) 0%, transparent 60%),
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 20px 20px, 20px 20px;
+    pointer-events: none;
+}
+
+.match-reveal-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.match-reveal-tag i {
+    font-size: 1rem;
+    filter: drop-shadow(0 0 5px var(--primary-glow));
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.6; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+.supervisor-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(79, 172, 254, 0.1));
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary-glow);
+}
+
 /* Hero Section Utilities */
 .hero-glow {
     position: absolute;
     top: -10%;
     left: 20%;
     width: 60vw;
-    height: 60vw;
+    height: 100vh;
     background: radial-gradient(circle, rgba(0, 242, 254, 0.05) 0%, transparent 70%);
     pointer-events: none;
     z-index: -1;
@@ -250,4 +327,4 @@ footer {
     margin-top: 5rem;
     border-top: 1px solid var(--glass-border);
     color: var(--text-dim);
-}
+}

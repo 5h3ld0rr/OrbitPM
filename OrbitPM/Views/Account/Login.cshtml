@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Authenticate";
+    ViewData["Title"] = "Login";
 }
 
 <div class="row justify-content-center mt-5">
@@ -7,34 +7,34 @@
         <div class="card p-4 p-md-5">
             <div class="text-center mb-5">
                 <div class="p-3 bg-primary bg-opacity-10 rounded-4 d-inline-block mb-4">
-                    <i class="bi bi-shield-lock-fill text-primary fs-2"></i>
+                    <i class="bi bi-person-fill-lock text-primary fs-2"></i>
                 </div>
-                <h2 class="fw-bold text-white mb-2">Access Portal</h2>
-                <p class="text-dim">Connect to the OrbitPM secure network</p>
+                <h2 class="fw-bold text-white mb-2">Welcome Back</h2>
+                <p class="text-dim">Login to access your OrbitPM account</p>
             </div>
             
             <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3 font-monospace small"></div>
                 
                 <div class="mb-4">
-                    <label class="form-label small text-uppercase ls-wide">Network ID (Email)</label>
-                    <input name="email" class="form-control" autocomplete="username" aria-required="true" placeholder="id@orbitpm.edu" required/>
+                    <label class="form-label small text-uppercase ls-wide">Email Address</label>
+                    <input name="email" class="form-control" autocomplete="username" aria-required="true" placeholder="Enter your email" required/>
                 </div>
 
                 <div class="mb-5">
                     <div class="d-flex justify-content-between">
-                        <label class="form-label small text-uppercase ls-wide">Security Key</label>
-                        <a href="#" class="small text-primary text-decoration-none">Lost Key?</a>
+                        <label class="form-label small text-uppercase ls-wide">Password</label>
+                        <a href="#" class="small text-primary text-decoration-none">Forgot Password?</a>
                     </div>
                     <input name="password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="••••••••" required/>
                 </div>
 
                 <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-4 py-3">
-                    Initiate Connection <i class="bi bi-arrow-right-short ms-2"></i>
+                    Login <i class="bi bi-arrow-right-short ms-2"></i>
                 </button>
 
                 <div class="text-center">
-                    <p class="text-dim small mb-0">New Operator? <a asp-action="Register" class="text-primary text-decoration-none fw-bold">Request Access</a></p>
+                    <p class="text-dim small mb-0">New here? <a asp-action="Register" class="text-primary text-decoration-none fw-bold">Create an Account</a></p>
                 </div>
             </form>
         </div>
