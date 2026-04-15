@@ -14,16 +14,11 @@
             </div>
             
             <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 font-monospace small"></div>
                 
                 <div class="mb-4">
                     <label class="form-label small text-uppercase ls-wide">Network ID (Email)</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
-                            <i class="bi bi-envelope"></i>
-                        </span>
-                        <input name="email" class="form-control border-start-0" autocomplete="username" aria-required="true" placeholder="id@orbitpm.edu" required/>
-                    </div>
+                    <input name="email" class="form-control" autocomplete="username" aria-required="true" placeholder="id@orbitpm.edu" required/>
                 </div>
 
                 <div class="mb-5">
@@ -31,12 +26,7 @@
                         <label class="form-label small text-uppercase ls-wide">Security Key</label>
                         <a href="#" class="small text-primary text-decoration-none">Lost Key?</a>
                     </div>
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
-                            <i class="bi bi-key"></i>
-                        </span>
-                        <input name="password" type="password" class="form-control border-start-0" autocomplete="current-password" aria-required="true" placeholder="••••••••" required/>
-                    </div>
+                    <input name="password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="••••••••" required/>
                 </div>
 
                 <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-4 py-3">

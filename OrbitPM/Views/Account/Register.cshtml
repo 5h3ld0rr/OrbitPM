@@ -19,23 +19,13 @@
                 
                 <div class="mb-4">
                     <label class="form-label small text-uppercase ls-wide">Full Legal Name</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
-                            <i class="bi bi-person"></i>
-                        </span>
-                        <input asp-for="FullName" class="form-control border-start-0" placeholder="e.g. Admiral Grace Hopper" required />
-                    </div>
+                    <input asp-for="FullName" class="form-control" placeholder="e.g. Admiral Grace Hopper" required />
                     <span asp-validation-for="FullName" class="text-danger small mt-1 d-block font-monospace"></span>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label small text-uppercase ls-wide">Academic Email</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-end-0 border-white border-opacity-5 text-dim">
-                            <i class="bi bi-envelope-at"></i>
-                        </span>
-                        <input asp-for="Email" class="form-control border-start-0" placeholder="id@orbitpm.edu" required />
-                    </div>
+                    <input asp-for="Email" class="form-control" placeholder="id@orbitpm.edu" required />
                     <span asp-validation-for="Email" class="text-danger small mt-1 d-block font-monospace"></span>
                 </div>
 
