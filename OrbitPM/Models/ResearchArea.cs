@@ -9,6 +9,8 @@ namespace OrbitPM.Models
         [Required]
         public string Name { get; set; } = string.Empty;
 
+        public int DisplayOrder { get; set; }
+
         public virtual ICollection<ProjectProposal> Proposals { get; set; } = new List<ProjectProposal>();
         public virtual ICollection<SupervisorResearchArea> SupervisorResearchAreas { get; set; } = new List<SupervisorResearchArea>();
     }

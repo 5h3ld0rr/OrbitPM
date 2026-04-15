@@ -3,114 +3,221 @@
     ViewData["Title"] = "Configure Users";
 }
 
-<div class="row justify-content-center mt-5 fade-in-up">
-    <div class="col-md-10">
-        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <div class="d-flex align-items-center">
-                    <div class="feature-icon-wrapper me-3 pulse-glow" style="width: 50px; height: 50px;">
-                        <i class="bi bi-people"></i>
-                    </div>
-                    <div>
-                        <h2 class="fw-bolder text-white mb-0">System Users</h2>
-                        <p class="text-secondary mb-0">Manage access control and provisions</p>
-                    </div>
+<div class="row justify-content-center mt-4 fade-in-up">
+    <div class="col-md-11 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-light transition-all">
+            <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
+        </a>
+    </div>
+    <div class="col-md-11">
+        <!-- Main Registry Card -->
+        <div class="card bg-black bg-opacity-40 border border-info border-opacity-20 shadow-2xl rounded-4 overflow-hidden">
+            
+            <!-- Deep Midnight Header -->
+            <div class="p-4 d-flex align-items-center border-bottom border-info border-opacity-30" style="background: #020617;">
+                <div class="bg-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="bi bi-people-fill text-white fs-4"></i>
                 </div>
-                <div>
-                    <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="collapse" data-bs-target="#createUserForm">
-                        <i class="bi bi-person-plus me-1"></i> Provision User
+                <h4 class="fw-800 text-white mb-0 tracking-tight">Member Registry</h4>
+                
+                <div class="ms-auto">
+                    <button class="btn btn-primary btn-sm rounded-pill px-4 fw-800 text-uppercase small" data-bs-toggle="collapse" data-bs-target="#createUserForm">
+                        <i class="bi bi-plus-lg me-1"></i> Provision Member
                     </button>
-                    <a asp-action="Index" class="btn btn-outline-light rounded-pill px-3 fw-bold text-secondary border-secondary ms-2 btn-sm">Back</a>
                 </div>
             </div>
 
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success border-0 bg-success bg-opacity-10 text-success rounded-4 p-3 mb-4">
-                    <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <div class="p-4 p-md-5">
+                <!-- Expandable Creation Form -->
+                <div class="collapse mb-5" id="createUserForm">
+                    <div class="card bg-white bg-opacity-5 border border-info border-opacity-20 rounded-4 p-4 shadow-lg">
+                        <h6 class="text-white fw-800 text-uppercase extra-small tracking-widest mb-4">Initialize Account Entity</h6>
+                        <form asp-action="CreateUser" method="post">
+                            <div class="row g-4">
+                                <div class="col-md-3">
+                                    <label class="text-dim extra-small fw-800 tracking-wider mb-2">FULL NAME</label>
+                                    <input type="text" name="fullName" class="form-control border-0 bg-black bg-opacity-30 text-white py-2" style="font-size: 0.9rem;" placeholder="Jane Doe" required />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-dim extra-small fw-800 tracking-wider mb-2">EMAIL ADDRESS</label>
+                                    <input type="email" name="email" class="form-control border-0 bg-black bg-opacity-30 text-white py-2" style="font-size: 0.9rem;" placeholder="jane@example.com" required />
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-dim extra-small fw-800 tracking-wider mb-2">MEMBER ROLE</label>
+                                    <select name="role" class="form-select border-0 bg-black bg-opacity-30 text-white py-2" style="font-size: 0.9rem;" required>
+                                        <option value="Student">Student</option>
+                                        <option value="Supervisor">Supervisor</option>
+                                        <option value="ModuleLeader">Module Leader</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-dim extra-small fw-800 tracking-wider mb-2">PASSWORD</label>
+                                    <input type="password" name="rawPassword" class="form-control border-0 bg-black bg-opacity-30 text-white py-2" style="font-size: 0.9rem;" placeholder="••••••••" required />
+                                </div>
+                                <div class="col-12 text-end mt-4">
+                                    <button type="submit" class="btn btn-primary px-5 fw-800 text-uppercase small rounded-pill">
+                                        Confirm Access Provision
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            }
 
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger rounded-4 p-3 mb-4">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ErrorMessage"]
-                </div>
-            }
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="glass-alert border-0 p-3 mb-4 scale-in">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i> @TempData["SuccessMessage"]
+                    </div>
+                }
 
-            <div class="collapse mb-4" id="createUserForm">
-                <div class="card bg-dark bg-opacity-50 border border-primary border-opacity-25 rounded-4 p-4">
-                    <form asp-action="CreateUser" method="post">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="text-secondary small mb-1">Full Name</label>
-                                <input type="text" name="fullName" class="form-control bg-transparent text-white border-secondary" required />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-secondary small mb-1">Email</label>
-                                <input type="email" name="email" class="form-control bg-transparent text-white border-secondary" required />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-secondary small mb-1">Access Role</label>
-                                <select name="role" class="form-select bg-dark text-white border-secondary" required>
-                                    <option value="Student">Student</option>
-                                    <option value="Supervisor">Supervisor</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-secondary small mb-1">Initial Password</label>
-                                <input type="password" name="rawPassword" class="form-control bg-transparent text-white border-secondary" required />
-                            </div>
-                            <div class="col-12 mt-4 text-end">
-                                <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold">Provision Account</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="glass-alert border-0 p-3 mb-4 scale-in" style="background: rgba(220, 53, 69, 0.1);">
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i> @TempData["ErrorMessage"]
+                    </div>
+                }
 
-            <div class="table-responsive rounded-4 border border-secondary border-opacity-25" style="background: rgba(255,255,255,0.02)">
-                <table class="table table-borderless table-hover text-white align-middle mb-0">
-                    <thead class="border-bottom border-secondary border-opacity-25 text-secondary">
-                        <tr>
-                            <th class="ps-4 py-3">User</th>
-                            <th class="py-3">Role</th>
-                            <th class="py-3">System ID / Auth</th>
-                            <th class="pe-4 py-3 text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var user in Model)
-                        {
-                            <tr class="border-bottom border-secondary border-opacity-10">
-                                <td class="ps-4 py-3">
-                                    <div class="fw-bold">@user.FullName</div>
-                                    <div class="small text-muted">@user.Email</div>
-                                </td>
-                                <td class="py-3">
-                                    <span class="badge @(user.Role == "Student" ? "bg-primary" : user.Role == "Supervisor" ? "bg-success" : "bg-danger") bg-opacity-25 border border-secondary border-opacity-25 rounded-pill px-3">@user.Role</span>
-                                </td>
-                                <td class="py-3 text-muted small user-select-all font-monospace">@user.Id.Substring(0,8)...</td>
-                                <td class="pe-4 py-3 text-end">
-                                    @if(user.Id != User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
-                                    {
-                                        <form asp-action="DeleteUser" method="post" onsubmit="return confirm('Are you sure you want to permanently remove this user?');" class="d-inline">
-                                            <input type="hidden" name="userId" value="@user.Id" />
-                                            <button type="submit" class="btn btn-link text-danger p-0" title="Delete User">
-                                                <i class="bi bi-trash3 fs-5"></i>
-                                            </button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary bg-opacity-25 text-white-50 rounded-pill small px-2">Current User</span>
-                                    }
-                                </td>
+                <!-- Allocation Table Inspired Registry -->
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 interstate-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-0">MEMBER ENTITY</th>
+                                <th class="text-center">ROLE IDENTITY</th>
+                                <th class="text-end">ACTIONS</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach(var user in Model)
+                            {
+                                <tr>
+                                    <td class="ps-0">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary bg-opacity-10 text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px;">
+                                                <span class="fw-800 text-uppercase">@user.FullName?[0]</span>
+                                            </div>
+                                            <div>
+                                                <div class="text-white fw-bold" style="font-size: 0.95rem;">@user.FullName.ToLower()</div>
+                                                <div class="text-dim extra-small text-uppercase tracking-wider" style="font-size: 0.65rem;">@user.Email</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        @{
+                                            var roleColor = user.Role switch {
+                                                "Student" => "primary",
+                                                "Supervisor" => "success",
+                                                "ModuleLeader" => "warning",
+                                                _ => "secondary"
+                                            };
+                                        }
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="status-dot-inner bg-@roleColor me-2"></div>
+                                            <span class="extra-small fw-800 text-@roleColor text-uppercase">@user.Role</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end pe-0">
+                                        <div class="d-flex justify-content-end gap-3 px-2">
+                                            @if(user.Id != User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                                            {
+                                                <form asp-action="DeleteUser" method="post" onsubmit="return confirm('Remove @user.FullName from the system?');" class="m-0">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="userId" value="@user.Id" />
+                                                    <button type="submit" class="btn-action revoke">
+                                                        <i class="bi bi-x-circle me-1"></i>REMOVE
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="active-badge">ACTIVE ACCOUNT</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="p-4 border-top border-info border-opacity-20 d-flex justify-content-between align-items-center" style="background: #020617;">
+                <span class="extra-small text-dim fw-800 text-uppercase tracking-widest">Global Member Registry Summary</span>
+                <span class="active-badge">
+                    TOTAL SYSTEMS LOAD: @Model.Count() ENTITIES
+                </span>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .interstate-table thead th {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--text-dim);
+        letter-spacing: 0.1rem;
+        border-bottom: 2px solid rgba(0, 242, 255, 0.2);
+        padding-bottom: 1.25rem;
+        text-transform: uppercase;
+    }
+    
+    .interstate-table tbody tr {
+        border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+        transition: background 0.2s ease;
+    }
+    
+    .interstate-table tbody tr:hover {
+        background: rgba(255,255,255,0.02);
+    }
+    
+    .interstate-table td {
+        padding: 1.25rem 0.5rem;
+    }
+
+    .btn-action {
+        background: transparent;
+        border: none;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        transition: opacity 0.2s;
+        text-transform: uppercase;
+    }
+    
+    .btn-action.revoke { color: #ff3344; }
+    .btn-action.edit { color: var(--text-dim); }
+    .btn-action:hover { opacity: 0.7; }
+
+    .status-dot-inner {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        box-shadow: 0 0 8px currentColor;
+    }
+
+    .active-badge {
+        background: #00f2ff;
+        color: #020617;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        padding: 4px 16px;
+        border-radius: 50px;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        text-transform: uppercase;
+    }
+
+    .tracking-tight { letter-spacing: -0.025em; }
+    .extra-small { font-size: 0.65rem; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .tracking-widest { letter-spacing: 0.2em; }
+    
+    .hover-light:hover { color: white !important; }
+    .transition-all { transition: all 0.2s ease; }
+</style>
