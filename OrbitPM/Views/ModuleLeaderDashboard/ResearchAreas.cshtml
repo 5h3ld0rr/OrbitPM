@@ -3,45 +3,260 @@
     ViewData["Title"] = "Configure Domains";
 }
 
-<div class="row justify-content-center mt-5 fade-in-up">
-    <div class="col-md-6">
-        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <div class="d-flex align-items-center">
-                    <div class="feature-icon-wrapper me-3 pulse-glow" style="width: 50px; height: 50px;">
-                        <i class="bi bi-tags"></i>
-                    </div>
-                    <div>
-                        <h2 class="fw-bolder text-white mb-0">System Domains</h2>
-                        <p class="text-secondary mb-0">Configure available research areas</p>
-                    </div>
+<div class="row justify-content-center mt-4 fade-in-up">
+    <div class="col-md-11 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-light transition-all">
+            <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
+        </a>
+    </div>
+    <div class="col-md-11">
+        <!-- Main Registry Card -->
+        <div class="card bg-black bg-opacity-40 border border-info border-opacity-20 shadow-2xl rounded-4 overflow-hidden">
+            
+            <!-- Deep Midnight Header -->
+            <div class="p-4 d-flex align-items-center border-bottom border-info border-opacity-30" style="background: #020617;">
+                <div class="bg-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="bi bi-grid-3x3-gap-fill text-white fs-4"></i>
                 </div>
-                <a asp-action="Index" class="btn btn-outline-light rounded-pill px-3 fw-bold text-secondary border-secondary btn-sm">Back</a>
+                <h4 class="fw-800 text-white mb-0 tracking-tight">Domain Registry</h4>
             </div>
 
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success border-0 bg-success bg-opacity-10 text-success rounded-4 p-3 mb-4">
-                    <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <div class="p-4 p-md-5">
+                <!-- Action Row -->
+                <div class="d-flex justify-content-between align-items-end mb-5">
+                    <div class="flex-grow-1 me-4">
+                        <form asp-action="CreateResearchArea" method="post">
+                            <label class="form-label extra-small fw-800 text-dim tracking-widest mb-3">PROVISION NEW DOMAIN</label>
+                            <div class="input-group input-group-lg shadow-sm rounded-4 overflow-hidden">
+                                <input type="text" name="name" 
+                                       class="form-control bg-black bg-opacity-30 border-0 text-white" 
+                                       style="font-size: 0.95rem; border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important;"
+                                       placeholder="Enter research field identity..." required />
+                                <button type="submit" class="btn btn-primary px-4 fw-800 text-uppercase small">
+                                    ADD <i class="bi bi-plus-lg ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            }
 
-            <form asp-action="CreateResearchArea" method="post" class="mb-4 d-flex gap-2">
-                <input type="text" name="name" class="form-control bg-transparent text-white border-secondary" placeholder="Enter new domain (e.g. Quantum Computing)" required />
-                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Add <i class="bi bi-plus-lg ms-1"></i></button>
-            </form>
-
-            <div class="list-group rounded-4 border border-secondary border-opacity-25" style="background: rgba(255,255,255,0.02)">
-                @foreach(var area in Model)
+                @if (TempData["SuccessMessage"] != null)
                 {
-                    <div class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex justify-content-between align-items-center py-3">
-                        <span class="fw-bold"><i class="bi bi-tag-fill text-primary opacity-75 me-2"></i> @area.Name</span>
-                        <span class="badge bg-secondary bg-opacity-25 text-secondary rounded-pill">ID: @area.Id</span>
+                    <div class="glass-alert border-0 p-3 mb-4 scale-in">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i> @TempData["SuccessMessage"]
                     </div>
                 }
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="glass-alert border-0 p-3 mb-4 scale-in" style="background: rgba(220, 53, 69, 0.1);">
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i> @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                <!-- Draggable Allocation Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 interstate-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">DOMAIN IDENTITY</th>
+                                <th class="text-end pe-4">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sortable-domains">
+                            @foreach(var area in Model.OrderBy(a => a.DisplayOrder))
+                            {
+                                <tr data-id="@area.Id" class="draggable-row cursor-grab">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-info bg-opacity-20 p-2 rounded-3 me-3 border border-info border-opacity-30 shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="bi bi-tag text-white fs-5"></i>
+                                            </div>
+                                            <span class="fw-800 text-white fs-5">@area.Name.ToLower()</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-3 px-2">
+                                            <button class="btn-action edit" data-bs-toggle="modal" data-bs-target="#editModal-@area.Id">
+                                                <i class="bi bi-pencil-square me-1"></i>RENAME
+                                            </button>
+                                            
+                                            <form asp-action="DeleteResearchArea" method="post" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@area.Id" />
+                                                <button type="submit" class="btn-action revoke" onclick="return confirm('Permanently remove domain: @area.Name?')">
+                                                    <i class="bi bi-x-circle me-1"></i>REMOVE
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
-            <p class="text-center text-muted small mt-4"><i class="bi bi-shield-lock-fill me-1"></i> Root Administrator Privilege Area</p>
+            <div class="p-4 border-top border-info border-opacity-20 d-flex justify-content-between align-items-center" style="background: #020617;">
+                <span class="extra-small text-dim fw-800 text-uppercase tracking-widest">Global Domain Registry Summary</span>
+                <span id="save-status" class="extra-small text-info fw-800 text-uppercase tracking-widest d-none">
+                    <i class="bi bi-cloud-upload-fill me-2 rotate-gear"></i>Syncing Sequence...
+                </span>
+                <span class="active-badge">
+                    TOTAL REGISTERED: @Model.Count() ENTITIES
+                </span>
+            </div>
         </div>
     </div>
 </div>
+
+
+<style>
+    /* ... existing styles ... */
+    .interstate-table thead th {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--text-dim);
+        letter-spacing: 0.1rem;
+        border-bottom: 2px solid rgba(0, 242, 255, 0.2);
+        padding-bottom: 1.25rem;
+        text-transform: uppercase;
+    }
+    
+    .interstate-table tbody tr {
+        border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+        transition: background 0.2s ease;
+    }
+    
+    .interstate-table tbody tr:hover {
+        background: rgba(255,255,255,0.02);
+    }
+    
+    .interstate-table td {
+        padding: 1.25rem 0.5rem;
+    }
+
+    .btn-action {
+        background: transparent;
+        border: none;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        transition: opacity 0.2s;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+    }
+    
+    .btn-action.revoke { color: #ff3344; }
+    .btn-action.edit { color: var(--text-dim); }
+    .btn-action:hover { opacity: 0.7; }
+
+    .cursor-grab { cursor: grab; }
+    .cursor-grab:active { cursor: grabbing; }
+
+    .sortable-ghost {
+        opacity: 0.4;
+        background: rgba(var(--bs-primary-rgb), 0.1) !important;
+    }
+
+    .active-badge {
+        background: #00f2ff;
+        color: #020617;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        padding: 4px 16px;
+        border-radius: 50px;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        text-transform: uppercase;
+    }
+
+    .tracking-tight { letter-spacing: -0.025em; }
+    .extra-small { font-size: 0.65rem; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .tracking-widest { letter-spacing: 0.2em; }
+    
+    .hover-light:hover { color: white !important; }
+    .transition-all { transition: all 0.2s ease; }
+
+    .rotate-gear {
+        display: inline-block;
+        animation: spin 2s linear infinite;
+    }
+    @@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = document.getElementById('sortable-domains');
+            const saveStatus = document.getElementById('save-status');
+            
+            new Sortable(el, {
+                animation: 250,
+                ghostClass: 'sortable-ghost',
+                filter: '.btn-action, .modal, .modal-dialog, .modal-content, input, button',
+                preventOnFilter: false, // Allows click events to pass through
+                onEnd: function() {
+                    const sortedIds = Array.from(el.querySelectorAll('tr')).map(tr => parseInt(tr.dataset.id));
+                    
+                    saveStatus.classList.remove('d-none');
+                    
+                    fetch('@Url.Action("UpdateDomainOrder")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify(sortedIds)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            setTimeout(() => saveStatus.classList.add('d-none'), 1000);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error saving order:', error);
+                        saveStatus.innerHTML = '<i class="bi bi-exclamation-circle-fill text-danger me-2"></i>Sync Failed';
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+<!-- Modals Container - Root Level -->
+@foreach(var area in Model)
+{
+    <div class="modal fade" id="editModal-@area.Id" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-black border border-info border-opacity-20 shadow-2xl rounded-4">
+                <div class="modal-header border-bottom border-info border-opacity-20 p-4" style="background: #020617;">
+                    <h5 class="modal-title fw-800 text-white">Modify Domain Identity</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form asp-action="EditResearchArea" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body p-4 text-start">
+                        <input type="hidden" name="id" value="@area.Id" />
+                        <label class="form-label extra-small fw-800 text-dim mb-3">CURRENT DESIGNATION</label>
+                        <input type="text" name="name" value="@area.Name" 
+                               class="form-control bg-info bg-opacity-5 text-white border border-info border-opacity-10 py-3" 
+                               required 
+                               style="outline: none !important; box-shadow: none !important;" />
+                    </div>
+                    <div class="modal-footer border-top border-info border-opacity-20 p-4">
+                        <button type="submit" class="btn btn-primary px-4 rounded-pill fw-800 text-uppercase small shadow-lg">Update Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
