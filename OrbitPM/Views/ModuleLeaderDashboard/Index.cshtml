@@ -3,161 +3,173 @@
     ViewData["Title"] = "Module Leader Overview";
 }
 
-<style>
-    body { background-color: #f1f5f9; }
-    
-    .stat-card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        border-left: 5px solid transparent;
-        transition: transform 0.2s;
-    }
-    .stat-card:hover { transform: translateY(-5px); }
-    
-    .stat-card.total { border-left-color: #3b82f6; }
-    .stat-card.matched { border-left-color: #10b981; }
-    .stat-card.pending { border-left-color: #f59e0b; }
-    
-    .custom-table {
-        background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-    .custom-table thead {
-        background-color: #1e293b;
-        color: #f8fafc;
-    }
-</style>
-
-<div class="container-fluid py-5 px-md-5">
-    <div class="mb-5 d-flex justify-content-between align-items-center">
+<div class="container-fluid py-4 px-md-5">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 fade-in-up">
         <div>
-            <h1 class="fw-bold"><i class="bi bi-gear-wide-connected text-danger me-2"></i>Module Leader Overview</h1>
-            <p class="text-muted mb-0">System-wide monitoring of Student-Supervisor project allocations.</p>
+            <nav aria-label="breadcrumb" class="mb-2">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item small"><a href="#" class="text-primary text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item small active text-dim" aria-current="page">System Overview</li>
+                </ol>
+            </nav>
+            <h1 class="fw-800 display-5 mb-1 text-white">
+                <i class="bi bi-gear-wide-connected text-primary me-3"></i>System Controls
+            </h1>
+            <p class="text-dim mb-0 lead-sm">Monitoring Student-Supervisor project allocations.</p>
         </div>
-        <div>
-            <a asp-action="Users" class="btn btn-outline-light rounded-pill px-4 shadow-sm fw-bold me-2">
-                <i class="bi bi-people me-2"></i> Manage Users
+        <div class="d-flex gap-2">
+            <a asp-action="Users" class="btn btn-outline-light d-flex align-items-center gap-2">
+                <i class="bi bi-people-fill"></i>
+                <span>Manage Users</span>
             </a>
-            <a asp-action="ResearchAreas" class="btn btn-outline-light rounded-pill px-4 shadow-sm fw-bold">
-                <i class="bi bi-tags me-2"></i> Manage Domains
+            <a asp-action="ResearchAreas" class="btn btn-outline-light d-flex align-items-center gap-2">
+                <i class="bi bi-tags-fill"></i>
+                <span>Manage Domains</span>
             </a>
         </div>
     </div>
 
-    <!-- Quick Stats -->
-    <div class="row g-4 mb-5">
+    <!-- Metrics Grid -->
+    <div class="row g-4 mb-5 fade-in-up" style="animation-delay: 0.1s;">
         <div class="col-md-4">
-            <div class="stat-card total d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-muted text-uppercase fw-bold letter-spacing-1 mb-1">Total Proposals</h6>
-                    <h2 class="fw-bold mb-0">@ViewBag.TotalProposals</h2>
-                </div>
-                <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
-                    <i class="bi bi-journal-text fs-3"></i>
+            <div class="card stat-card border-0">
+                <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-dim small text-uppercase fw-800 tracking-wider mb-1">Total Proposals</div>
+                        <div class="text-white display-6 fw-800 font-monospace">@ViewBag.TotalProposals</div>
+                    </div>
+                    <div class="p-3 bg-primary bg-opacity-10 rounded-4">
+                        <i class="bi bi-journal-text text-primary fs-2"></i>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="stat-card matched d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-muted text-uppercase fw-bold letter-spacing-1 mb-1">Matched</h6>
-                    <h2 class="fw-bold mb-0">@ViewBag.MatchedProposals</h2>
-                </div>
-                <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
-                    <i class="bi bi-check2-all fs-3"></i>
+            <div class="card stat-card border-0">
+                <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-dim small text-uppercase fw-800 tracking-wider mb-1">Matched</div>
+                        <div class="text-success display-6 fw-800 font-monospace">@ViewBag.MatchedProposals</div>
+                    </div>
+                    <div class="p-3 bg-success bg-opacity-10 rounded-4">
+                        <i class="bi bi-check2-all text-success fs-2"></i>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="stat-card pending d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-muted text-uppercase fw-bold letter-spacing-1 mb-1">Pending Review</h6>
-                    <h2 class="fw-bold mb-0">@ViewBag.PendingProposals</h2>
-                </div>
-                <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning">
-                    <i class="bi bi-hourglass-split fs-3"></i>
+            <div class="card stat-card border-0">
+                <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-dim small text-uppercase fw-800 tracking-wider mb-1">Pending</div>
+                        <div class="text-warning display-6 fw-800 font-monospace">@ViewBag.PendingProposals</div>
+                    </div>
+                    <div class="p-3 bg-warning bg-opacity-10 rounded-4">
+                        <i class="bi bi-hourglass-split text-warning fs-2"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Master Tracking Table -->
-    <div class="custom-table table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th scope="col" class="py-3 px-4 rounded-top-left">Project ID</th>
-                    <th scope="col" class="py-3 px-4">Student Name</th>
-                    <th scope="col" class="py-3 px-4">Research Area</th>
-                    <th scope="col" class="py-3 px-4">Project Title</th>
-                    <th scope="col" class="py-3 px-4">Status</th>
-                    <th scope="col" class="py-3 px-4 text-center">Supervisor Matching</th>
-                    <th scope="col" class="py-3 px-4 rounded-top-right text-end">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(var record in Model)
-                {
+    <div class="card border-0 fade-in-up shadow-lg" style="animation-delay: 0.2s;">
+        <div class="card-header bg-black bg-opacity-20 border-bottom border-white border-opacity-10 p-4">
+            <h5 class="mb-0 fw-bold text-white"><i class="bi bi-table me-2 text-primary"></i>Allocation Registry</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
                     <tr>
-                        <td class="px-4 fw-bold text-muted">#@record.ProjectProposalId.ToString("D4")</td>
-                        <td class="px-4">
-                            <span class="fw-bold">@(record.Student?.FullName ?? "Unknown")</span>
-                            <div class="small text-muted">@record.Student?.Email</div>
-                        </td>
-                        <td class="px-4">
-                            <span class="badge bg-secondary">@(record.ProjectProposal?.ResearchArea?.Name ?? "Uncategorized")</span>
-                        </td>
-                        <td class="px-4 text-truncate" style="max-width: 250px;" title="@record.ProjectProposal?.Title">
-                            @record.ProjectProposal?.Title
-                        </td>
-                        <td class="px-4">
-                            @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Pending) {
-                                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
-                            } else if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched) {
-                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Matched</span>
-                            } else {
-                                <span class="badge bg-light text-dark border">Withdrawn</span>
-                            }
-                        </td>
-                        <td class="px-4 text-center">
-                            @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched && record.ProjectProposal.MatchRecord != null) {
-                                <span class="text-success fw-bold">@(record.ProjectProposal.MatchRecord.Supervisor?.FullName ?? "Unknown Supervisor")</span>
-                            } else {
-                                <span class="text-muted fst-italic">Waiting for Supervisor</span>
-                            }
-                        </td>
-                        <td class="px-4 text-end">
-                            @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched)
-                            {
-                                <form asp-action="ForceUnmatch" method="post" class="m-0" onsubmit="return confirm('Are you sure you want to revoke this match?');">
-                                    <input type="hidden" name="proposalId" value="@record.ProjectProposal.Id" />
-                                    <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm fw-bold rounded-pill">
-                                        <i class="bi bi-x-circle me-1"></i> Revoke
-                                    </button>
-                                </form>
-                            }
-                            else
-                            {
-                                <button class="btn btn-sm btn-light text-muted fw-bold rounded-pill" disabled><i class="bi bi-dash"></i></button>
-                            }
-                        </td>
+                        <th class="ps-4">ID</th>
+                        <th>Student Entity</th>
+                        <th>Domain</th>
+                        <th>Project Focus</th>
+                        <th>Status</th>
+                        <th>Supervisor Match</th>
+                        <th class="pe-4 text-end">Actions</th>
                     </tr>
-                }
-                
-                @if(!Model.Any())
-                {
-                    <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            <i class="bi bi-inboxes" style="font-size: 2rem;"></i>
-                            <p class="mt-2 text-muted">No projects have been logged in the system yet.</p>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach(var record in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <span class="font-monospace text-primary fw-bold">#@record.ProjectProposalId.ToString("D4")</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm bg-surface-light text-dim rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        @(record.Student?.FullName?.Substring(0, 1) ?? "U")
+                                    </div>
+                                    <div>
+                                        <div class="text-white fw-bold">@(record.Student?.FullName ?? "Unknown User")</div>
+                                        <div class="text-dim extra-small">@record.Student?.Email</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 py-1 px-3">
+                                    @(record.ProjectProposal?.ResearchArea?.Name ?? "General")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="text-white fw-500 text-truncate" style="max-width: 200px;" title="@record.ProjectProposal?.Title">
+                                    @record.ProjectProposal?.Title
+                                </div>
+                            </td>
+                            <td>
+                                @{
+                                    var statusClass = record.ProjectProposal?.Status switch {
+                                        OrbitPM.Models.ProjectStatus.Pending => "warning",
+                                        OrbitPM.Models.ProjectStatus.Matched => "success",
+                                        _ => "secondary"
+                                    };
+                                }
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-@statusClass" style="width: 8px; height: 8px;"></div>
+                                    <span class="text-@statusClass text-uppercase small fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">@record.ProjectProposal?.Status</span>
+                                </div>
+                            </td>
+                            <td>
+                                @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched && record.ProjectProposal.MatchRecord != null) {
+                                    <div class="d-flex align-items-center text-success">
+                                        <i class="bi bi-person-check-fill me-2 fs-5"></i>
+                                        <span class="fw-bold">@(record.ProjectProposal.MatchRecord.Supervisor?.FullName ?? "Supervisor Assigned")</span>
+                                    </div>
+                                } else {
+                                    <span class="text-dim fst-italic small">Unassigned</span>
+                                }
+                            </td>
+                            <td class="pe-4 text-end">
+                                @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched)
+                                {
+                                    <form asp-action="ForceUnmatch" method="post" class="m-0 d-inline-block">
+                                        <input type="hidden" name="proposalId" value="@record.ProjectProposal.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger px-3 rounded-pill" onclick="return confirm('Revoke match for proposal #@record.ProjectProposal.Id?')">
+                                            <i class="bi bi-x-circle me-1"></i> Revoke
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-dim opacity-25"><i class="bi bi-dash"></i></span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<style>
+    .fw-500 { font-weight: 500; }
+    .extra-small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .lead-sm { font-size: 1.1rem; opacity: 0.8; }
+    .text-dim { color: var(--text-dim) !important; }
+    .fw-800 { font-weight: 800; }
+</style>
