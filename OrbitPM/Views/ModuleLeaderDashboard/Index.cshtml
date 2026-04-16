@@ -1,153 +1,147 @@
 @model IEnumerable<OrbitPM.Models.ProposalOwnership>
 @{
-    ViewData["Title"] = "Module Leader Overview";
+    ViewData["Title"] = "Module Leader Dashboard";
 }
 
-<div class="container-fluid py-4 px-md-5">
+<div class="container-fluid py-4 min-vh-100">
     <!-- Header Section -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 fade-in-up">
         <div>
-            <nav aria-label="breadcrumb" class="mb-2">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item small"><a href="#" class="text-primary text-decoration-none">Dashboard</a></li>
-                    <li class="breadcrumb-item small active text-dim" aria-current="page">System Overview</li>
-                </ol>
-            </nav>
             <h1 class="fw-800 display-5 mb-1 text-white">
-                <i class="bi bi-gear-wide-connected text-primary me-3"></i>System Controls
+                <i class="bi bi-grid-1x2-fill text-primary me-3"></i>System Control
             </h1>
-            <p class="text-dim mb-0 lead-sm">Monitoring Student-Supervisor project allocations.</p>
+            <p class="text-dim lead-sm mb-0">Unified Project Allocation & Entity Management Console</p>
         </div>
         <div class="d-flex gap-2">
-            <a asp-action="Users" class="btn btn-outline-light d-flex align-items-center gap-2">
-                <i class="bi bi-people-fill"></i>
-                <span>Manage Users</span>
+            <a asp-action="Users" class="btn btn-outline-info rounded-pill px-4 hover-cyan transition-all">
+                <i class="bi bi-people-fill me-2"></i>Manage Users
             </a>
-            <a asp-action="ResearchAreas" class="btn btn-outline-light d-flex align-items-center gap-2">
-                <i class="bi bi-tags-fill"></i>
-                <span>Manage Domains</span>
+            <a asp-action="ResearchAreas" class="btn btn-outline-info rounded-pill px-4 hover-cyan transition-all">
+                <i class="bi bi-tags-fill me-2"></i>Configure Domains
             </a>
         </div>
     </div>
 
-    <!-- Metrics Grid -->
-    <div class="row g-4 mb-5 fade-in-up" style="animation-delay: 0.1s;">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="glass-alert border-info border-opacity-20 p-3 mb-4 scale-in">
+            <i class="bi bi-check-circle-fill text-info me-2"></i> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <!-- Statistics Panel -->
+    <div class="row g-4 mb-5 card-stats-container">
         <div class="col-md-4">
-            <div class="card stat-card border-0">
-                <div class="card-body p-4 d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-dim small text-uppercase fw-800 tracking-wider mb-1">Total Proposals</div>
-                        <div class="text-white display-6 fw-800 font-monospace">@ViewBag.TotalProposals</div>
+            <div class="stat-card p-4 rounded-4 border border-info border-opacity-10 shadow-lg h-100 fade-in-up" style="animation-delay: 0.05s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-mortarboard-fill text-primary fs-4"></i>
                     </div>
-                    <div class="p-3 bg-primary bg-opacity-10 rounded-4">
-                        <i class="bi bi-journal-text text-primary fs-2"></i>
-                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Submissions</span>
                 </div>
+                <h2 class="fw-800 text-white mb-1">@ViewBag.TotalProposals</h2>
+                <div class="extra-small text-dim">Total Registered Projects</div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card stat-card border-0">
-                <div class="card-body p-4 d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-dim small text-uppercase fw-800 tracking-wider mb-1">Matched</div>
-                        <div class="text-success display-6 fw-800 font-monospace">@ViewBag.MatchedProposals</div>
+            <div class="stat-card p-4 rounded-4 border border-info border-opacity-10 shadow-lg h-100 fade-in-up" style="animation-delay: 0.1s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-success bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-diagram-3-fill text-success fs-4"></i>
                     </div>
-                    <div class="p-3 bg-success bg-opacity-10 rounded-4">
-                        <i class="bi bi-check2-all text-success fs-2"></i>
-                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Allocated</span>
                 </div>
+                <h2 class="fw-800 text-white mb-1">@ViewBag.MatchedProposals</h2>
+                <div class="extra-small text-dim">Successful Matches</div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card stat-card border-0">
-                <div class="card-body p-4 d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="text-dim small text-uppercase fw-800 tracking-wider mb-1">Pending</div>
-                        <div class="text-warning display-6 fw-800 font-monospace">@ViewBag.PendingProposals</div>
+            <div class="stat-card p-4 rounded-4 border border-info border-opacity-10 shadow-lg h-100 fade-in-up" style="animation-delay: 0.15s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-warning bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-journal-text text-warning fs-4"></i>
                     </div>
-                    <div class="p-3 bg-warning bg-opacity-10 rounded-4">
-                        <i class="bi bi-hourglass-split text-warning fs-2"></i>
-                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Pending</span>
                 </div>
+                <h2 class="fw-800 text-white mb-1">@ViewBag.PendingProposals</h2>
+                <div class="extra-small text-dim">Submission Queue</div>
             </div>
         </div>
     </div>
 
     <!-- Master Tracking Table -->
-    <div class="card border-0 fade-in-up shadow-lg" style="animation-delay: 0.2s;">
-        <div class="card-header bg-black bg-opacity-20 border-bottom border-white border-opacity-10 p-4">
-            <h5 class="mb-0 fw-bold text-white"><i class="bi bi-table me-2 text-primary"></i>Allocation Registry</h5>
+    <div class="card border-0 fade-in-up shadow-lg" style="animation-delay: 0.2s; border: 1px solid rgba(0, 242, 255, 0.1) !important;">
+        <div class="card-header border-bottom border-info border-opacity-30 p-4 d-flex align-items-center" style="background: #020617;">
+            <div class="bg-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                <i class="bi bi-grid-3x3-gap-fill text-white fs-4"></i>
+            </div>
+            <h5 class="mb-0 fw-800 text-white tracking-tight">Allocation Registry</h5>
         </div>
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 interstate-table">
                 <thead>
                     <tr>
-                        <th class="ps-4">ID</th>
-                        <th>Student Entity</th>
-                        <th>Domain</th>
-                        <th>Project Focus</th>
-                        <th>Status</th>
-                        <th>Supervisor Match</th>
-                        <th class="pe-4 text-end">Actions</th>
+                        <th class="ps-4">STUDENT IDENTITY</th>
+                        <th class="ps-3">PROJECT DESIGNATION</th>
+                        <th class="ps-3">DOMAIN</th>
+                        <th class="ps-3">RESEARCHER</th>
+                        <th class="text-center">STATUS</th>
+                        <th class="text-end pe-4">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var record in Model)
+                    @foreach (var record in Model)
                     {
                         <tr>
                             <td class="ps-4">
-                                <span class="font-monospace text-primary fw-bold">#@record.ProjectProposalId.ToString("D4")</span>
-                            </td>
-                            <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar-sm bg-surface-light text-dim rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                                        @(record.Student?.FullName?.Substring(0, 1) ?? "U")
+                                    <div class="avatar-sm bg-primary bg-opacity-10 text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        <span class="fw-bold">@record.Student?.FullName?[0].ToString().ToUpper()</span>
                                     </div>
                                     <div>
-                                        <div class="text-white fw-bold">@(record.Student?.FullName ?? "Unknown User")</div>
-                                        <div class="text-dim extra-small">@record.Student?.Email</div>
+                                        <div class="text-white fw-bold" style="font-size: 0.9rem;">@record.Student?.FullName?.ToLower()</div>
+                                        <div class="text-dim extra-small text-uppercase tracking-wider" style="font-size: 0.65rem;">ID: @record.Student?.Id.Substring(0, 8)</div>
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 py-1 px-3">
-                                    @(record.ProjectProposal?.ResearchArea?.Name ?? "General")
+                            <td class="ps-3">
+                                <div class="text-white fw-bold mb-1" style="font-size: 0.9rem;">@record.ProjectProposal?.Title</div>
+                                <div class="extra-small text-dim text-truncate" style="max-width: 250px;">@record.ProjectProposal?.Abstract</div>
+                            </td>
+                            <td class="ps-3">
+                                <span class="badge border border-info border-opacity-20 text-info fw-bold bg-black bg-opacity-30" style="font-size: 0.7rem;">
+                                    @record.ProjectProposal?.ResearchArea?.Name.ToUpper()
                                 </span>
                             </td>
-                            <td>
-                                <div class="text-white fw-500 text-truncate" style="max-width: 200px;" title="@record.ProjectProposal?.Title">
-                                    @record.ProjectProposal?.Title
-                                </div>
-                            </td>
-                            <td>
-                                @{
-                                    var statusClass = record.ProjectProposal?.Status switch {
-                                        OrbitPM.Models.ProjectStatus.Pending => "warning",
-                                        OrbitPM.Models.ProjectStatus.Matched => "success",
-                                        _ => "secondary"
-                                    };
-                                }
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="rounded-circle bg-@statusClass" style="width: 8px; height: 8px;"></div>
-                                    <span class="text-@statusClass text-uppercase small fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">@record.ProjectProposal?.Status</span>
-                                </div>
-                            </td>
-                            <td>
-                                @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched && record.ProjectProposal.MatchRecord != null) {
-                                    <div class="d-flex align-items-center text-success">
-                                        <i class="bi bi-person-check-fill me-2 fs-5"></i>
-                                        <span class="fw-bold">@(record.ProjectProposal.MatchRecord.Supervisor?.FullName ?? "Supervisor Assigned")</span>
-                                    </div>
-                                } else {
-                                    <span class="text-dim fst-italic small">Unassigned</span>
-                                }
-                            </td>
-                            <td class="pe-4 text-end">
-                                @if(record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched)
+                            <td class="ps-3">
+                                @if (record.ProjectProposal?.MatchRecord?.Supervisor != null)
                                 {
-                                    <form asp-action="ForceUnmatch" method="post" class="m-0 d-inline-block">
-                                        <input type="hidden" name="proposalId" value="@record.ProjectProposal.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger px-3 rounded-pill" onclick="return confirm('Revoke match for proposal #@record.ProjectProposal.Id?')">
+                                    <div class="d-flex align-items-center text-white small">
+                                        <i class="bi bi-person-check-fill text-success me-2"></i> @record.ProjectProposal.MatchRecord.Supervisor.FullName
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-dim small italic">Unassigned</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    var isAllocated = record.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched;
+                                    var statusClass = isAllocated ? "bg-info" : "bg-warning";
+                                    var statusText = isAllocated ? "ALLOCATED" : "PENDING";
+                                }
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="status-dot-inner @statusClass me-2"></div>
+                                    <span class="extra-small fw-800 text-white">@statusText</span>
+                                </div>
+                            </td>
+                            <td class="text-end pe-4">
+                                @if (isAllocated)
+                                {
+                                    <form asp-action="ForceUnmatch" method="post" class="d-inline">
+                                        <input type="hidden" name="proposalId" value="@record.ProjectProposal?.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger px-3 rounded-pill" onclick="return confirm('Revoke match for proposal #@record.ProjectProposal?.Id?')">
                                             <i class="bi bi-x-circle me-1"></i> Revoke
                                         </button>
                                     </form>
@@ -172,4 +166,42 @@
     .lead-sm { font-size: 1.1rem; opacity: 0.8; }
     .text-dim { color: var(--text-dim) !important; }
     .fw-800 { font-weight: 800; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .hover-cyan:hover { border-color: #00f2ff !important; color: #00f2ff !important; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+    .transition-all { transition: all 0.3s ease; }
+
+    .interstate-table thead th {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--text-dim);
+        letter-spacing: 0.1rem;
+        border-bottom: 2px solid rgba(0, 242, 255, 0.2);
+        padding: 1.25rem 0.5rem;
+        text-transform: uppercase;
+    }
+
+    .interstate-table tbody tr {
+        border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+        transition: background 0.2s ease;
+    }
+
+    .active-badge {
+        background: #00f2ff;
+        color: #020617;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        padding: 4px 16px;
+        border-radius: 50px;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        text-transform: uppercase;
+    }
+
+    .status-dot-inner {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        box-shadow: 0 0 8px currentColor;
+    }
 </style>

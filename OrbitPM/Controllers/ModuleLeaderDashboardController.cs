@@ -55,7 +55,19 @@ namespace OrbitPM.Controllers
         [HttpGet]
         public async Task<IActionResult> ResearchAreas()
         {
-            var areas = await _context.ResearchAreas.ToListAsync();
+            var areas = await _context.ResearchAreas.OrderBy(a => a.DisplayOrder).ThenBy(a => a.Id).ToListAsync();
+            
+            // Auto-initialize orders if they are all 0 (first-run optimization)
+            if (areas.Any() && areas.All(a => a.DisplayOrder == 0))
+            {
+                for (int i = 0; i < areas.Count; i++)
+                {
+                    areas[i].DisplayOrder = i + 1;
+                }
+                await _context.SaveChangesAsync();
+                areas = await _context.ResearchAreas.OrderBy(a => a.DisplayOrder).ToListAsync();
+            }
+            
             return View(areas);
         }
 
@@ -65,12 +77,92 @@ namespace OrbitPM.Controllers
         {
             if (!string.IsNullOrWhiteSpace(name))
             {
-                _context.ResearchAreas.Add(new ResearchArea { Name = name });
+                var maxOrder = await _context.ResearchAreas.MaxAsync(a => (int?)a.DisplayOrder) ?? 0;
+                _context.ResearchAreas.Add(new ResearchArea { Name = name, DisplayOrder = maxOrder + 1 });
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "New research domain added securely.";
+                TempData["SuccessMessage"] = $"Domain '{name}' added to system registry.";
             }
             return RedirectToAction(nameof(ResearchAreas));
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditResearchArea(int id, string name)
+        {
+            var area = await _context.ResearchAreas.FindAsync(id);
+            if (area != null && !string.IsNullOrWhiteSpace(name))
+            {
+                area.Name = name;
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Domain name updated successfully.";
+            }
+            return RedirectToAction(nameof(ResearchAreas));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteResearchArea(int id)
+        {
+            var area = await _context.ResearchAreas.Include(a => a.Proposals).FirstOrDefaultAsync(a => a.Id == id);
+            if (area != null)
+            {
+                if (area.Proposals.Any())
+                {
+                    TempData["ErrorMessage"] = "Cannot delete domain: it is currently linked to active project proposals.";
+                    return RedirectToAction(nameof(ResearchAreas));
+                }
+
+                _context.ResearchAreas.Remove(area);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Domain removed from system registry.";
+            }
+            return RedirectToAction(nameof(ResearchAreas));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReorderResearchArea(int id, string direction)
+        {
+            var areas = await _context.ResearchAreas.OrderBy(a => a.DisplayOrder).ToListAsync();
+            var area = areas.FirstOrDefault(a => a.Id == id);
+            
+            if (area != null)
+            {
+                int currentIndex = areas.IndexOf(area);
+                if (direction == "up" && currentIndex > 0)
+                {
+                    var other = areas[currentIndex - 1];
+                    (area.DisplayOrder, other.DisplayOrder) = (other.DisplayOrder, area.DisplayOrder);
+                }
+                else if (direction == "down" && currentIndex < areas.Count - 1)
+                {
+                    var other = areas[currentIndex + 1];
+                    (area.DisplayOrder, other.DisplayOrder) = (other.DisplayOrder, area.DisplayOrder);
+                }
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(ResearchAreas));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateDomainOrder([FromBody] List<int> sortedIds)
+        {
+            if (sortedIds == null || !sortedIds.Any()) return BadRequest();
+
+            var areas = await _context.ResearchAreas.ToListAsync();
+            
+            for (int i = 0; i < sortedIds.Count; i++)
+            {
+                var area = areas.FirstOrDefault(a => a.Id == sortedIds[i]);
+                if (area != null)
+                {
+                    area.DisplayOrder = i + 1;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpGet]
