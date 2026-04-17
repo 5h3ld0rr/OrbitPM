@@ -3,330 +3,189 @@
     ViewData["Title"] = "Supervisor Dashboard - Blind Match";
 }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-<style>
-    /* Premium Glassmorphism Aesthetics for Supervisor Dashboard */
-    body {
-        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-        color: #f8fafc;
-        font-family: 'Inter', system-ui, sans-serif;
-    }
-    
-    .dashboard-header {
-        margin-bottom: 2.5rem;
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .proposal-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 1.8rem;
-        margin-bottom: 1.5rem;
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .proposal-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.2) inset;
-        border: 1px solid rgba(99, 102, 241, 0.5);
-    }
-    
-    .badge-research {
-        background: rgba(99, 102, 241, 0.2);
-        color: #818cf8;
-        border: 1px solid rgba(99, 102, 241, 0.4);
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-    }
-    
-    .tag-stack {
-        background: rgba(30, 41, 59, 0.8);
-        color: #94a3b8;
-        font-size: 0.75rem;
-        padding: 0.3rem 0.8rem;
-        border-radius: 6px;
-        border: 1px solid rgba(255,255,255,0.05);
-        margin-right: 0.5rem;
-        margin-bottom: 0.5rem;
-        display: inline-block;
-    }
-
-    .btn-match {
-        background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 0.6rem 1.5rem;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-    }
-    
-    .btn-match:hover {
-        opacity: 0.95;
-        transform: scale(1.02);
-        color: white;
-        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.5);
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 5rem 2rem;
-        background: rgba(255,255,255,0.02);
-        border-radius: 16px;
-        border: 1px dashed rgba(255,255,255,0.15);
-    }
-
-    /* Stats Panel Styles */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .glass-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--primary);
-    }
-    .stat-icon {
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-        font-size: 1.5rem;
-    }
-    .ls-wide { letter-spacing: 0.05em; }
-
-    /* New Empty State Lux Styles */
-    .empty-state-lux {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px dashed rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-    }
-    .guide-card {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        position: relative;
-        transition: all 0.3s ease;
-    }
-    .guide-card:hover {
-        transform: translateY(-10px);
-        background: rgba(30, 41, 59, 0.8);
-        border-color: rgba(99, 102, 241, 0.3);
-    }
-    .guide-num {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        width: 32px;
-        height: 32px;
-        background: var(--primary);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.5);
-    }
-    .shadow-glow {
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-    }
-    .shadow-glow:hover {
-        box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
-    }
-</style>
-
-<div class="container py-5">
-    <div class="dashboard-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 fade-in-up">
         <div>
-            <h1 class="fw-bold mb-2 text-white"><i class="bi bi-shield-lock-fill text-primary me-3"></i>Blind Review Dashboard</h1>
-            <p class="text-slate-300 mb-0" style="color: #cbd5e1; font-size: 1.1rem;">Browse anonymous student proposals securely and select your matches.</p>
+            <h1 class="fw-800 display-5 mb-1 text-white">
+                <i class="bi bi-shield-lock-fill text-primary me-3"></i>Blind Review
+            </h1>
+            <p class="text-dim mb-0 lead-sm">Securely evaluate anonymous student proposals and confirm your interest.</p>
         </div>
         <div>
-            <a asp-action="ManageExpertise" class="btn btn-outline-light rounded-pill px-4 shadow-sm" style="border-color: rgba(255,255,255,0.2);">
-                <i class="bi bi-sliders me-2"></i> Manage Research Areas
+            <a asp-action="ManageExpertise" class="btn btn-outline-light d-flex align-items-center gap-2">
+                <i class="bi bi-sliders fs-5"></i>
+                <span>Manage Expertise</span>
             </a>
         </div>
     </div>
 
     <!-- Statistics Panel -->
-    <div class="row g-3 mb-5">
+    <div class="row g-4 mb-5">
         <div class="col-md-3 col-6">
-            <div class="glass-card p-3 d-flex align-items-center">
-                <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
-                    <i class="bi bi-clipboard-check-fill"></i>
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.05s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-clipboard-check-fill text-primary fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Total</span>
                 </div>
-                <div>
-                    <div class="text-dim small fw-bold text-uppercase ls-wide">Total Matches</div>
-                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Total</div>
-                </div>
+                <h2 class="fw-800 mb-1">@ViewBag.Stats_Total</h2>
+                <div class="extra-small text-dim">Active Matches</div>
             </div>
         </div>
         <div class="col-md-3 col-6">
-            <div class="glass-card p-3 d-flex align-items-center">
-                <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
-                    <i class="bi bi-check-all"></i>
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.1s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-success bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-check-all text-success fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Approved</span>
                 </div>
-                <div>
-                    <div class="text-dim small fw-bold text-uppercase ls-wide">Approved</div>
-                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Approved</div>
-                </div>
+                <h2 class="fw-800 mb-1">@ViewBag.Stats_Approved</h2>
+                <div class="extra-small text-dim">Confirmed Projects</div>
             </div>
         </div>
         <div class="col-md-3 col-6">
-            <div class="glass-card p-3 d-flex align-items-center">
-                <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
-                    <i class="bi bi-hourglass-split"></i>
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.15s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-warning bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-hourglass-split text-warning fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Pending</span>
                 </div>
-                <div>
-                    <div class="text-dim small fw-bold text-uppercase ls-wide">Pending</div>
-                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Pending</div>
-                </div>
+                <h2 class="fw-800 mb-1">@ViewBag.Stats_Pending</h2>
+                <div class="extra-small text-dim">In-review Queue</div>
             </div>
         </div>
         <div class="col-md-3 col-6">
-            <div class="glass-card p-3 d-flex align-items-center">
-                <div class="stat-icon bg-danger bg-opacity-10 text-danger me-3">
-                    <i class="bi bi-x-circle-fill"></i>
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-danger bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-x-circle-fill text-danger fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Rejected</span>
                 </div>
-                <div>
-                    <div class="text-dim small fw-bold text-uppercase ls-wide">Rejected</div>
-                    <div class="fs-4 fw-bold text-white">@ViewBag.Stats_Rejected</div>
-                </div>
+                <h2 class="fw-800 mb-1">@ViewBag.Stats_Rejected</h2>
+                <div class="extra-small text-dim">Revoked Selections</div>
             </div>
         </div>
     </div>
 
     @if (ViewBag.MatchCount > 0)
     {
-        <div class="notification-banner mb-5 p-4 rounded-4 d-flex align-items-center justify-content-between animate__animated animate__pulse animate__infinite">
-            <div class="d-flex align-items-center">
-                <div class="icon-box me-4">
-                    <i class="bi bi-lightning-charge-fill text-warning fs-3"></i>
+        <div class="match-reveal-module mb-5 fade-in-up">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                <div class="d-flex align-items-center">
+                    <div class="supervisor-avatar me-4">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                    <div>
+                        <div class="match-reveal-tag">
+                            <i class="bi bi-stars"></i> Priority Match Discovery
+                        </div>
+                        <h4 class="fw-bold text-white mb-1">High-Context Suggestions Available</h4>
+                        <p class="text-dim mb-0">We found @ViewBag.MatchCount proposals strictly matching your academic research expertise.</p>
+                    </div>
                 </div>
-                <div>
-                    <h5 class="fw-bold text-white mb-1">New Priority Matches Detected!</h5>
-                    <p class="mb-0 text-white opacity-75">There are @ViewBag.MatchCount pending proposals matching your academic research areas.</p>
-                </div>
+                <button class="btn btn-primary px-4 fw-800" onclick="scrollToFirstMatch()">Focus Matches</button>
             </div>
-            <button class="btn btn-light btn-sm rounded-pill px-4 fw-bold text-primary shadow-sm" onclick="scrollToFirstMatch()">View Now</button>
         </div>
     }
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; backdrop-filter: blur(8px);">
-            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert glass-alert border-primary border-opacity-25 d-flex align-items-center mb-4 fade-in-up" role="alert">
+            <i class="bi bi-check-circle-fill text-primary me-3 fs-4"></i>
+            <div class="text-white">@TempData["SuccessMessage"]</div>
+            <button type="button" class="ms-auto btn-close btn-close-white" data-bs-dismiss="alert"></button>
         </div>
     }
 
     @if (!Model.Any())
     {
-        <div class="empty-state-lux p-5 rounded-4 text-center mt-4">
+        <div class="card p-5 text-center border-dashed fade-in-up" style="border: 2px dashed var(--glass-border) !important; background: transparent !important;">
             <div class="mb-4">
-                <div class="display-container position-relative d-inline-block">
-                    <i class="bi bi-rocket-takeoff-fill text-primary display-1 opacity-25"></i>
-                    <i class="bi bi-search position-absolute top-50 start-50 translate-middle text-white fs-1"></i>
+                <div class="d-inline-flex p-4 rounded-circle bg-surface-light mb-3">
+                    <i class="bi bi-rocket-takeoff-fill text-dim" style="font-size: 3.5rem;"></i>
                 </div>
             </div>
+            <h3 class="fw-bold text-white mb-2">No active proposals found</h3>
+            <p class="text-dim mb-5 mx-auto" style="max-width: 500px;">The innovation pipeline is currently recharging. Optimize your research profile to ensure you never miss a perfect match.</p>
             
-            <h2 class="fw-bold text-white mb-3">Quiet before the innovation storm...</h2>
-            <p class="text-dim mb-5 mx-auto" style="max-width: 600px;">
-                There aren't any pending proposals right now. While you wait for student submissions, 
-                make sure your profile is optimized for the best matches.
-            </p>
-
             <div class="row g-4 justify-content-center mb-5">
                 <div class="col-md-4">
-                    <div class="guide-card p-4 rounded-4 h-100">
-                        <div class="guide-num">1</div>
-                        <i class="bi bi-tags-fill text-primary fs-3 mb-3 d-block"></i>
-                        <h6 class="fw-bold text-white">Define Expertise</h6>
-                        <p class="small text-dim mb-0">Select your research areas to trigger Priority Match alerts.</p>
+                    <div class="card bg-surface-light border-0 p-4 h-100">
+                        <i class="bi bi-tags-fill text-primary fs-3 mb-3"></i>
+                        <h6 class="fw-bold text-white">Academic Tags</h6>
+                        <p class="extra-small text-dim mb-0">Define your expertise to trigger match alerts.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="guide-card p-4 rounded-4 h-100">
-                        <div class="guide-num">2</div>
-                        <i class="bi bi-incognito text-warning fs-3 mb-3 d-block"></i>
-                        <h6 class="fw-bold text-white">Blind Review</h6>
-                        <p class="small text-dim mb-0">Evaluate project abstracts without student identity bias.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="guide-card p-4 rounded-4 h-100">
-                        <div class="guide-num">3</div>
-                        <i class="bi bi-handshake-fill text-success fs-3 mb-3 d-block"></i>
-                        <h6 class="fw-bold text-white">Mutual Match</h6>
-                        <p class="small text-dim mb-0">Confirm interests to unlock contact details and proceed.</p>
+                    <div class="card bg-surface-light border-0 p-4 h-100">
+                        <i class="bi bi-incognito text-warning fs-3 mb-3"></i>
+                        <h6 class="fw-bold text-white">Blind Eval</h6>
+                        <p class="extra-small text-dim mb-0">Review based on merit, not identity metadata.</p>
                     </div>
                 </div>
             </div>
 
-            <a asp-action="ManageExpertise" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow-glow">
-                <i class="bi bi-gear-fill me-2"></i> Update Research Profile Now
+            <a asp-action="ManageExpertise" class="btn btn-outline-light px-4">
+                Update Security Profile
             </a>
         </div>
     }
     else
     {
-        <div class="row g-4">
+        <div class="row g-4 mb-5">
             @foreach (var proposal in Model)
             {
                 var isMatch = (ViewBag.MyAreaIds as List<int>)?.Contains(proposal.ResearchAreaId) ?? false;
                 <div class="col-lg-6 @(isMatch ? "priority-match-item" : "")">
-                    <div class="proposal-card @(isMatch ? "matched-border" : "")">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="d-flex align-items-center gap-2 overflow-hidden">
-                                <span class="badge badge-research rounded-pill px-3 py-2 text-truncate" style="max-width: 180px;" title="@(proposal.ResearchArea?.Name ?? "Uncategorized")">
-                                    @(proposal.ResearchArea?.Name ?? "Uncategorized")
-                                </span>
-                                @if (isMatch)
-                                {
-                                    <span class="badge bg-warning text-dark border-0 rounded-pill px-3 py-2 small fw-bold">
-                                        <i class="bi bi-star-fill me-1"></i> PRIORITY MATCH
+                    <div class="card h-100 fade-in-up shadow-lg @(isMatch ? "border-primary border-opacity-50" : "")">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <!-- Card Header -->
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="badge border border-primary border-opacity-25 text-primary bg-primary bg-opacity-10 py-1 px-3 rounded-pill extra-small fw-800">
+                                        @(proposal.ResearchArea?.Name ?? "General Research")
                                     </span>
+                                    @if (isMatch)
+                                    {
+                                        <div class="text-warning extra-small fw-800 tracking-widest mt-1">
+                                            <i class="bi bi-stars me-1"></i> PRIORITY MATCH
+                                        </div>
+                                    }
+                                </div>
+                                <span class="font-monospace text-dim small">#@proposal.Id.ToString("D4")</span>
+                            </div>
+                            
+                            <!-- Content -->
+                            <h4 class="fw-bold text-white mb-3 tracking-tight">@proposal.Title</h4>
+                            
+                            <p class="text-dim mb-4 line-clamp-3">
+                                @proposal.Abstract
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
+                                @foreach(var tech in proposal.TechnicalStack.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    <span class="badge bg-surface-light text-dim border border-white border-opacity-5 fw-500">@tech.Trim()</span>
                                 }
                             </div>
-                            <span class="text-muted small fw-bold" style="letter-spacing: 1px;">#@proposal.Id.ToString("D4")</span>
-                        </div>
-                        
-                        <h4 class="fw-bold text-white mb-3" style="line-height: 1.4;">@proposal.Title</h4>
-                        <p class="text-slate-300 flex-grow-1" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                            @proposal.Abstract
-                        </p>
-                        
-                        <div class="mb-4">
-                            @foreach(var tech in proposal.TechnicalStack.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
-                            {
-                                <span class="tag-stack">@tech.Trim()</span>
-                            }
-                        </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-auto pt-4" style="border-top: 1px solid rgba(255,255,255,0.05);">
-                            <div class="small" style="color: #cbd5e1;">
-                                <i class="bi bi-incognito text-primary me-2"></i> <span class="opacity-75">Anonymous Submission</span>
+                            <!-- Actions -->
+                            <div class="pt-4 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center">
+                                <div class="extra-small text-dim d-flex align-items-center">
+                                    <i class="bi bi-shield-check me-2 text-primary"></i> Blind Verified
+                                </div>
+                                <form asp-action="ExpressInterest" method="post" class="m-0">
+                                    <input type="hidden" name="proposalId" value="@proposal.Id" />
+                                    <button type="submit" class="btn btn-primary btn-sm px-4">
+                                        Confirm Match
+                                    </button>
+                                </form>
                             </div>
-                            <form asp-action="ExpressInterest" method="post" class="m-0">
-                                <input type="hidden" name="proposalId" value="@proposal.Id" />
-                                <button type="submit" class="btn btn-match">
-                                    <i class="bi bi-hand-index-thumb me-1"></i> Confirm Match
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -341,36 +200,26 @@
             const firstMatch = document.querySelector('.priority-match-item');
             if (firstMatch) {
                 firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                firstMatch.classList.add('pulse-highlight');
-                setTimeout(() => firstMatch.classList.remove('pulse-highlight'), 2000);
+                firstMatch.querySelector('.card').style.borderColor = 'var(--primary)';
+                firstMatch.querySelector('.card').style.boxShadow = '0 0 30px rgba(0, 242, 254, 0.2)';
             }
         }
     </script>
-    <style>
-        .notification-banner {
-            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .icon-box {
-            background: rgba(255,255,255,0.15);
-            padding: 1rem;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .matched-border {
-            border: 2px solid rgba(255, 193, 7, 0.4) !important;
-            background: rgba(255, 193, 7, 0.03) !important;
-        }
-        .pulse-highlight {
-            animation: pulse-ring 1s cubic-bezier(0.25, 0, 0, 1) infinite;
-        }
-        @@keyframes pulse-ring {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
-            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(255, 193, 7, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
-        }
-    </style>
 }
+
+<style>
+    .fw-800 { font-weight: 800; }
+    .text-dim { color: var(--text-dim) !important; }
+    .lead-sm { font-size: 1.1rem; opacity: 0.8; }
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .tracking-widest { letter-spacing: 0.15em; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .extra-small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    .fw-500 { font-weight: 500; }
+</style>
+

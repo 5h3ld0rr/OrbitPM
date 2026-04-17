@@ -6,77 +6,102 @@
 }
 
 <div class="row justify-content-center mt-5 fade-in-up">
-    <div class="col-md-10 mb-3">
+    <div class="col-md-11 mb-3">
         <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
             <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
         </a>
     </div>
-    <div class="col-md-10">
-            <!-- Header Section & Search -->
-            <div class="mb-5">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-                    <div class="d-flex align-items-center">
-                        <div class="p-3 bg-primary bg-opacity-20 rounded-4 me-3">
-                            <i class="bi bi-diagram-3 text-primary fs-3"></i>
-                        </div>
-                        <div>
-                            <h2 class="fw-bold text-white mb-0">Research Areas</h2>
-                            <p class="text-dim mb-0">Manage system-wide academic domains.</p>
-                        </div>
+    <div class="col-md-11">
+        <!-- Main Registry Section -->
+        <div class="mb-5">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="p-3 bg-primary bg-opacity-20 rounded-4 me-3">
+                        <i class="bi bi-diagram-3-fill text-primary fs-3"></i>
                     </div>
-                    <!-- Quick Add Form -->
-                    <form action="/SupervisorDashboard/AddResearchArea" method="post" class="d-flex gap-2">
-                        @Html.AntiForgeryToken()
-                        <input type="text" name="name" class="form-control form-control-sm bg-dark text-white border-white border-opacity-10" placeholder="Create new..." required />
-                        <button type="submit" class="btn btn-primary btn-sm px-3 shadow-glow"><i class="bi bi-plus-lg"></i></button>
-                    </form>
-                </div>
-
-                <!-- Advanced Search Filter -->
-                <div class="position-relative search-container">
-                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-primary"></i>
-                    <input type="text" id="areaSearch" class="form-control bg-white bg-opacity-5 border-white border-opacity-10 py-3 ps-5 text-white rounded-4 shadow-none focus-glow" 
-                           placeholder="Filter domains by name or keyword..." onkeyup="filterAreas()">
-                    <div id="searchCounter" class="position-absolute top-50 end-0 translate-middle-y me-3 badge bg-primary bg-opacity-20 text-primary d-none">
-                        <span id="matchCount">0</span> matches
+                    <div>
+                        <h2 class="fw-800 text-white mb-0 tracking-tight">Research Domains</h2>
+                        <p class="text-dim mb-0 lead-sm text-uppercase extra-small tracking-widest">Global Academic Mapping</p>
                     </div>
                 </div>
+                <!-- Quick Add Form -->
+                <form action="/SupervisorDashboard/AddResearchArea" method="post" class="d-flex gap-2">
+                    @Html.AntiForgeryToken()
+                    <input type="text" name="name" class="form-control form-control-sm bg-dark text-white border-white border-opacity-10 rounded-pill px-3" placeholder="New domain identity..." required />
+                    <button type="submit" class="btn btn-primary btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </form>
             </div>
 
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success bg-success bg-opacity-10 border-success border-opacity-25 text-success mb-4" role="alert">
-                    <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <!-- Advanced Search Filter -->
+            <div class="position-relative search-container mb-4">
+                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-primary"></i>
+                <input type="text" id="areaSearch" class="form-control bg-white bg-opacity-5 border-white border-opacity-10 py-3 ps-5 text-white rounded-4 shadow-none focus-glow" 
+                       placeholder="Filter academic domains by name..." onkeyup="filterAreas()">
+                <div id="searchCounter" class="position-absolute top-50 end-0 translate-middle-y me-3 badge bg-primary bg-opacity-20 text-primary d-none">
+                    <span id="matchCount">0</span> matches
                 </div>
-            }
+            </div>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert glass-alert border-primary border-opacity-25 d-flex align-items-center mb-4 scale-in" role="alert">
+                <i class="bi bi-check-circle-fill text-primary me-3 fs-4"></i>
+                <div class="text-white">@TempData["SuccessMessage"]</div>
+            </div>
+        }
+
+        <form action="/SupervisorDashboard/ManageExpertise" method="post" id="expertiseForm">
+            @Html.AntiForgeryToken()
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-800 text-white mb-0 extra-small tracking-widest text-uppercase">Domain Grid Selection</h5>
+                <button type="submit" class="btn btn-primary btn-sm px-4 rounded-pill fw-800 shadow-lg">Save Expertise Profile</button>
+            </div>
 
             <!-- Primary Selection Grid -->
-            <div class="row g-4 mb-3" id="areaGrid">
+            <div class="row g-4 mb-5" id="areaGrid">
                 @foreach (var area in allAreas)
                 {
+                    var isSelected = myAreas.Contains(area.Id);
                     <div class="col-lg-4 col-md-6 area-card-item" data-name="@area.Name.ToLower()">
-                        <div class="card bg-white bg-opacity-5 border-white border-opacity-10 p-3 h-100 group-hover transition-all border-1">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <h5 class="fw-bold text-white mb-0 area-title text-truncate-2" title="@area.Name">@area.Name</h5>
-                                <div class="d-flex gap-1">
-                                    <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-primary" data-bs-toggle="modal" data-bs-target="#editModal_@area.Id">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-link text-dim p-1 hover-danger" onclick="confirmDelete(@area.Id, '@area.Name')">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
+                        <div class="card h-100 group-hover transition-all @(isSelected ? "border-primary border-opacity-50 expertise-selected" : "border-white border-opacity-10 bg-white bg-opacity-5")">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input expertise-checkbox" type="checkbox" name="selectedAreas" value="@area.Id" id="check_@area.Id" @(isSelected ? "checked" : "")>
+                                        <label class="form-check-label ms-2 fw-800 text-white tracking-tight" for="check_@area.Id" style="font-size: 1.1rem; cursor: pointer;">
+                                            @area.Name
+                                        </label>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-link p-0 text-dim hover-primary transition-all" data-bs-toggle="modal" data-bs-target="#editModal_@area.Id">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-link p-0 text-dim hover-danger transition-all" onclick="confirmDelete(@area.Id, '@area.Name')">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mt-auto">
+                                    <span class="font-monospace text-dim extra-small">#ID-@area.Id.ToString("D3")</span>
+                                    @if (isSelected)
+                                    {
+                                        <span class="badge bg-primary bg-opacity-10 text-primary extra-small py-1 px-2 rounded-1">Linked</span>
+                                    }
                                 </div>
                             </div>
-                            <span class="text-dim small opacity-50">#ID-@area.Id</span>
                         </div>
                     </div>
                 }
             </div>
-            <div id="noResults" class="text-center py-5 d-none">
-                <i class="bi bi-search text-dim display-1 mb-3 opacity-25"></i>
-                <h4 class="text-white fw-light">No matching domains found</h4>
-                <p class="text-dim">Try a different keyword or create a new area.</p>
-            </div>
+        </form>
+
+        <div id="noResults" class="text-center py-5 d-none">
+            <i class="bi bi-search text-dim display-1 mb-3 opacity-25"></i>
+            <h4 class="text-white fw-light">No matching domains found</h4>
+            <p class="text-dim">Try a different keyword or create a new system-wide area.</p>
         </div>
     </div>
 </div>
@@ -84,11 +109,11 @@
 <!-- Modals -->
 @foreach (var area in allAreas)
 {
-    <div class="modal fade" id="editModal_@area.Id" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(5px);">
+    <div class="modal fade" id="editModal_@area.Id" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-slate-900 border border-white border-opacity-20 rounded-4" style="background-color: #0f172a;">
-                <div class="modal-header border-bottom border-white border-opacity-5 p-4">
-                    <h5 class="modal-title fw-bold text-white">Modify Domain #@area.Id</h5>
+            <div class="modal-content bg-slate-900 border border-white border-opacity-20 rounded-4 shadow-2xl">
+                <div class="modal-header border-bottom border-white border-opacity-5 p-4" style="background: var(--bg-dark);">
+                    <h5 class="modal-title fw-800 text-white tracking-tight">Modify Domain Identity</h5>
                     <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="/SupervisorDashboard/EditResearchArea" method="post">
@@ -96,17 +121,16 @@
                     <div class="modal-body p-4">
                         <input type="hidden" name="id" value="@area.Id" />
                         <div class="mb-4">
-                            <label class="form-label small text-uppercase text-dim ls-wide mb-2">Domain Designation</label>
-                            <input type="text" name="name" class="form-control bg-dark text-white border-white border-opacity-20 py-2 px-3 shadow-none focus-vibrant" value="@area.Name" required />
+                            <label class="form-label extra-small fw-800 text-dim tracking-widest mb-2">DOMAIN DESIGNATION</label>
+                            <input type="text" name="name" class="form-control bg-dark text-white border-white border-opacity-20 py-3 px-3 shadow-none focus-glow" value="@area.Name" required />
                         </div>
                         <div class="d-flex align-items-start p-3 bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-20">
-                            <i class="bi bi-exclamation-triangle-fill text-warning me-2 mt-1"></i>
-                            <p class="text-warning small mb-0">Changing names affects all matching rules system-wide.</p>
+                            <i class="bi bi-info-circle-fill text-warning me-2 mt-1"></i>
+                            <p class="text-warning extra-small mb-0">Identity changes propagate across all student proposals and supervisor profiles instantly.</p>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-white border-opacity-5 p-3">
-                        <button type="button" class="btn btn-link text-white text-decoration-none px-4" data-bs-dismiss="modal">Discard</button>
-                        <button type="submit" class="btn btn-primary px-4">Apply Changes</button>
+                    <div class="modal-footer border-top border-white border-opacity-5 p-4">
+                        <button type="submit" class="btn btn-primary px-4 rounded-pill fw-800 text-uppercase small w-100 py-3 shadow-lg">Apply Systematic Change</button>
                     </div>
                 </form>
             </div>
@@ -122,7 +146,7 @@
 @section Scripts {
     <script>
         function confirmDelete(id, name) {
-            if (confirm(`Permanent Action: Are you sure you want to remove '${name}'?`)) {
+            if (confirm(`Permanent Database Action: Are you sure you want to remove '${name}'? This cannot be undone.`)) {
                 document.getElementById('deleteId').value = id;
                 document.getElementById('deleteForm').submit();
             }
@@ -146,7 +170,6 @@
                 }
             });
 
-            // Update UI feedback
             if (query.length > 0) {
                 counter.classList.remove('d-none');
                 matchCountSpan.innerText = matchCount;
@@ -154,7 +177,6 @@
                 counter.classList.add('d-none');
             }
 
-            // Toggle no results state
             if (matchCount === 0 && query.length > 0) {
                 noResults.classList.remove('d-none');
                 document.getElementById('areaGrid').classList.add('d-none');
@@ -163,30 +185,54 @@
                 document.getElementById('areaGrid').classList.remove('d-none');
             }
         }
+
+        // Highlight card when checkbox is checked
+        document.querySelectorAll('.expertise-checkbox').forEach(cb => {
+            cb.addEventListener('change', function() {
+                const card = this.closest('.card');
+                if (this.checked) {
+                    card.classList.add('border-primary', 'border-opacity-50', 'expertise-selected');
+                    card.classList.remove('border-white', 'border-opacity-10', 'bg-white', 'bg-opacity-5');
+                } else {
+                    card.classList.remove('border-primary', 'border-opacity-50', 'expertise-selected');
+                    card.classList.add('border-white', 'border-opacity-10', 'bg-white', 'bg-opacity-5');
+                }
+            });
+        });
     </script>
-    <style>
-        .hover-primary:hover { color: var(--primary) !important; transform: scale(1.1); }
-        .hover-danger:hover { color: #ef4444 !important; transform: scale(1.1); }
-        .group-hover:hover { border-color: var(--primary) !important; background: rgba(255,255,255,0.08) !important; }
-        .ls-wide { letter-spacing: 0.05em; }
-        .transition-all { transition: all 0.2s ease-in-out; }
-        .text-truncate-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-height: 3rem;
-            line-height: 1.5rem;
-        }
-        .focus-vibrant:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.25) !important; }
-        .bg-slate-900 { background-color: #0f172a; }
-        .focus-glow:focus { 
-            background: rgba(255,255,255,0.1) !important; 
-            border-color: var(--primary) !important; 
-            box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.2) !important;
-        }
-        .search-container i { opacity: 0.5; transition: opacity 0.2s; }
-        .search-container:focus-within i { opacity: 1; color: var(--primary) !important; }
-    </style>
 }
+
+<style>
+    .fw-800 { font-weight: 800; }
+    .text-dim { color: var(--text-dim) !important; }
+    .tracking-widest { letter-spacing: 0.15em; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .extra-small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    .lead-sm { font-size: 1.1rem; opacity: 0.8; }
+    
+    .hover-primary:hover { color: var(--primary) !important; transform: scale(1.1); }
+    .hover-danger:hover { color: #ef4444 !important; transform: scale(1.1); }
+    .transition-all { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    
+    .bg-slate-900 { background-color: #0f172a; }
+    .focus-glow:focus { 
+        background: rgba(255,255,255,0.1) !important; 
+        border-color: var(--primary) !important; 
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.2) !important;
+    }
+    
+    .expertise-selected {
+        background: rgba(0, 242, 254, 0.08) !important;
+        box-shadow: 0 0 25px rgba(0, 242, 254, 0.1) !important;
+    }
+    
+    .form-check-input {
+        background-color: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.2);
+    }
+    .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+</style>
+
