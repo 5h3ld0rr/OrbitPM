@@ -38,16 +38,19 @@ namespace OrbitPM.Controllers
             ViewBag.MatchCount = availableProposals.Count(p => myAreaIds.Contains(p.ResearchAreaId));
             ViewBag.MyAreaIds = myAreaIds;
 
-            // 4. Statistics Calculation for the logged-in supervisor
+            // 4. Statistics Calculation for the supervisor
+            var allPending = await _context.ProjectProposals.CountAsync(p => p.Status == ProjectStatus.Pending);
+            var expertiseMatches = availableProposals.Count(p => myAreaIds.Contains(p.ResearchAreaId));
+
             var myMatches = await _context.MatchRecords
                 .Include(m => m.ProjectProposal)
                 .Where(m => m.SupervisorId == supervisorId)
                 .ToListAsync();
 
-            ViewBag.Stats_Total = myMatches.Count;
+            ViewBag.Stats_TotalPool = allPending;
+            ViewBag.Stats_ExpertiseMatch = expertiseMatches;
+            ViewBag.Stats_MyMatches = myMatches.Count;
             ViewBag.Stats_Approved = myMatches.Count(m => m.ProjectProposal?.Status == ProjectStatus.Approved);
-            ViewBag.Stats_Pending = myMatches.Count(m => m.ProjectProposal?.Status == ProjectStatus.Matched); // Still in 'Matched' phase but not yet 'Approved'
-            ViewBag.Stats_Rejected = myMatches.Count(m => m.ProjectProposal?.Status == ProjectStatus.Rejected);
 
             return View(availableProposals);
         }
