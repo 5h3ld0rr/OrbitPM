@@ -106,7 +106,7 @@
                                         </a>
                                         <form asp-action="WithdrawProposal" method="post" class="d-inline">
                                             <input type="hidden" name="proposalId" value="@proposal.Id" />
-                                            <button type="submit" class="btn btn-outline-danger btn-sm px-3" onclick="return confirm('Withdraw proposal #@proposal.Id?')">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm px-3" onclick="return confirm('Permanently delete proposal #@proposal.Id? This action cannot be undone.')">
                                                 <i class="bi bi-trash-fill me-1"></i> Withdraw
                                             </button>
                                         </form>

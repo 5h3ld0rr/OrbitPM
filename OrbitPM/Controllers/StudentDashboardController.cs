@@ -136,10 +136,10 @@ namespace OrbitPM.Controllers
                 return BadRequest("Cannot withdraw a matched or invalid proposal.");
             }
 
-            ownership.ProjectProposal!.Status = ProjectStatus.Withdrawn;
+            _context.ProjectProposals.Remove(ownership.ProjectProposal!);
             await _context.SaveChangesAsync();
             
-            TempData["SuccessMessage"] = "Your proposal has been successfully withdrawn. It is no longer visible to supervisors.";
+            TempData["SuccessMessage"] = "Your proposal has been successfully deleted from the system.";
             return RedirectToAction(nameof(Index));
         }
     }
