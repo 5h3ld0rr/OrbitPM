@@ -3,62 +3,103 @@
     ViewData["Title"] = "Create Proposal - Student Dashboard";
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header bg-white border-bottom p-4">
-                    <div class="d-flex align-items-center mb-1">
-                        <a asp-action="Index" class="btn btn-sm btn-light border me-3"><i class="bi bi-arrow-left"></i> Back</a>
-                        <h2 class="fw-bold mb-0 text-dark">Submit New Idea</h2>
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-lg-8 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
+            <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
+        </a>
+    </div>
+    <div class="col-lg-8">
+        <div class="card bg-black bg-opacity-40 border border-info border-opacity-10 shadow-2xl rounded-4 overflow-hidden">
+            
+            <!-- Blue Gradient Header -->
+            <div class="p-4 d-flex align-items-center border-bottom border-info border-opacity-30" 
+                 style="background: linear-gradient(135deg, #0f172a 0%, #020617 100%);">
+                <div class="bg-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="bi bi-lightbulb-fill text-white fs-4"></i>
+                </div>
+                <div>
+                    <h4 class="fw-800 text-white mb-0 tracking-tight">Submit New Idea</h4>
+                    <p class="extra-small text-dim fw-800 text-uppercase tracking-widest mb-0 opacity-75">Secure Blind Review Submission Line</p>
+                </div>
+            </div>
+
+            <div class="p-4 p-md-5">
+                <div class="glass-alert border-0 p-3 mb-5 scale-in" style="background: rgba(0, 242, 255, 0.05);">
+                    <i class="bi bi-shield-lock-fill text-primary me-2"></i> 
+                    <span class="small fw-600 text-dim">Your identity will remain completely <span class="text-white">ANONYMOUS</span> until a supervisor establishes a handshake connection.</span>
+                </div>
+
+                <form asp-action="CreateProposal" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">PROJECT DESIGNATION <span class="text-danger">*</span></label>
+                        <input asp-for="Title" class="form-control form-control-lg border-0 text-white py-3 px-4" 
+                               style="background: var(--input-bg); font-size: 1rem; border-radius: 12px;"
+                               placeholder="e.g., AI-Driven Analytics Platform" required />
+                        <span asp-validation-for="Title" class="text-danger extra-small mt-2 d-block"></span>
                     </div>
-                    <p class="text-muted ms-5 ps-2 mb-0">Your identity will remain completely anonymous until a supervisor connects.</p>
-                </div>
-                
-                <div class="card-body p-4 p-md-5">
-                    <form asp-action="CreateProposal" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <div class="mb-4">
-                            <label asp-for="Title" class="form-label fw-bold text-secondary">Project Title <span class="text-danger">*</span></label>
-                            <input asp-for="Title" class="form-control form-control-lg bg-light" placeholder="e.g., AI-Driven Analytics Platform" required />
-                            <span asp-validation-for="Title" class="text-danger small"></span>
-                        </div>
 
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-4 mb-md-0">
-                                <label asp-for="ResearchAreaId" class="form-label fw-bold text-secondary">Primary Research Area <span class="text-danger">*</span></label>
-                                <select asp-for="ResearchAreaId" class="form-select border-secondary-subtle" asp-items="ViewBag.ResearchAreas" required>
-                                    <option value="">-- Select specific category --</option>
-                                </select>
-                                <span asp-validation-for="ResearchAreaId" class="text-danger small"></span>
-                                <div class="form-text mt-2"><i class="bi bi-info-circle"></i> Supervisors filter strongly by Area.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="TechnicalStack" class="form-label fw-bold text-secondary">Technical Stack</label>
-                                <input asp-for="TechnicalStack" class="form-control border-secondary-subtle" placeholder="e.g., React, Node.js, Python" />
-                                <span asp-validation-for="TechnicalStack" class="text-danger small"></span>
-                            </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label asp-for="ResearchAreaId" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">RESEARCH DOMAIN <span class="text-danger">*</span></label>
+                            <select asp-for="ResearchAreaId" class="form-select border-0 text-white py-3 px-4" 
+                                    style="background: var(--input-bg); font-size: 0.9rem; border-radius: 12px;"
+                                    asp-items="ViewBag.ResearchAreas" required>
+                                <option value="">-- Select specific category --</option>
+                            </select>
+                            <span asp-validation-for="ResearchAreaId" class="text-danger extra-small mt-2 d-block"></span>
                         </div>
+                        <div class="col-md-6">
+                            <label asp-for="TechnicalStack" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">TECHNOLOGY STACK</label>
+                            <input asp-for="TechnicalStack" class="form-control border-0 text-white py-3 px-4" 
+                                   style="background: var(--input-bg); font-size: 0.9rem; border-radius: 12px;"
+                                   placeholder="e.g., React, Node.js, Python" />
+                            <span asp-validation-for="TechnicalStack" class="text-danger extra-small mt-2 d-block"></span>
+                        </div>
+                    </div>
 
-                        <div class="mb-5">
-                            <label asp-for="Abstract" class="form-label fw-bold text-secondary">Project Abstract <span class="text-danger">*</span></label>
-                            <textarea asp-for="Abstract" class="form-control bg-light" rows="6" placeholder="Describe the core problem, methodology, and expected outcomes..." required></textarea>
-                            <span asp-validation-for="Abstract" class="text-danger small"></span>
-                            <div class="form-text mt-2"><i class="bi bi-shield-check text-success"></i> Reminder: Do not include your real name or ID in the abstract to protect Blind Review integrity.</div>
+                    <div class="mb-5">
+                        <label asp-for="Abstract" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">PROJECT ABSTRACT <span class="text-danger">*</span></label>
+                        <textarea asp-for="Abstract" class="form-control border-0 text-white py-3 px-4" 
+                                  style="background: var(--input-bg); font-size: 0.9rem; border-radius: 15px;"
+                                  rows="6" placeholder="Describe the core problem, methodology, and expected outcomes..." required></textarea>
+                        <span asp-validation-for="Abstract" class="text-danger extra-small mt-2 d-block"></span>
+                        <div class="mt-3 p-3">
+                            <i class="bi bi-shield-check text-success me-2"></i> 
+                            <span class="extra-small text-dim fw-600">Reminder: Do not include your real name or ID in the abstract to protect Blind Review integrity.</span>
                         </div>
+                    </div>
 
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold shadow">
-                                <i class="bi bi-send-fill me-2"></i> Submit Proposal for Blind Review
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 fw-800 text-uppercase tracking-wider shadow-lg">
+                            <i class="bi bi-send-fill me-2"></i> Submit Proposal
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .tracking-widest { letter-spacing: 0.15em; }
+    .extra-small { font-size: 0.65rem; }
+    .fw-800 { font-weight: 800; }
+    .text-dim { color: var(--text-dim); }
+    .tracking-tight { letter-spacing: -0.02em; }
+    
+    .form-control::placeholder, .form-select::placeholder {
+        color: rgba(255,255,255,0.3) !important;
+    }
+    
+    .glass-alert {
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -3,22 +3,23 @@
     ViewData["Title"] = "Configure Domains";
 }
 
-<div class="row justify-content-center mt-4 fade-in-up">
-    <div class="col-md-11 mb-3">
-        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-light transition-all">
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-10 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
             <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
         </a>
     </div>
-    <div class="col-md-11">
+    <div class="col-md-10">
         <!-- Main Registry Card -->
-        <div class="card bg-black bg-opacity-40 border border-info border-opacity-20 shadow-2xl rounded-4 overflow-hidden">
+        <div class="card border border-info border-opacity-25 shadow-2xl rounded-4 overflow-hidden" 
+             style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(2, 6, 23, 0.8) 100%); backdrop-filter: blur(10px);">
             
             <!-- Deep Midnight Header -->
             <div class="p-4 d-flex align-items-center border-bottom border-info border-opacity-30" style="background: #020617;">
                 <div class="bg-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
                     <i class="bi bi-grid-3x3-gap-fill text-white fs-4"></i>
                 </div>
-                <h4 class="fw-800 text-white mb-0 tracking-tight">Domain Registry</h4>
+                <h4 class="fw-800 mb-0 tracking-tight text-white">Domain Registry</h4>
             </div>
 
             <div class="p-4 p-md-5">
@@ -29,8 +30,8 @@
                             <label class="form-label extra-small fw-800 text-dim tracking-widest mb-3">PROVISION NEW DOMAIN</label>
                             <div class="input-group input-group-lg shadow-sm rounded-4 overflow-hidden">
                                 <input type="text" name="name" 
-                                       class="form-control bg-black bg-opacity-30 border-0 text-white" 
-                                       style="font-size: 0.95rem; border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important;"
+                                       class="form-control border-0 text-white" 
+                                       style="font-size: 0.95rem; background: var(--input-bg); border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important;"
                                        placeholder="Enter research field identity..." required />
                                 <button type="submit" class="btn btn-primary px-4 fw-800 text-uppercase small">
                                     ADD <i class="bi bi-plus-lg ms-2"></i>
@@ -72,7 +73,7 @@
                                             <div class="bg-info bg-opacity-20 p-2 rounded-3 me-3 border border-info border-opacity-30 shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
                                                 <i class="bi bi-tag text-white fs-5"></i>
                                             </div>
-                                            <span class="fw-800 text-white fs-5">@area.Name.ToLower()</span>
+                                            <span class="fw-800 fs-5" style="color: var(--text-main);">@area.Name.ToLower()</span>
                                         </div>
                                     </td>
                                     <td class="text-end pe-4">
@@ -112,7 +113,6 @@
 
 
 <style>
-    /* ... existing styles ... */
     .interstate-table thead th {
         font-size: 0.7rem;
         font-weight: 800;
@@ -129,7 +129,7 @@
     }
     
     .interstate-table tbody tr:hover {
-        background: rgba(255,255,255,0.02);
+        background: rgba(0, 242, 255, 0.04) !important;
     }
     
     .interstate-table td {
@@ -203,7 +203,7 @@
                 animation: 250,
                 ghostClass: 'sortable-ghost',
                 filter: '.btn-action, .modal, .modal-dialog, .modal-content, input, button',
-                preventOnFilter: false, // Allows click events to pass through
+                preventOnFilter: false, 
                 onEnd: function() {
                     const sortedIds = Array.from(el.querySelectorAll('tr')).map(tr => parseInt(tr.dataset.id));
                     
@@ -248,9 +248,9 @@
                         <input type="hidden" name="id" value="@area.Id" />
                         <label class="form-label extra-small fw-800 text-dim mb-3">CURRENT DESIGNATION</label>
                         <input type="text" name="name" value="@area.Name" 
-                               class="form-control bg-info bg-opacity-5 text-white border border-info border-opacity-10 py-3" 
+                               class="form-control text-white py-3" 
                                required 
-                               style="outline: none !important; box-shadow: none !important;" />
+                               style="background: var(--input-bg); outline: none !important; box-shadow: none !important;" />
                     </div>
                     <div class="modal-footer border-top border-info border-opacity-20 p-4">
                         <button type="submit" class="btn btn-primary px-4 rounded-pill fw-800 text-uppercase small shadow-lg">Update Record</button>

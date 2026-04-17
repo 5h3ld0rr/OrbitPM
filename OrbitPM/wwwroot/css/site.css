@@ -80,6 +80,8 @@ body {
     transition: var(--transition-smooth);
 }
 
+.text-dim { color: #94a3b8; }
+
 .nav-link:hover {
     color: #fff !important;
     background: rgba(255, 255, 255, 0.05);
