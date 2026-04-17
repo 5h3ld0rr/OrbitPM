@@ -123,69 +123,10 @@ namespace OrbitPM.Controllers
             return RedirectToAction(nameof(ManageExpertise)); // Redirect back to manage instead of Index
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddResearchArea([FromForm] string name)
-        {
-            try 
-            {
-                if (string.IsNullOrWhiteSpace(name)) return BadRequest("Name is required.");
 
-                var area = new ResearchArea { Name = name.Trim() };
-                _context.ResearchAreas.Add(area);
-                await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = $"Domain '{name}' added to system.";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "Error adding domain: " + ex.Message;
-            }
-            return RedirectToAction(nameof(ManageExpertise));
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteResearchArea([FromForm] int id)
-        {
-            try
-            {
-                var area = await _context.ResearchAreas.FindAsync(id);
-                if (area == null) return NotFound();
 
-                _context.ResearchAreas.Remove(area);
-                await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Domain removed from system.";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "Error removing domain: " + ex.Message;
-            }
-            return RedirectToAction(nameof(ManageExpertise));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditResearchArea([FromForm] int id, [FromForm] string name)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(name)) return BadRequest("Name is required.");
-
-                var area = await _context.ResearchAreas.FindAsync(id);
-                if (area == null) return NotFound();
-
-                area.Name = name.Trim();
-                await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Domain updated successfully.";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "Error updating domain: " + ex.Message;
-            }
-            return RedirectToAction(nameof(ManageExpertise));
-        }
     }
 }
