@@ -1,0 +1,346 @@
+@model IEnumerable<OrbitPM.Models.MatchRecord>
+@{
+    ViewData["Title"] = "My Interests - OrbitPM";
+}
+
+<div class="row justify-content-center mt-5 fade-in-up">
+    <div class="col-md-11 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
+            <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
+        </a>
+    </div>
+
+    <div class="col-md-11">
+        <!-- Header Section -->
+        <div class="d-flex flex-column mb-5">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-diagram-3-fill text-info display-5 me-3"></i>
+                <div>
+                    <h1 class="fw-800 text-white mb-1 tracking-tight display-5">My Interests</h1>
+                    <div class="extra-small fw-800 text-dim tracking-widest text-uppercase opacity-50">
+                        Project Match Monitoring
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card p-5 text-center border-dashed fade-in-up" style="border: 2px dashed var(--glass-border) !important; background: transparent !important;">
+            <div class="mb-4">
+                <div class="d-inline-flex p-4 rounded-circle bg-surface-light mb-3 text-info">
+                    <i class="bi bi-lightning-charge" style="font-size: 3.5rem;"></i>
+                </div>
+            </div>
+            <h3 class="fw-bold text-white mb-2">No interests recorded</h3>
+            <p class="text-dim mb-5 mx-auto" style="max-width: 500px;">You haven't confirmed interest in any proposals yet. Visit the Blind Review pool to find projects matching your research expertise.</p>
+            
+            <a asp-action="Index" class="btn btn-primary px-4">
+                Explore Proposals
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4 mb-5">
+            @foreach (var match in Model)
+            {
+                <div class="col-lg-6">
+                    <div class="card h-100 fade-in-up shadow-lg border-opacity-10 border-info">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <!-- Card Header -->
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="badge border border-info border-opacity-25 text-info bg-info bg-opacity-10 py-1 px-3 rounded-pill extra-small fw-800">
+                                        @(match.ProjectProposal?.ResearchArea?.Name ?? "General Research")
+                                    </span>
+                                    <div class="text-dim extra-small mt-1">
+                                        Matched @match.MatchedAt.ToString("MMM dd, yyyy")
+                                    </div>
+                                </div>
+                                @{
+                                    var statusClass = match.ProjectProposal?.Status switch
+                                    {
+                                        OrbitPM.Models.ProjectStatus.Matched => "text-warning",
+                                        OrbitPM.Models.ProjectStatus.Approved => "text-success",
+                                        _ => "text-dim"
+                                    };
+                                }
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle @(statusClass.Replace("text", "bg"))" style="width: 8px; height: 8px; box-shadow: 0 0 10px currentColor;"></div>
+                                    <span class="extra-small fw-800 @statusClass text-uppercase tracking-widest">@match.ProjectProposal?.Status</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Content -->
+                            <h4 class="fw-bold text-white mb-3 tracking-tight">@match.ProjectProposal?.Title</h4>
+                            
+                            <div class="abstract-container mb-4">
+                                <p class="text-dim mb-2 line-clamp-3 abstract-text">
+                                    @match.ProjectProposal?.Abstract
+                                </p>
+                                <button type="button" class="btn btn-link p-0 text-info extra-small fw-800 text-decoration-none hover-glow-info" 
+                                        data-bs-toggle="modal" data-bs-target="#matchModal-@match.Id">
+                                    READ FULL EVALUATION <i class="bi bi-arrow-right ms-1"></i>
+                                </button>
+                            </div>
+ 
+                            <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
+                                @if (!string.IsNullOrEmpty(match.ProjectProposal?.TechnicalStack))
+                                {
+                                    @foreach(var tech in match.ProjectProposal.TechnicalStack.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span class="badge bg-surface-light text-dim border border-white border-opacity-5 fw-500">@tech.Trim()</span>
+                                    }
+                                }
+                            </div>
+ 
+                            <!-- Actions -->
+                            <div class="pt-4 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center">
+                                <div class="extra-small text-dim d-flex align-items-center">
+                                    <i class="bi bi-shield-check me-2 text-info"></i> Interest Confirmed
+                                </div>
+                                <div class="d-flex gap-2">
+                                    @if(match.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched)
+                                    {
+                                        <span class="text-dim small italic">Awaiting Leader Approval</span>
+                                    }
+                                    else if(match.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Approved)
+                                    {
+                                        <span class="text-success small fw-bold"><i class="bi bi-check-all"></i> Finalized</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div> <!-- Close col-md-11 -->
+</div> <!-- Close main row -->
+
+<!-- Project Interest Review Console (Modal) - Isolated at Root -->
+@foreach (var record in Model)
+{
+    <div class="modal fade" id="matchModal-@record.Id" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0 shadow-2xl rounded-5 overflow-hidden">
+                
+                <div class="d-flex flex-column flex-md-row min-vh-75" style="backdrop-filter: blur(30px);">
+                    
+                    <!-- Sidebar: Control Panel (35%) -->
+                    <div class="col-md-4 p-5 d-flex flex-column border-end border-white border-opacity-10" style="background: rgba(1, 4, 18, 0.85); box-shadow: 10px 0 30px rgba(0,0,0,0.5);">
+                        <!-- Header Section -->
+                        <div class="mb-5 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="pulse-dot"></div>
+                                <span class="extra-small fw-800 text-dim tracking-widest text-uppercase" style="font-size: 0.6rem;">Interest Monitor</span>
+                            </div>
+                            @{
+                                var status = record.ProjectProposal?.Status;
+                                var statusColor = status switch {
+                                    OrbitPM.Models.ProjectStatus.Approved => "#10b981",
+                                    OrbitPM.Models.ProjectStatus.Matched => "#f59e0b",
+                                    _ => "#00f2ff"
+                                };
+                            }
+                            <div class="pixel-status" style="--status-color: @statusColor">
+                                @status?.ToString().ToUpper()
+                            </div>
+                        </div>
+
+                        <!-- Identity Card: Student -->
+                        <div class="identity-card mb-4">
+                            <label class="extra-small text-primary fw-800 tracking-widest mb-3 d-block uppercase" style="color: rgba(0, 242, 255, 0.6) !important;">Student Identity</label>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar-glow">@(record.ProjectProposal?.Ownership?.Student?.FullName?.FirstOrDefault() ?? 'A')</div>
+                                <div>
+                                    <h5 class="text-white fw-bold mb-0 tracking-tight">@(record.ProjectProposal?.Ownership?.Student?.FullName?.ToLower() ?? "anonymous student")</h5>
+                                    <p class="text-dim extra-small mb-0 opacity-50 tracking-wider">@(record.ProjectProposal?.Ownership?.Student?.Email ?? "not provided")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="extra-small text-dim fw-800 tracking-widest mb-3 d-block uppercase" style="opacity: 0.4;">Domain Track</label>
+                            <div class="domain-tag w-100">
+                                <i class="bi bi-bezier2 me-2"></i>
+                                @(record.ProjectProposal?.ResearchArea?.Name?.ToUpper() ?? "PROPOSAL CORE")
+                            </div>
+                        </div>
+
+                        <!-- Meta Card: Tech Stack -->
+                        <div class="mb-4">
+                            <label class="extra-small text-dim fw-800 tracking-widest mb-3 d-block uppercase" style="opacity: 0.4;">Core Technology</label>
+                            <div class="p-3 rounded-4" style="background: rgba(0, 242, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1);">
+                                <div class="d-flex flex-wrap gap-2">
+                                    @if (!string.IsNullOrEmpty(record.ProjectProposal?.TechnicalStack))
+                                    {
+                                        @foreach (var tech in record.ProjectProposal.TechnicalStack.Split(','))
+                                        {
+                                            <span class="badge rounded-pill border border-cyan border-opacity-25 bg-cyan bg-opacity-10 py-2 px-3 fw-medium" style="font-size: 0.65rem; color: #00f2ff; letter-spacing: 0.05em;">
+                                                <i class="bi bi-cpu me-1 opacity-50"></i>@tech.Trim().ToUpper()
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="text-dim small opacity-50 italic py-1"><i class="bi bi-slash-circle me-1"></i>No stack listed</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-5">
+                            <div class="d-grid gap-3">
+                                @if (record.ProjectProposal?.Ownership?.Student != null)
+                                {
+                                    <a href="mailto:@record.ProjectProposal.Ownership.Student.Email?subject=Inquiry regarding: @record.ProjectProposal.Title" 
+                                       class="btn btn-console primary w-100 text-decoration-none">
+                                        <i class="bi bi-envelope-paper-fill me-2"></i>
+                                        CONTACT STUDENT
+                                    </a>
+                                }
+                                
+                                <button type="button" class="btn btn-console @(record.ProjectProposal?.Ownership?.Student == null ? "primary" : "secondary") w-100" data-bs-dismiss="modal">
+                                    CLOSE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content: Document (65%) -->
+                    <div class="col-md-8 p-0 d-flex flex-column" style="background: #020617;">
+                        <div class="h-100 p-5 p-md-6 d-flex flex-column bg-gradient-doc">
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <span class="ref-badge lowercase">project designation</span>
+                                    <div class="h-px bg-white bg-opacity-10 flex-grow-1"></div>
+                                </div>
+                                <h1 class="fw-800 text-white tracking-tightest mb-0" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05;">
+                                    @record.ProjectProposal?.Title
+                                </h1>
+                            </div>
+
+                            <div class="doc-body flex-grow-1 overflow-auto pe-4 custom-scrollbar" style="max-height: 55vh;">
+                                <div class="proposal-glass-card">
+                                    <label class="extra-small text-dim fw-800 tracking-widest mb-4 d-block uppercase" style="opacity: 0.4;">proposal abstraction</label>
+                                    <div class="text-white opacity-70 lead-sm lh-extra" style="white-space: pre-line; font-weight: 300;">
+                                        @record.ProjectProposal?.Abstract
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // --- Elite Backdrop Cleanup Protocol ---
+        document.addEventListener('hidden.bs.modal', function () {
+            // Remove any dangling backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(b => b.remove());
+            // Restore body scrollability
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    </script>
+}
+    </div> <!-- Close col-md-11 -->
+</div> <!-- Close main row -->
+
+    <!-- Standard Elite Console Style Overrides -->
+    <style>
+        .modal-xl { max-width: 1200px; }
+        .bg-gradient-doc {
+            background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.05), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.03), transparent 40%),
+                        linear-gradient(135deg, #020617 0%, #010414 100%);
+        }
+        .proposal-glass-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.5);
+        }
+        .identity-card {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .avatar-glow {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.2);
+            color: #00f2ff; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        }
+        .domain-tag {
+            display: inline-flex; align-items: center; padding: 10px 16px;
+            background: linear-gradient(90deg, rgba(0, 242, 255, 0.1), transparent);
+            border-left: 2px solid #00f2ff; color: #00f2ff; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+        }
+        .btn-console {
+            border: 1px solid rgba(255, 255, 255, 0.05); padding: 16px 24px; border-radius: 8px;
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 2px; display: flex;
+            align-items: center; justify-content: center; transition: all 0.3s ease;
+            position: relative; overflow: hidden; text-transform: uppercase;
+        }
+        .btn-console.primary { background: linear-gradient(135deg, #00f2ff 0%, #0284c7 100%); color: #020617; border: none; }
+    .btn-console.secondary { 
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        color: rgba(255, 255, 255, 0.4); 
+    }
+    .btn-console.secondary:hover { 
+        background: rgba(255, 255, 255, 0.08); 
+        border-color: rgba(255, 255, 255, 0.2); 
+        color: #fff; 
+        transform: translateY(-2px);
+    }
+        .pulse-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse-ring 2s infinite; }
+        @@keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(0.9); opacity: 1; } }
+        .pixel-status { font-size: 0.65rem; font-weight: 800; color: var(--status-color); padding: 4px 12px; border: 1px solid var(--status-color); border-radius: 4px; letter-spacing: 1px; }
+        .ref-badge { font-family: monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; }
+        .lh-extra { line-height: 1.8; }
+        .tracking-tightest { letter-spacing: -0.04rem; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 242, 255, 0.2); border-radius: 10px; }
+    </style>
+
+<style>
+    .fw-800 { font-weight: 800; }
+    .text-dim { color: var(--text-dim) !important; }
+    .lead-sm { font-size: 1.1rem; opacity: 0.8; }
+    
+    /* Content Styling */
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .tracking-widest { letter-spacing: 0.2em; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .extra-small { font-size: 0.65rem; text-transform: uppercase; }
+    .fw-500 { font-weight: 500; }
+    .border-dashed { border-style: dashed !important; }
+    .bg-surface-light { background: rgba(255, 255, 255, 0.05); }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .uppercase { text-transform: uppercase; }
+    .hover-glow-info:hover { text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); color: white !important; }
+    .shadow-glow-sm { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); }
+    .hover-main:hover { color: var(--primary) !important; }
+    .transition-all { transition: all 0.2s ease; }
+</style>

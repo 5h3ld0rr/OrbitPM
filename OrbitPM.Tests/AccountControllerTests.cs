@@ -73,7 +73,7 @@ namespace OrbitPM.Tests
                 // Assert
                 var redirectResult = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("Index", redirectResult.ActionName);
-                Assert.Equal("Home", redirectResult.ControllerName);
+                Assert.Equal("StudentDashboard", redirectResult.ControllerName);
 
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email == "test@example.com");
                 Assert.NotNull(user);

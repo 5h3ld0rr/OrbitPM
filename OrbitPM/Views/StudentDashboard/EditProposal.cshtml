@@ -1,56 +1,193 @@
 @model OrbitPM.Models.ProjectProposal
 @{
-    ViewData["Title"] = "Update Proposal Details";
+    ViewData["Title"] = "Update Proposal - Student Dashboard";
 }
 
-<div class="row justify-content-center mt-5 fade-in-up">
-    <div class="col-md-8">
-        <div class="card border-0 rounded-5 shadow-lg p-5" style="background: linear-gradient(180deg, rgba(13,20,36,0.8) 0%, rgba(5,8,16,0.95) 100%); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05) !important;">
-            <div class="d-flex align-items-center mb-4">
-                <div class="feature-icon-wrapper me-3 pulse-glow" style="width: 50px; height: 50px;">
-                    <i class="bi bi-pencil-square"></i>
+<div class="row justify-content-center mt-5 fade-in-up pb-5">
+    <div class="col-lg-8 mb-3">
+        <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
+            <i class="bi bi-chevron-left me-2"></i>Return to Mission Control
+        </a>
+    </div>
+    <div class="col-lg-8">
+        <div class="card proposal-form-card border-0 shadow-2xl rounded-5 overflow-hidden">
+            
+            <!-- High-Precision Header: Modification Context -->
+            <div class="p-5 d-flex align-items-center border-bottom border-white border-opacity-10" 
+                 style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(1, 8, 22, 0.6) 100%);">
+                <div class="bg-primary p-2 rounded-4 me-4 d-flex align-items-center justify-content-center glow-primary" style="width: 52px; height: 52px;">
+                    <i class="bi bi-pencil-square text-white fs-3"></i>
                 </div>
                 <div>
-                    <h2 class="fw-bolder text-white mb-0">Modify Proposal</h2>
-                    <p class="text-secondary mb-0">Update your abstract or tech stack securely</p>
+                    <h2 class="fw-800 text-white mb-0 tracking-tightest">Modify Signal</h2>
+                    <p class="extra-small text-dim fw-800 text-uppercase tracking-widest mb-0 opacity-50">Authorized Proposal Reconfiguration #@Model.Id.ToString("D4")</p>
                 </div>
             </div>
-            
-            <form asp-action="EditProposal" method="post">
-                <input type="hidden" asp-for="Id" />
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                
-                <div class="form-floating mb-4">
-                    <input asp-for="Title" class="form-control bg-transparent text-white border-secondary" placeholder="Project Title" required />
-                    <label asp-for="Title" class="text-secondary">Project Title</label>
-                    <span asp-validation-for="Title" class="text-danger small"></span>
-                </div>
-                
-                <div class="form-floating mb-4">
-                    <select asp-for="ResearchAreaId" class="form-select bg-dark text-white border-secondary" asp-items="ViewBag.ResearchAreas" required>
-                        <option value="">-- Select Domain --</option>
-                    </select>
-                    <label asp-for="ResearchAreaId" class="text-secondary">Research Domain</label>
-                    <span asp-validation-for="ResearchAreaId" class="text-danger small"></span>
-                </div>
-                
-                <div class="form-floating mb-4">
-                    <textarea asp-for="Abstract" class="form-control bg-transparent text-white border-secondary" style="height: 150px" placeholder="Abstract" required></textarea>
-                    <label asp-for="Abstract" class="text-secondary">Project Abstract / Summary</label>
-                    <span asp-validation-for="Abstract" class="text-danger small"></span>
-                </div>
-                
-                <div class="form-floating mb-4">
-                    <input asp-for="TechnicalStack" class="form-control bg-transparent text-white border-secondary" placeholder="e.g. React, Node, SQL" />
-                    <label asp-for="TechnicalStack" class="text-secondary">Technical Stack (Comma separated)</label>
-                    <span asp-validation-for="TechnicalStack" class="text-danger small"></span>
-                </div>
-                
-                <div class="d-flex justify-content-end gap-3 mt-5">
-                    <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4 fw-bold text-secondary border-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold">Update Signal <i class="bi bi-arrow-up-circle ms-2"></i></button>
-                </div>
-            </form>
+
+            <div class="p-4 p-md-5 bg-primary bg-opacity-10 backdrop-blur-3xl" style="background: rgba(30, 58, 138, 0.1) !important;">
+                <form asp-action="EditProposal" method="post" id="editProposalForm">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 font-monospace extra-small"></div>
+                    
+                    <div class="mb-5">
+                        <label asp-for="Title" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Project Designation <span class="text-danger">*</span></label>
+                        <div class="input-focus-group">
+                            <input asp-for="Title" class="form-control elite-input py-3 px-4" 
+                                   placeholder="PROJECT DESIGNATION" required />
+                            <div class="focus-border"></div>
+                        </div>
+                        <span asp-validation-for="Title" class="text-danger extra-small mt-2 d-block font-monospace"></span>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <label asp-for="ResearchAreaId" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Research Domain <span class="text-danger">*</span></label>
+                            <div class="input-focus-group">
+                                <select asp-for="ResearchAreaId" class="form-select elite-input py-3 px-4" 
+                                        asp-items="ViewBag.ResearchAreas" required>
+                                    <option value="">-- SYSTEM SELECT CATEGORY --</option>
+                                </select>
+                                <div class="focus-border"></div>
+                            </div>
+                            <span asp-validation-for="ResearchAreaId" class="text-danger extra-small mt-2 d-block font-monospace"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="TechnicalStack" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Tech Stack Architecture</label>
+                            <div class="input-focus-group">
+                                <input asp-for="TechnicalStack" class="form-control elite-input py-3 px-4" 
+                                       placeholder="E.G., REACT, NODE.JS, POSTGRESQL" />
+                                <div class="focus-border"></div>
+                            </div>
+                            <p class="extra-small text-dim mt-2 opacity-50 font-monospace">COMMA SEPARATED VALUES ONLY</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label asp-for="Abstract" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Project Abstract & Methodology <span class="text-danger">*</span></label>
+                        <div class="input-focus-group">
+                            <textarea asp-for="Abstract" class="form-control elite-input py-4 px-4" 
+                                      rows="8" placeholder="DESCRIBE CORE PROBLEM, HYPOTHESIS, AND METHODOLOGY..." required></textarea>
+                            <div class="focus-border"></div>
+                        </div>
+                        <span asp-validation-for="Abstract" class="text-danger extra-small mt-2 d-block font-monospace"></span>
+                    </div>
+
+                    <div class="d-flex flex-column flex-md-row gap-3 mt-5 pt-3">
+                        <a asp-action="Index" class="btn btn-elite-secondary py-3 fw-800 text-uppercase tracking-widest flex-grow-1">
+                            ABORT MODIFICATION
+                        </a>
+                        <button type="submit" class="btn btn-elite-primary py-3 fw-800 text-uppercase tracking-widest px-md-5 flex-grow-1">
+                            TRANSMIT UPDATED SIGNAL
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    :root {
+        --elite-input-bg: rgba(255, 255, 255, 0.02);
+        --input-focus: rgba(0, 242, 255, 0.1);
+    }
+
+    .proposal-form-card {
+        background: rgba(1, 4, 18, 0.7) !important;
+        backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    }
+
+    .elite-input {
+        background: var(--elite-input-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        letter-spacing: 0.02em;
+        font-weight: 400;
+    }
+
+    .input-focus-group {
+        position: relative;
+    }
+
+    .focus-border {
+        position: absolute;
+        bottom: 0; left: 50%; right: 50%;
+        height: 2px;
+        background: #00f2ff;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: 0 0 15px #00f2ff;
+    }
+
+    .elite-input:focus {
+        background: rgba(0, 242, 255, 0.01) !important;
+        box-shadow: none !important;
+        border-color: rgba(0, 242, 255, 0.2) !important;
+    }
+
+    .elite-input:focus + .focus-border {
+        left: 0; right: 0;
+        opacity: 1;
+    }
+
+    .btn-elite-primary {
+        background: linear-gradient(135deg, #00f2ff 0%, #0284c7 100%);
+        border: none;
+        color: #020617;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    
+    .btn-elite-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 242, 255, 0.4);
+        filter: brightness(1.1);
+    }
+
+    .btn-elite-secondary {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.4);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-elite-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .glow-primary {
+        box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+    }
+
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .tracking-widest { letter-spacing: 0.15em; }
+    .tracking-tightest { letter-spacing: -0.04em; }
+    .extra-small { font-size: 0.65rem; }
+    .fw-800 { font-weight: 800; }
+    .text-dim { color: #94a3b8; }
+    
+    .elite-input::placeholder {
+        color: rgba(255,255,255,0.2) !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

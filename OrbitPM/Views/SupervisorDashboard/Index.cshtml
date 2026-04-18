@@ -12,8 +12,12 @@
             </h1>
             <p class="text-dim mb-0 lead-sm">Securely evaluate anonymous student proposals and confirm your interest.</p>
         </div>
-        <div>
-            <a asp-action="ManageExpertise" class="btn btn-outline-light d-flex align-items-center gap-2">
+        <div class="d-flex gap-2">
+            <a asp-action="MyInterests" class="btn btn-outline-info d-flex align-items-center gap-2 hover-cyan">
+                <i class="bi bi-diagram-3-fill fs-5"></i>
+                <span>My Interests</span>
+            </a>
+            <a asp-action="ManageExpertise" class="btn btn-outline-info d-flex align-items-center gap-2 hover-cyan">
                 <i class="bi bi-sliders fs-5"></i>
                 <span>Manage Expertise</span>
             </a>
@@ -131,7 +135,7 @@
             </div>
 
             <a asp-action="ManageExpertise" class="btn btn-outline-light px-4">
-                Update Security Profile
+                Update Expertise
             </a>
         </div>
     }
@@ -163,14 +167,23 @@
                             <!-- Content -->
                             <h4 class="fw-bold text-white mb-3 tracking-tight">@proposal.Title</h4>
                             
-                            <p class="text-dim mb-4 line-clamp-3">
-                                @proposal.Abstract
-                            </p>
+                            <div class="abstract-container mb-4">
+                                <p class="text-dim mb-2 line-clamp-3 abstract-text">
+                                    @proposal.Abstract
+                                </p>
+                                <button type="button" class="btn btn-link p-0 text-primary extra-small fw-800 text-decoration-none hover-glow" 
+                                        data-bs-toggle="modal" data-bs-target="#proposalModal-@proposal.Id">
+                                    READ FULL EVALUATION <i class="bi bi-arrow-right ms-1"></i>
+                                </button>
+                            </div>
 
                             <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-                                @foreach(var tech in proposal.TechnicalStack.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                                @if (!string.IsNullOrEmpty(proposal.TechnicalStack))
                                 {
-                                    <span class="badge bg-surface-light text-dim border border-white border-opacity-5 fw-500">@tech.Trim()</span>
+                                    @foreach (var tech in proposal.TechnicalStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span class="badge bg-surface-light text-dim border border-white border-opacity-5 fw-500">@tech.Trim()</span>
+                                    }
                                 }
                             </div>
 
@@ -192,7 +205,119 @@
             }
         </div>
     }
-</div>
+
+</div> <!-- End main container -->
+
+<!-- Project Details Triage Console (Modal) - Isolated at Root -->
+@foreach (var record in Model)
+{
+    <div class="modal fade" id="proposalModal-@record.Id" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0 shadow-2xl rounded-5 overflow-hidden">
+                
+                <div class="d-flex flex-column flex-md-row min-vh-75" style="backdrop-filter: blur(30px);">
+                    
+                    <!-- Sidebar: Control Panel (35%) -->
+                    <div class="col-md-4 p-5 d-flex flex-column border-end border-white border-opacity-10" style="background: rgba(1, 4, 18, 0.85); box-shadow: 10px 0 30px rgba(0,0,0,0.5);">
+                        <!-- Header Section -->
+                        <div class="mb-5 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="pulse-dot"></div>
+                                <span class="extra-small fw-800 text-dim tracking-widest text-uppercase" style="font-size: 0.6rem;">Archive Entry</span>
+                            </div>
+                            <div class="pixel-status" style="--status-color: #00f2ff">
+                                RECORDED
+                            </div>
+                        </div>
+
+                        <!-- Identity Card: Student -->
+                        <div class="identity-card mb-4">
+                            <label class="extra-small text-primary fw-800 tracking-widest mb-3 d-block uppercase" style="color: rgba(0, 242, 255, 0.6) !important;">Student Identity</label>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar-glow">@(record.Ownership?.Student?.FullName?.FirstOrDefault() ?? 'A')</div>
+                                <div>
+                                    <h5 class="text-white fw-bold mb-0 tracking-tight">@(record.Ownership?.Student?.FullName?.ToLower() ?? "anonymous student")</h5>
+                                    <p class="text-dim extra-small mb-0 opacity-50 tracking-wider">@(record.Ownership?.Student?.Email ?? "not provided")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Meta Card: Domain -->
+                        <div class="mb-4">
+                            <label class="extra-small text-dim fw-800 tracking-widest mb-3 d-block uppercase" style="opacity: 0.4;">Domain Focus</label>
+                            <div class="domain-tag w-100">
+                                <i class="bi bi-bezier2 me-2"></i>
+                                @(record.ResearchArea?.Name?.ToUpper() ?? "GENERAL FOCUS")
+                            </div>
+                        </div>
+
+                        <!-- Meta Card: Tech Stack -->
+                        <div class="mb-4">
+                            <label class="extra-small text-dim fw-800 tracking-widest mb-3 d-block uppercase" style="opacity: 0.4;">Core Technology</label>
+                            <div class="p-3 rounded-4" style="background: rgba(0, 242, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1);">
+                                <div class="d-flex flex-wrap gap-2">
+                                    @if (!string.IsNullOrEmpty(record.TechnicalStack))
+                                    {
+                                        @foreach (var tech in record.TechnicalStack.Split(','))
+                                        {
+                                            <span class="badge rounded-pill border border-cyan border-opacity-25 bg-cyan bg-opacity-10 py-2 px-3 fw-medium" style="font-size: 0.65rem; color: #00f2ff; letter-spacing: 0.05em;">
+                                                <i class="bi bi-cpu me-1 opacity-50"></i>@tech.Trim().ToUpper()
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="text-dim small opacity-50 italic py-1"><i class="bi bi-slash-circle me-1"></i>No stack listed</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-5">
+                            <div class="d-grid gap-3">
+                                <form asp-action="ExpressInterest" method="post" class="m-0">
+                                    <input type="hidden" name="proposalId" value="@record.Id" />
+                                    <button type="submit" class="btn btn-console primary w-100">
+                                        <i class="bi bi-lightning-fill me-2"></i>
+                                        EXPRESS INTEREST
+                                    </button>
+                                </form>
+                                
+                                <button type="button" class="btn btn-console secondary w-100" data-bs-dismiss="modal">
+                                    CLOSE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content: Document (65%) -->
+                    <div class="col-md-8 p-0 d-flex flex-column" style="background: #020617;">
+                        <div class="h-100 p-5 p-md-6 d-flex flex-column bg-gradient-doc">
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <span class="ref-badge lowercase">project designation</span>
+                                    <div class="h-px bg-white bg-opacity-10 flex-grow-1"></div>
+                                </div>
+                                <h1 class="fw-800 text-white tracking-tightest mb-0" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05;">
+                                    @record.Title
+                                </h1>
+                            </div>
+
+                            <div class="doc-body flex-grow-1 overflow-auto pe-4 custom-scrollbar" style="max-height: 55vh;">
+                                <div class="proposal-glass-card">
+                                    <label class="extra-small text-dim fw-800 tracking-widest mb-4 d-block uppercase" style="opacity: 0.4;">proposal abstraction</label>
+                                    <div class="text-white opacity-70 lead-sm lh-extra" style="white-space: pre-line; font-weight: 300;">
+                                        @record.Abstract
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @section Scripts {
     <script>
@@ -204,10 +329,80 @@
                 firstMatch.querySelector('.card').style.boxShadow = '0 0 30px rgba(0, 242, 254, 0.2)';
             }
         }
+
+        // --- Elite Backdrop Cleanup Protocol ---
+        document.addEventListener('hidden.bs.modal', function () {
+            // Remove any dangling backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(b => b.remove());
+            // Restore body scrollability
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
     </script>
 }
 
 <style>
+    .modal-xl { max-width: 1200px; }
+    .bg-gradient-doc {
+        background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.05), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.03), transparent 40%),
+                    linear-gradient(135deg, #020617 0%, #010414 100%);
+    }
+    .proposal-glass-card {
+        background: rgba(255, 255, 255, 0.015);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.5);
+    }
+    .identity-card {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .avatar-glow {
+        width: 40px; height: 40px; border-radius: 12px;
+        background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.2);
+        color: #00f2ff; display: flex; align-items: center; justify-content: center;
+        font-weight: 800; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+    }
+    .domain-tag {
+        display: inline-flex; align-items: center; padding: 10px 16px;
+        background: linear-gradient(90deg, rgba(0, 242, 255, 0.1), transparent);
+        border-left: 2px solid #00f2ff; color: #00f2ff; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+    }
+    .btn-console {
+        border: 1px solid rgba(255, 255, 255, 0.05); padding: 16px 24px; border-radius: 8px;
+        font-size: 0.72rem; font-weight: 800; letter-spacing: 2px; display: flex;
+        align-items: center; justify-content: center; transition: all 0.3s ease;
+        position: relative; overflow: hidden; text-transform: uppercase;
+    }
+    .btn-console.primary { background: linear-gradient(135deg, #00f2ff 0%, #0284c7 100%); color: #020617; border: none; }
+    .btn-console.secondary { 
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        color: rgba(255, 255, 255, 0.4); 
+    }
+    .btn-console.secondary:hover { 
+        background: rgba(255, 255, 255, 0.08); 
+        border-color: rgba(255, 255, 255, 0.2); 
+        color: #fff; 
+        transform: translateY(-2px);
+    }
+    .pulse-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse-ring 2s infinite; }
+    @@keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(0.9); opacity: 1; } }
+    .pixel-status { font-size: 0.65rem; font-weight: 800; color: var(--status-color); padding: 4px 12px; border: 1px solid var(--status-color); border-radius: 4px; letter-spacing: 1px; }
+    .ref-badge { font-family: monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; }
+    .lh-extra { line-height: 1.8; }
+    .tracking-tightest { letter-spacing: -0.04rem; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 242, 255, 0.2); border-radius: 10px; }
+
     .fw-800 { font-weight: 800; }
     .text-dim { color: var(--text-dim) !important; }
     .lead-sm { font-size: 1.1rem; opacity: 0.8; }
@@ -221,5 +416,17 @@
     .tracking-tight { letter-spacing: -0.025em; }
     .extra-small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
     .fw-500 { font-weight: 500; }
+    .bg-surface-light { background: rgba(255, 255, 255, 0.03); }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .uppercase { text-transform: uppercase; }
+    .hover-glow:hover { text-shadow: 0 0 10px rgba(var(--bs-primary-rgb), 0.5); color: white !important; }
+    .hover-cyan:hover { 
+        border-color: #00f2ff !important; 
+        color: #fff !important; 
+        background-color: rgba(0, 242, 255, 0.15) !important;
+        box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+        transform: translateY(-1px);
+    }
+    .hover-cyan { transition: all 0.3s ease; }
 </style>
 

@@ -1,6 +1,9 @@
 @model IEnumerable<OrbitPM.Models.ProposalOwnership>
 @{
-    ViewData["Title"] = "Student Dashboard - My Proposals";
+    ViewData["Title"] = "Student Dashboard - OrbitPM";
+    var totalProposals = Model.Count();
+    var matchedProposals = Model.Count(p => p.ProjectProposal?.Status == OrbitPM.Models.ProjectStatus.Matched);
+    var pendingProposals = totalProposals - matchedProposals;
 }
 
 <div class="container py-4">
@@ -8,40 +11,81 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 fade-in-up">
         <div>
             <h1 class="fw-800 display-5 mb-1 text-white">
-                <i class="bi bi-mortarboard-fill text-primary me-3"></i>My Projects
+                <i class="bi bi-mortarboard-fill text-primary me-3"></i>Project Hub
             </h1>
-            <p class="text-dim mb-0 lead-sm">Track your progress and manage your research proposals.</p>
+            <p class="text-dim mb-0 lead-sm">Securely manage your research proposals and track supervisor matches.</p>
         </div>
-        <div>
-            <a asp-action="CreateProposal" class="btn btn-primary d-flex align-items-center gap-2">
-                <i class="bi bi-plus-circle-fill fs-5"></i>
-                <span>New Proposal</span>
+        <div class="d-flex gap-2">
+            <a asp-action="CreateProposal" class="btn btn-outline-info d-flex align-items-center gap-2 hover-cyan">
+                <i class="bi bi-rocket-takeoff-fill fs-5"></i>
+                <span>Submit Proposal</span>
             </a>
         </div>
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert glass-alert border-primary border-opacity-25 d-flex align-items-center mb-4 fade-in-up" role="alert">
-            <i class="bi bi-check-circle-fill text-primary me-3 fs-4"></i>
-            <div class="text-white">@TempData["SuccessMessage"]</div>
-            <button type="button" class="ms-auto btn-close btn-close-white" data-bs-dismiss="alert"></button>
+    <!-- Statistics Panel -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3 col-6">
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.05s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-stack text-primary fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Direct Pool</span>
+                </div>
+                <h2 class="fw-800 mb-1">@totalProposals</h2>
+                <div class="extra-small text-dim">Active Proposals</div>
+            </div>
         </div>
-    }
+        <div class="col-md-3 col-6">
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.1s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-info bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-hourglass-split text-info fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Evaluation</span>
+                </div>
+                <h2 class="fw-800 mb-1">@pendingProposals</h2>
+                <div class="extra-small text-dim">Pending Review</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.15s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-warning bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-lightning-charge-fill text-warning fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Matches</span>
+                </div>
+                <h2 class="fw-800 mb-1">@matchedProposals</h2>
+                <div class="extra-small text-dim">Expressed Interests</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card p-4 h-100 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="bg-success bg-opacity-10 p-2 rounded-3">
+                        <i class="bi bi-shield-check text-success fs-4"></i>
+                    </div>
+                    <span class="text-dim extra-small fw-800 tracking-widest text-uppercase">Allocated</span>
+                </div>
+                <h2 class="fw-800 mb-1">@matchedProposals</h2>
+                <div class="extra-small text-dim">Approved Projects</div>
+            </div>
+        </div>
+    </div>
 
     @if (!Model.Any())
     {
         <div class="card p-5 text-center border-dashed fade-in-up" style="border: 2px dashed var(--glass-border) !important; background: transparent !important;">
             <div class="mb-4">
                 <div class="d-inline-flex p-4 rounded-circle bg-surface-light mb-3">
-                    <i class="bi bi-rocket-takeoff text-dim" style="font-size: 3.5rem;"></i>
+                    <i class="bi bi-rocket-takeoff-fill text-dim" style="font-size: 3.5rem;"></i>
                 </div>
             </div>
-            <h3 class="fw-bold text-white mb-2">No projects started yet</h3>
-            <p class="text-dim mb-4 mx-auto" style="max-width: 400px;">Begin your research journey by submitting your first proposal. Our supervisors are waiting to review your ideas.</p>
-            <a asp-action="CreateProposal" class="btn btn-outline-light px-4">
-                Launch Initial Proposal
-            </a>
+            <h3 class="fw-bold text-white mb-2">No active proposals found</h3>
+            <p class="text-dim mb-5 mx-auto" style="max-width: 500px;">The innovation pipeline is currently recharging. Submit your initial proposal to begin the handshake process.</p>
+            <a asp-action="CreateProposal" class="btn btn-primary px-4">INITIALIZE PROPOSAL</a>
         </div>
     }
     else
@@ -50,90 +94,180 @@
             @foreach (var ownership in Model)
             {
                 var proposal = ownership.ProjectProposal!;
+                var isMatch = proposal.Status == OrbitPM.Models.ProjectStatus.Matched;
+                
                 <div class="col-lg-6">
-                    <div class="card h-100 fade-in-up shadow-lg">
+                    <div class="card h-100 fade-in-up shadow-lg @(isMatch ? "border-primary border-opacity-50" : "")">
                         <div class="card-body p-4 d-flex flex-column">
                             <!-- Card Header -->
                             <div class="d-flex justify-content-between align-items-start mb-4">
-                                <div class="d-flex flex-column">
-                                    <span class="text-primary fw-800 small text-uppercase tracking-wider mb-1">Project ID</span>
-                                    <span class="font-monospace text-white">#@proposal.Id.ToString("D4")</span>
-                                </div>
-                                <div class="badge-group">
-                                    @{
-                                        var statusClass = proposal.Status switch {
-                                            OrbitPM.Models.ProjectStatus.Pending => "bg-warning",
-                                            OrbitPM.Models.ProjectStatus.Matched => "bg-success",
-                                            _ => "bg-secondary"
-                                        };
-                                        var statusIcon = proposal.Status switch {
-                                            OrbitPM.Models.ProjectStatus.Pending => "bi-hourglass-split",
-                                            OrbitPM.Models.ProjectStatus.Matched => "bi-shield-check",
-                                            _ => "bi-slash-circle"
-                                        };
-                                    }
-                                    <span class="badge @statusClass bg-opacity-10 text-@statusClass.Replace("bg-", "") border border-@statusClass.Replace("bg-", "") border-opacity-25 py-2 px-3">
-                                        <i class="bi @statusIcon me-2"></i>@proposal.Status
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="badge border border-primary border-opacity-25 text-primary bg-primary bg-opacity-10 py-1 px-3 rounded-pill extra-small fw-800">
+                                        @(proposal.ResearchArea?.Name ?? "General Research")
                                     </span>
                                 </div>
+                                <span class="font-monospace text-dim small">#@proposal.Id.ToString("D4")</span>
                             </div>
                             
                             <!-- Content -->
-                            <h3 class="fw-bold text-white mb-3">@proposal.Title</h3>
+                            <h4 class="fw-bold text-white mb-3 tracking-tight">@proposal.Title</h4>
                             
-                            <div class="d-flex flex-wrap gap-3 mb-4">
-                                <div class="d-flex align-items-center text-dim small">
-                                    <i class="bi bi-tag-fill text-primary me-2"></i>
-                                    <span>@(proposal.ResearchArea?.Name ?? "Uncategorized")</span>
-                                </div>
-                                <div class="d-flex align-items-center text-dim small">
-                                    <i class="bi bi-calendar3 text-primary me-2"></i>
-                                    <span>@ownership.SubmittedAt.ToString("MMM dd, yyyy")</span>
+                            <div class="abstract-container mb-4">
+                                <p class="text-dim mb-2 line-clamp-3 abstract-text">
+                                    @proposal.Abstract
+                                </p>
+                                <button type="button" class="btn btn-link p-0 text-primary extra-small fw-800 text-decoration-none hover-glow" 
+                                        data-bs-toggle="modal" data-bs-target="#proposalConsole-@proposal.Id">
+                                    READ FULL EVALUATION <i class="bi bi-arrow-right ms-1"></i>
+                                </button>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
+                                @if (!string.IsNullOrEmpty(proposal.TechnicalStack))
+                                {
+                                    @foreach (var tech in proposal.TechnicalStack.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span class="badge bg-surface-light text-dim border border-white border-opacity-5 fw-500">@tech.Trim()</span>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="pt-4 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center">
+                                <div class="extra-small text-dim d-flex align-items-center">
+                                    <i class="bi bi-shield-check me-2 text-primary"></i> Blind Verified
                                 </div>
                             </div>
-                            
-                            <p class="text-dim mb-4 line-clamp-2">
-                                @proposal.Abstract
-                            </p>
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- Actions / Reveal Container -->
-                            <div class="mt-auto">
-                                @if (proposal.Status == OrbitPM.Models.ProjectStatus.Pending)
-                                {
-                                    <div class="pt-4 border-top border-white border-opacity-10 d-flex justify-content-end gap-2">
-                                        <a asp-action="EditProposal" asp-route-id="@proposal.Id" class="btn btn-outline-light btn-sm px-3">
-                                            <i class="bi bi-pencil-square me-1"></i> Edit
-                                        </a>
-                                        <form asp-action="WithdrawProposal" method="post" class="d-inline">
-                                            <input type="hidden" name="proposalId" value="@proposal.Id" />
-                                            <button type="submit" class="btn btn-outline-danger btn-sm px-3" onclick="return confirm('Permanently delete proposal #@proposal.Id? This action cannot be undone.')">
-                                                <i class="bi bi-trash-fill me-1"></i> Withdraw
-                                            </button>
-                                        </form>
-                                    </div>
-                                }
+                <!-- Project Details Triage Console (Modal) - Isolated at Root -->
+                <div class="modal fade" id="proposalConsole-@proposal.Id" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-content bg-transparent border-0 shadow-2xl rounded-5 overflow-hidden">
+                            
+                            <div class="d-flex flex-column flex-md-row min-vh-75" style="backdrop-filter: blur(30px);">
                                 
-                                @if (proposal.Status == OrbitPM.Models.ProjectStatus.Matched && proposal.MatchRecord != null)
-                                {
-                                    <div class="card bg-surface-light border-0 shadow-sm mt-4 overflow-hidden">
-                                        <div class="card-body p-3">
+                                <!-- Sidebar: Control Panel (35%) -->
+                                <div class="col-md-4 p-5 d-flex flex-column border-end border-white border-opacity-10" style="background: rgba(15, 23, 42, 0.95); box-shadow: 10px 0 30px rgba(0,0,0,0.5);">
+                                    <!-- Header Section -->
+                                    <div class="mb-5 d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="pulse-dot"></div>
+                                            <span class="extra-small fw-800 text-dim tracking-widest text-uppercase" style="font-size: 0.6rem;">Interest Monitor</span>
+                                        </div>
+                                        <div class="pixel-status" style="--status-color: @(isMatch ? "#fbbf24" : (proposal.Status == OrbitPM.Models.ProjectStatus.Approved ? "#10b981" : "#00f2ff"))">
+                                            @proposal.Status.ToString().ToUpper()
+                                        </div>
+                                    </div>
+
+                                    <!-- Identity Card: Supervisor Reveal -->
+                                    <div class="identity-card mb-4">
+                                        <label class="extra-small text-primary fw-800 tracking-widest mb-3 d-block uppercase" style="color: rgba(0, 242, 255, 0.6) !important;">Assigned Supervisor</label>
+                                        @if (proposal.MatchRecord?.Supervisor != null)
+                                        {
                                             <div class="d-flex align-items-center gap-3">
-                                                <div class="bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold rounded-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
-                                                    <i class="bi bi-person-check-fill"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="text-white fw-bold mb-0">@(proposal.MatchRecord.Supervisor?.FullName ?? "Assigned Supervisor")</div>
-                                                    <div class="text-dim small">Matched Supervisor</div>
-                                                </div>
+                                                <div class="avatar-glow success">@(proposal.MatchRecord.Supervisor.FullName?.FirstOrDefault() ?? 'S')</div>
                                                 <div>
-                                                    <a href="mailto:supervisor@university.edu" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                                        <i class="bi bi-envelope me-1"></i> Contact
-                                                    </a>
+                                                    <h5 class="text-white fw-bold mb-0 tracking-tight">@(proposal.MatchRecord.Supervisor.FullName?.ToLower() ?? "research lead")</h5>
+                                                    <p class="text-dim extra-small mb-0 opacity-50 tracking-wider">@(proposal.MatchRecord.Supervisor.Email ?? "contact pending")</p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex align-items-center gap-3 opacity-30">
+                                                <div class="avatar-glow"><i class="bi bi-lock-fill"></i></div>
+                                                <div>
+                                                    <h5 class="text-dim fw-bold mb-0 italic">Identity Locked</h5>
+                                                    <p class="extra-small mb-0 tracking-wider">Awaiting Handshake</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <!-- Meta Card: Domain -->
+                                    <div class="mb-4">
+                                        <label class="extra-small text-dim fw-800 tracking-widest mb-3 d-block uppercase" style="opacity: 0.4;">Domain Focus</label>
+                                        <div class="domain-tag w-100">
+                                            <i class="bi bi-bezier2 me-2"></i>
+                                            @(proposal.ResearchArea?.Name?.ToUpper() ?? "GENERAL FOCUS")
+                                        </div>
+                                    </div>
+
+                                    <!-- Meta Card: Tech Stack -->
+                                    <div class="mb-4">
+                                        <label class="extra-small text-dim fw-800 tracking-widest mb-3 d-block uppercase" style="opacity: 0.4;">Core Technology</label>
+                                        <div class="p-3 rounded-4" style="background: rgba(0, 242, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1);">
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @if (!string.IsNullOrEmpty(proposal.TechnicalStack))
+                                                {
+                                                    @foreach (var tech in proposal.TechnicalStack.Split(','))
+                                                    {
+                                                        <span class="badge rounded-pill border border-cyan border-opacity-25 bg-cyan bg-opacity-10 py-2 px-3 fw-medium" style="font-size: 0.65rem; color: #00f2ff; letter-spacing: 0.05em;">
+                                                            <i class="bi bi-cpu me-1 opacity-50"></i>@tech.Trim().ToUpper()
+                                                        </span>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-dim small opacity-50 italic py-1"><i class="bi bi-slash-circle me-1"></i>No stack listed</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-auto pt-5">
+                                        <div class="d-grid gap-3">
+                                            @if (proposal.MatchRecord?.Supervisor != null)
+                                            {
+                                                <a href="mailto:@proposal.MatchRecord.Supervisor.Email?subject=OrbitPM Inquiry: @proposal.Title" class="btn btn-console primary w-100">
+                                                    <i class="bi bi-envelope-at-fill me-2"></i> CONTACT LEAD
+                                                </a>
+                                            }
+                                            else if (proposal.Status == OrbitPM.Models.ProjectStatus.Pending)
+                                            {
+                                                <a asp-action="EditProposal" asp-route-id="@proposal.Id" class="btn btn-console primary w-100">
+                                                    <i class="bi bi-pencil-square me-2"></i> MODIFY SIGNAL
+                                                </a>
+                                                <form asp-action="WithdrawProposal" method="post" class="m-0">
+                                                    <input type="hidden" name="proposalId" value="@proposal.Id" />
+                                                    <button type="submit" class="btn btn-outline-danger py-3 w-100 fw-900 border-opacity-25" onclick="return confirm('Confirm project withdrawal?')">
+                                                        <i class="bi bi-trash3-fill me-2"></i> WITHDRAWal
+                                                    </button>
+                                                </form>
+                                            }
+                                            <button type="button" class="btn btn-console secondary w-100" data-bs-dismiss="modal">
+                                                CLOSE
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main Content: Document (65%) -->
+                                <div class="col-md-8 p-0 d-flex flex-column" style="background: radial-gradient(circle at bottom right, #1e3a8a -50%, #020617 100%);">
+                                    <div class="h-100 p-5 p-md-6 d-flex flex-column bg-gradient-doc">
+                                        <div class="mb-5">
+                                            <div class="d-flex align-items-center gap-3 mb-3">
+                                                <span class="ref-badge lowercase">project designation</span>
+                                                <div class="h-px bg-white bg-opacity-10 flex-grow-1"></div>
+                                            </div>
+                                            <h1 class="fw-800 text-white tracking-tightest mb-0" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05;">
+                                                @proposal.Title
+                                            </h1>
+                                        </div>
+
+                                        <div class="doc-body flex-grow-1 overflow-auto pe-4 custom-scrollbar" style="max-height: 55vh;">
+                                            <div class="proposal-glass-card">
+                                                <label class="extra-small text-dim fw-800 tracking-widest mb-4 d-block uppercase" style="opacity: 0.4;">proposal abstraction</label>
+                                                <div class="text-white opacity-70 lead-sm lh-extra" style="white-space: pre-line; font-weight: 300;">
+                                                    @proposal.Abstract
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -141,29 +275,115 @@
             }
         </div>
     }
-</div>
+
+</div> <!-- End main container -->
+
+@section Scripts {
+    <script>
+        // --- Elite Backdrop Cleanup Protocol ---
+        document.addEventListener('hidden.bs.modal', function () {
+            // Remove any dangling backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(b => b.remove());
+            // Restore body scrollability
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    </script>
+}
 
 <style>
+    .modal-xl { max-width: 1200px; }
+    .bg-gradient-doc {
+        background: radial-gradient(circle at top right, rgba(0, 242, 255, 0.05), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.03), transparent 40%),
+                    linear-gradient(135deg, #020617 0%, #010414 100%);
+    }
+    .proposal-glass-card {
+        background: rgba(255, 255, 255, 0.015);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.5);
+    }
+    .identity-card {
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .avatar-glow {
+        width: 40px; height: 40px; border-radius: 12px;
+        background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.2);
+        color: #00f2ff; display: flex; align-items: center; justify-content: center;
+        font-weight: 800; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+    }
+    .avatar-glow.success { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+    .domain-tag {
+        display: inline-flex; align-items: center; padding: 10px 16px;
+        background: linear-gradient(90deg, rgba(0, 242, 255, 0.1), transparent);
+        border-left: 2px solid #00f2ff; color: #00f2ff; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+    }
+    .btn-console {
+        border: 1px solid rgba(255, 255, 255, 0.05); padding: 16px 24px; border-radius: 8px;
+        font-size: 0.72rem; font-weight: 800; letter-spacing: 2px; display: flex;
+        align-items: center; justify-content: center; transition: all 0.3s ease;
+        position: relative; overflow: hidden; text-transform: uppercase;
+    }
+    .btn-console.primary { background: linear-gradient(135deg, #00f2ff 0%, #0284c7 100%); color: #020617; border: none; }
+    .btn-console.secondary { 
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        color: rgba(255, 255, 255, 0.4); 
+    }
+    .btn-console.secondary:hover { 
+        background: rgba(255, 255, 255, 0.08); 
+        border-color: rgba(255, 255, 255, 0.2); 
+        color: #fff; 
+        transform: translateY(-2px);
+    }
+    .pulse-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse-ring 2s infinite; }
+    @@keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(0.9); opacity: 1; } }
+    .pixel-status { font-size: 0.65rem; font-weight: 800; color: var(--status-color); padding: 4px 12px; border: 1px solid var(--status-color); border-radius: 4px; letter-spacing: 1px; }
+    .ref-badge { font-family: monospace; font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; }
+    .lh-extra { line-height: 1.8; }
+    .tracking-tightest { letter-spacing: -0.04rem; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 242, 255, 0.2); border-radius: 10px; }
+
+    .stat-card {
+        background: rgba(15, 23, 42, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+    }
+
     .fw-800 { font-weight: 800; }
     .text-dim { color: var(--text-dim) !important; }
     .lead-sm { font-size: 1.1rem; opacity: 0.8; }
-    .line-clamp-2 {
+    .line-clamp-3 {
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    .tracking-wider { letter-spacing: 0.05em; }
     .tracking-widest { letter-spacing: 0.15em; }
+    .tracking-tight { letter-spacing: -0.025em; }
     .extra-small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
-
-    .glass-alert {
-        background: rgba(0, 242, 254, 0.05);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
+    .fw-500 { font-weight: 500; }
+    .bg-surface-light { background: rgba(255, 255, 255, 0.03); }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .uppercase { text-transform: uppercase; }
+    .hover-glow:hover { text-shadow: 0 0 10px rgba(var(--bs-primary-rgb), 0.5); color: white !important; }
+    .hover-cyan:hover { 
+        border-color: #00f2ff !important; 
+        color: #fff !important; 
+        background-color: rgba(0, 242, 255, 0.15) !important;
+        box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+        transform: translateY(-1px);
     }
-
-    .card {
-        transition: var(--transition-smooth);
-    }
+    .hover-cyan { transition: all 0.3s ease; }
 </style>

@@ -29,7 +29,7 @@ namespace OrbitPM.Controllers
                 .ThenInclude(p => p!.ResearchArea)
                 .Include(po => po.ProjectProposal!.MatchRecord)
                 .ThenInclude(m => m!.Supervisor) 
-                .Where(po => po.StudentId == studentId)
+                .Where(po => po.StudentId == studentId && po.ProjectProposal!.Status != ProjectStatus.Withdrawn)
                 .ToListAsync();
 
             return View(myProposals);
@@ -136,7 +136,7 @@ namespace OrbitPM.Controllers
                 return BadRequest("Cannot withdraw a matched or invalid proposal.");
             }
 
-            _context.ProjectProposals.Remove(ownership.ProjectProposal!);
+            ownership.ProjectProposal!.Status = ProjectStatus.Withdrawn;
             await _context.SaveChangesAsync();
             
             TempData["SuccessMessage"] = "Your proposal has been successfully deleted from the system.";

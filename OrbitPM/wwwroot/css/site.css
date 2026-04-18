@@ -7,15 +7,16 @@
     --primary-glow: rgba(0, 242, 254, 0.4);
     --secondary: #94a3b8;
     --accent: #10b981;
-    --bg-dark: #020617; /* Deeper midnight blue */
-    --surface: #0f172a;
-    --surface-light: #1e293b;
-    --glass-bg: rgba(15, 23, 42, 0.7);
+    --bg-dark: #010816; /* Deep Orbital Blue */
+    --surface: #0a1128;
+    --surface-light: #161e3d;
+    --glass-bg: rgba(10, 17, 40, 0.75);
     --glass-border: rgba(0, 242, 254, 0.1);
     --glass-highlight: rgba(0, 242, 254, 0.2);
     --text-main: #f8fafc;
     --text-dim: #94a3b8;
     --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    color-scheme: dark;
 }
 
 /* Base Body Styles */
@@ -48,6 +49,12 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-alt);
+}
+
+/* Form Control Harmonization */
+select option {
+    background-color: #0f172a; /* Hardcoded fallback for legacy rendering */
+    color: white;
 }
 
 /* Navbar Enhancements */

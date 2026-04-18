@@ -25,14 +25,30 @@ namespace OrbitPM.Controllers
                 .ThenInclude(p => p!.ResearchArea)
                 .Include(po => po.ProjectProposal!.MatchRecord)
                 .ThenInclude(m => m!.Supervisor)
+                .Where(o => o.ProjectProposal!.Status != ProjectStatus.Withdrawn)
                 .OrderByDescending(po => po.SubmittedAt)
                 .ToListAsync();
 
             ViewBag.TotalProposals = ownerships.Count;
-            ViewBag.MatchedProposals = ownerships.Count(o => o.ProjectProposal!.Status == ProjectStatus.Matched);
-            ViewBag.PendingProposals = ownerships.Count(o => o.ProjectProposal!.Status == ProjectStatus.Pending);
+            ViewBag.AllocatedProposals = ownerships.Count(o => o.ProjectProposal!.Status == ProjectStatus.Approved);
+            ViewBag.PendingApproval = ownerships.Count(o => o.ProjectProposal!.Status == ProjectStatus.Matched);
+            ViewBag.PendingSubmissions = ownerships.Count(o => o.ProjectProposal!.Status == ProjectStatus.Pending);
 
             return View(ownerships);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveMatch(int proposalId)
+        {
+            var proposal = await _context.ProjectProposals.FindAsync(proposalId);
+            if (proposal != null && proposal.Status == ProjectStatus.Matched)
+            {
+                proposal.Status = ProjectStatus.Approved;
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Match finalized. Allocation record secured.";
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
