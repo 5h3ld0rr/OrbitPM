@@ -30,6 +30,8 @@ namespace OrbitPM.Controllers
             // 2. Fetch all pending proposals
             var availableProposals = await _context.ProjectProposals
                 .Include(p => p.ResearchArea)
+                .Include(p => p.Ownership)
+                    .ThenInclude(o => o!.Student)
                 .Where(p => p.Status == ProjectStatus.Pending)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
@@ -128,5 +130,22 @@ namespace OrbitPM.Controllers
 
 
 
+        [HttpGet]
+        public async Task<IActionResult> MyInterests()
+        {
+            var supervisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            var myMatches = await _context.MatchRecords
+                .Include(m => m.ProjectProposal)
+                    .ThenInclude(p => p!.ResearchArea)
+                .Include(m => m.ProjectProposal)
+                    .ThenInclude(p => p!.Ownership)
+                        .ThenInclude(o => o!.Student)
+                .Where(m => m.SupervisorId == supervisorId)
+                .OrderByDescending(m => m.MatchedAt)
+                .ToListAsync();
+
+            return View(myMatches);
+        }
     }
 }

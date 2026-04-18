@@ -3,78 +3,94 @@
     ViewData["Title"] = "Create Proposal - Student Dashboard";
 }
 
-<div class="row justify-content-center mt-5 fade-in-up">
+<div class="row justify-content-center mt-5 fade-in-up pb-5">
     <div class="col-lg-8 mb-3">
         <a asp-action="Index" class="text-dim text-decoration-none extra-small fw-800 text-uppercase tracking-widest hover-main transition-all">
-            <i class="bi bi-chevron-left me-2"></i>Return to Dashboard
+            <i class="bi bi-chevron-left me-2"></i>Return to Mission Control
         </a>
     </div>
     <div class="col-lg-8">
-        <div class="card bg-black bg-opacity-40 border border-info border-opacity-10 shadow-2xl rounded-4 overflow-hidden">
+        <div class="card proposal-form-card border-0 shadow-2xl rounded-5 overflow-hidden">
             
-            <!-- Blue Gradient Header -->
-            <div class="p-4 d-flex align-items-center border-bottom border-info border-opacity-30" 
-                 style="background: linear-gradient(135deg, #0f172a 0%, #020617 100%);">
-                <div class="bg-primary p-2 rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
-                    <i class="bi bi-lightbulb-fill text-white fs-4"></i>
+            <!-- High-Precision Header -->
+            <div class="p-5 d-flex align-items-center border-bottom border-white border-opacity-10" 
+                 style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(1, 8, 22, 0.6) 100%);">
+                <div class="bg-primary p-2 rounded-4 me-4 d-flex align-items-center justify-content-center glow-primary" style="width: 52px; height: 52px;">
+                    <i class="bi bi-rocket-takeoff-fill text-white fs-3"></i>
                 </div>
                 <div>
-                    <h4 class="fw-800 text-white mb-0 tracking-tight">Submit New Idea</h4>
-                    <p class="extra-small text-dim fw-800 text-uppercase tracking-widest mb-0 opacity-75">Secure Blind Review Submission Line</p>
+                    <h2 class="fw-800 text-white mb-0 tracking-tightest">Initiate Project</h2>
+                    <p class="extra-small text-dim fw-800 text-uppercase tracking-widest mb-0 opacity-50">Authorized Blind Review Data Entry</p>
                 </div>
             </div>
 
-            <div class="p-4 p-md-5">
-                <div class="glass-alert border-0 p-3 mb-5 scale-in" style="background: rgba(0, 242, 255, 0.05);">
-                    <i class="bi bi-shield-lock-fill text-primary me-2"></i> 
-                    <span class="small fw-600 text-dim">Your identity will remain completely <span class="text-white">ANONYMOUS</span> until a supervisor establishes a handshake connection.</span>
+            <div class="p-4 p-md-5 bg-primary bg-opacity-10 backdrop-blur-3xl" style="background: rgba(30, 58, 138, 0.1) !important;">
+                <div class="glass-alert border-0 p-4 mb-5 scale-in" style="background: rgba(0, 242, 255, 0.03); border-left: 3px solid #00f2ff !important; border-radius: 4px 16px 16px 4px;">
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bi bi-shield-lock-fill text-primary fs-4"></i> 
+                        <div>
+                            <h6 class="text-white fw-800 extra-small tracking-widest mb-1 text-uppercase">Privacy Shield Active</h6>
+                            <p class="small fw-500 text-dim mb-0 lh-base">Your identity is cryptographically shielded. Supervisors will only see your <span class="text-white">Research Data</span> and <span class="text-white">Technical Stack</span> until a handshake is confirmed.</p>
+                        </div>
+                    </div>
                 </div>
 
-                <form asp-action="CreateProposal" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <form asp-action="CreateProposal" method="post" id="proposalForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 font-monospace extra-small"></div>
                     
-                    <div class="mb-4">
-                        <label asp-for="Title" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">PROJECT DESIGNATION <span class="text-danger">*</span></label>
-                        <input asp-for="Title" class="form-control form-control-lg border-0 text-white py-3 px-4" 
-                               style="background: var(--input-bg); font-size: 1rem; border-radius: 12px;"
-                               placeholder="e.g., AI-Driven Analytics Platform" required />
-                        <span asp-validation-for="Title" class="text-danger extra-small mt-2 d-block"></span>
+                    <div class="mb-5">
+                        <label asp-for="Title" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Project Designation <span class="text-danger">*</span></label>
+                        <div class="input-focus-group">
+                            <input asp-for="Title" class="form-control elite-input py-3 px-4" 
+                                   placeholder="e.g., QUANTUM LEDGER: AI-DRIVEN HEDGE FUND ANALYTICS" required />
+                            <div class="focus-border"></div>
+                        </div>
+                        <span asp-validation-for="Title" class="text-danger extra-small mt-2 d-block font-monospace"></span>
                     </div>
 
-                    <div class="row mb-4">
+                    <div class="row mb-5">
                         <div class="col-md-6 mb-4 mb-md-0">
-                            <label asp-for="ResearchAreaId" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">RESEARCH DOMAIN <span class="text-danger">*</span></label>
-                            <select asp-for="ResearchAreaId" class="form-select border-0 text-white py-3 px-4" 
-                                    style="background: var(--input-bg); font-size: 0.9rem; border-radius: 12px;"
-                                    asp-items="ViewBag.ResearchAreas" required>
-                                <option value="">-- Select specific category --</option>
-                            </select>
-                            <span asp-validation-for="ResearchAreaId" class="text-danger extra-small mt-2 d-block"></span>
+                            <label asp-for="ResearchAreaId" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Research Domain <span class="text-danger">*</span></label>
+                            <div class="input-focus-group">
+                                <select asp-for="ResearchAreaId" class="form-select elite-input py-3 px-4" 
+                                        asp-items="ViewBag.ResearchAreas" required>
+                                    <option value="">-- SYSTEM SELECT CATEGORY --</option>
+                                </select>
+                                <div class="focus-border"></div>
+                            </div>
+                            <span asp-validation-for="ResearchAreaId" class="text-danger extra-small mt-2 d-block font-monospace"></span>
                         </div>
                         <div class="col-md-6">
-                            <label asp-for="TechnicalStack" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">TECHNOLOGY STACK</label>
-                            <input asp-for="TechnicalStack" class="form-control border-0 text-white py-3 px-4" 
-                                   style="background: var(--input-bg); font-size: 0.9rem; border-radius: 12px;"
-                                   placeholder="e.g., React, Node.js, Python" />
-                            <span asp-validation-for="TechnicalStack" class="text-danger extra-small mt-2 d-block"></span>
+                            <label asp-for="TechnicalStack" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Tech Stack Architecture</label>
+                            <div class="input-focus-group">
+                                <input asp-for="TechnicalStack" class="form-control elite-input py-3 px-4" 
+                                       placeholder="E.G., RUST, WEBASSEMBLY, POSTGRESQL" />
+                                <div class="focus-border"></div>
+                            </div>
+                            <p class="extra-small text-dim mt-2 opacity-50 font-monospace">COMMA SEPARATED VALUES ONLY</p>
                         </div>
                     </div>
 
                     <div class="mb-5">
-                        <label asp-for="Abstract" class="form-label extra-small fw-800 text-dim tracking-widest mb-3">PROJECT ABSTRACT <span class="text-danger">*</span></label>
-                        <textarea asp-for="Abstract" class="form-control border-0 text-white py-3 px-4" 
-                                  style="background: var(--input-bg); font-size: 0.9rem; border-radius: 15px;"
-                                  rows="6" placeholder="Describe the core problem, methodology, and expected outcomes..." required></textarea>
-                        <span asp-validation-for="Abstract" class="text-danger extra-small mt-2 d-block"></span>
-                        <div class="mt-3 p-3">
-                            <i class="bi bi-shield-check text-success me-2"></i> 
-                            <span class="extra-small text-dim fw-600">Reminder: Do not include your real name or ID in the abstract to protect Blind Review integrity.</span>
+                        <label asp-for="Abstract" class="form-label extra-small fw-800 text-dim tracking-widest mb-3 text-uppercase">Project Abstract & Methodology <span class="text-danger">*</span></label>
+                        <div class="input-focus-group">
+                            <textarea asp-for="Abstract" class="form-control elite-input py-4 px-4" 
+                                      rows="8" placeholder="DESCRIBE CORE PROBLEM, HYPOTHESIS, AND METHODOLOGY..." required></textarea>
+                            <div class="focus-border"></div>
+                        </div>
+                        <span asp-validation-for="Abstract" class="text-danger extra-small mt-2 d-block font-monospace"></span>
+                        <div class="mt-4 p-3 rounded-3 d-flex align-items-center gap-2" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.1);">
+                            <i class="bi bi-info-circle-fill text-success"></i> 
+                            <span class="extra-small text-dim fw-600">ANONYMITY CHECK: ENSURE NO PERSONAL IDENTIFIERS ARE PRESENT IN THE ABSTRACT.</span>
                         </div>
                     </div>
 
-                    <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 fw-800 text-uppercase tracking-wider shadow-lg">
-                            <i class="bi bi-send-fill me-2"></i> Submit Proposal
+                    <div class="d-grid mt-5 pt-3">
+                        <button type="submit" class="btn btn-elite-primary py-3 fw-800 text-uppercase tracking-widest">
+                            <span class="d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-shield-check fs-5"></i>
+                                TRANSMIT PROPOSAL DATA
+                            </span>
                         </button>
                     </div>
                 </form>
@@ -84,20 +100,96 @@
 </div>
 
 <style>
+    :root {
+        --elite-input-bg: rgba(255, 255, 255, 0.02);
+        --input-focus: rgba(0, 242, 255, 0.1);
+    }
+
+    .proposal-form-card {
+        background: rgba(1, 4, 18, 0.7) !important;
+        backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    }
+
+    .elite-input {
+        background: var(--elite-input-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        letter-spacing: 0.02em;
+        font-weight: 400;
+    }
+
+    .input-focus-group {
+        position: relative;
+    }
+
+    .focus-border {
+        position: absolute;
+        bottom: 0; left: 50%; right: 50%;
+        height: 2px;
+        background: #00f2ff;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: 0 0 15px #00f2ff;
+    }
+
+    .elite-input:focus {
+        background: rgba(0, 242, 255, 0.01) !important;
+        box-shadow: none !important;
+        border-color: rgba(0, 242, 255, 0.2) !important;
+    }
+
+    .elite-input:focus + .focus-border {
+        left: 0; right: 0;
+        opacity: 1;
+    }
+
+    .btn-elite-primary {
+        background: linear-gradient(135deg, #00f2ff 0%, #0284c7 100%);
+        border: none;
+        color: #020617;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 0 20px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-elite-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 242, 255, 0.4);
+        filter: brightness(1.1);
+    }
+    
+    .btn-elite-primary:active {
+        transform: translateY(-1px);
+    }
+
+    .glow-primary {
+        box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+    }
+
     .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
     .tracking-widest { letter-spacing: 0.15em; }
+    .tracking-tightest { letter-spacing: -0.04em; }
     .extra-small { font-size: 0.65rem; }
     .fw-800 { font-weight: 800; }
-    .text-dim { color: var(--text-dim); }
-    .tracking-tight { letter-spacing: -0.02em; }
+    .text-dim { color: #94a3b8; }
     
-    .form-control::placeholder, .form-select::placeholder {
-        color: rgba(255,255,255,0.3) !important;
+    .elite-input::placeholder {
+        color: rgba(255,255,255,0.2) !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
     }
     
     .glass-alert {
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
     }
 </style>
 
